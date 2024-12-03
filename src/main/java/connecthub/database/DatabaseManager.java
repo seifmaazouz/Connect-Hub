@@ -6,7 +6,9 @@ import connecthub.models.Post;
 import connecthub.models.Story;
 import connecthub.models.User;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static connecthub.constants.FilePath.*;
 
@@ -23,40 +25,14 @@ public class DatabaseManager {
     }
 
     /**
-     * Save all posts to the posts.json file.
-     *
-     * @param posts The list of posts to save.
-     */
-    public void savePosts(List<Post> posts) {
-        try {
-            jsonParser.writeJSON(postsFilePath, posts);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Fetch all posts from the posts.json file.
-     *
-     * @return A list of posts.
-     */
-    public List<Post> getAllPosts() {
-        try {
-            return jsonParser.readJSON(postsFilePath, new TypeReference<List<Post>>() {});
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    /**
      * Fetch all users from the users.json file.
      *
      * @return A list of users.
      */
-    public List<User> getAllUsers() {
+    public HashMap<String, User> getUserMap() {
         try {
-            return jsonParser.readJSON(usersFilePath, new TypeReference<List<User>>() {});
+            return jsonParser.readJSON(usersFilePath, new TypeReference<>() {
+            });
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -67,7 +43,7 @@ public class DatabaseManager {
      *
      * @param users The list of users to save.
      */
-    public void saveUsers(List<User> users) {
+    public void saveUserMap(HashMap<String, User> users) {
         try {
             jsonParser.writeJSON(usersFilePath, users);
         } catch (Exception e) {
