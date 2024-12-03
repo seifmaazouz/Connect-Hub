@@ -5,14 +5,18 @@ import java.util.List;
 public class ContentService {
     private final ContentDatabase contentDatabase;
 
-    public ContentService(ContentDatabase contentDatabase) { // could make general interface ContentStorage to satisfy Dependancy Inversion
+    public ContentService(ContentDatabase contentDatabase) { // could make general contentDatabase interface to satisfy Dependency Inversion
         this.contentDatabase = contentDatabase;
     }
     
     public void createContent(Content content) {
         contentDatabase.saveContent(content);
     }
-    
+
+    public void refreshContents() {
+        contentDatabase.loadAllContents();
+    }
+
     public void deleteExpiredStories() {
         for(Content content : contentDatabase.getListOfContents()) {
             if(content instanceof Expirable && ((Expirable)content).isExpired()) // Open/Closed Principle

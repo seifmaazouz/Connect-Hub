@@ -6,8 +6,8 @@ import java.time.LocalTime;
 public class Story extends Content implements Expirable {
     private static final long EXPIRATION_AFTER_SET_HOURS = 24;
 
-    public Story(String autherId, ContentData content) {
-        super(autherId, content);
+    public Story(String authorId, ContentData content) {
+        super(authorId, content);
     }
 
     @Override
