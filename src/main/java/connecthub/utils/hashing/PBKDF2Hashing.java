@@ -9,7 +9,7 @@ import java.security.spec.KeySpec;
 import java.util.Base64;
 
 public class PBKDF2Hashing implements HashingBehaviour {
-
+    @Override
     public String[] hash(String password) throws InvalidKeySpecException, NoSuchAlgorithmException {
         // Generate a random salt
         SecureRandom random = new SecureRandom();

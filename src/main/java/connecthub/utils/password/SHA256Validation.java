@@ -6,6 +6,7 @@ import java.util.Base64;
 
 public class SHA256Validation implements ValidationBehaviour {
 
+    @Override
     public boolean validatePassword(String password, String storedHash, String storedSalt) {
         try {
             // Decode the stored salt
