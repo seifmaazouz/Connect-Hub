@@ -11,7 +11,6 @@ public abstract class Content {
 
     public Content(String authorId, ContentData content) {
         contentId = UUID.randomUUID().toString(); // TODO: change this to handle unique numbers even after closing and re-opening program
-        System.out.println(contentId);
         this.authorId = authorId;
         this.contentData = content;
         timestamp = LocalDateTime.now();
@@ -38,11 +37,11 @@ public abstract class Content {
         System.out.println("Type: " + this.getClass().getSimpleName());
         ContentData contentData = getContentData();
         System.out.println("Content: " + contentData.getText());
-        String[] imagePaths = contentData.imagePaths;
-        if(imagePaths != null)
-            System.out.println("Images: " + String.join(", ", imagePaths));
+        String imagePath = contentData.imagePath;
+        if(imagePath != null)
+            System.out.println("Image: " + String.join(", ", imagePath));
         else
-            System.out.println("Images: null"); // Handles null or empty imagePaths
+            System.out.println("Image: null"); // Handles null or empty imagePaths
         System.out.println();
     }
 }

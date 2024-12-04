@@ -12,7 +12,7 @@ public class StoryLoader implements ContentLoader<Story> {
         // TODO: insert logic for loading story contents from stories.json file (SRP)
 
         // for testing purposes
-        stories.add(new Story("1", new ContentData("test data 1", new String[]{"img.png"})));
+        stories.add(new Story("1", new ContentData("test data 1", "img.png")));
 
         return stories;
     }

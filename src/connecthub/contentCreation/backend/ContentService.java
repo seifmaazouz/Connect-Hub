@@ -13,13 +13,16 @@ public class ContentService<T extends Content> {
         contentDatabase.saveContent(content);
     }
 
-    // now this method is not needed as I manually update the database after each change
+    // use this method for when pressing refresh button
     public void refreshContents() {
         contentDatabase.loadAllContents();
     }
 
-    public void deleteExpiredContent()  {
-        contentDatabase.deleteExpiredContent();
+    // removes expired content
+    public void deleteExpiredContent() {
+        if (contentDatabase instanceof StoryDatabase) {
+            ((StoryDatabase) contentDatabase).deleteExpiredStories();
+        }
     }
 
     public List<T> getListOfContents() {

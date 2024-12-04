@@ -2,25 +2,25 @@ package connecthub.contentCreation.backend;
 
 public class ContentData {
     String text;
-    String[] imagePaths; // optional image paths
+    String imagePath; // optional image paths
 
     // without images
     public ContentData(String text) {
         this.text = text;
-        this.imagePaths = null;
+        this.imagePath = null;
     }
 
     // with optional images
-    public ContentData(String text, String[] imagePaths) {
+    public ContentData(String text, String imagePath) {
         this.text = text;
-        this.imagePaths = imagePaths;
+        this.imagePath = imagePath;
     }
 
     public String getText() {
         return text;
     }
 
-    public String[] getImages() {
-        return imagePaths;
+    public String getImage() {
+        return imagePath;
     }
 }
