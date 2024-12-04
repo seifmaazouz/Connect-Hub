@@ -2,11 +2,9 @@ package main.java.connecthub.models;
 
 import connecthub.utils.hashing.HashingBehaviour;
 import connecthub.utils.hashing.PBKDF2Hashing;
-import connecthub.utils.hashing.SHA256Hashing;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class User {
@@ -19,7 +17,7 @@ public class User {
     private String[] hashedPasswordWithSalt;
     private HashingBehaviour hashingBehaviour;
 
-    private ArrayList <Friendship> friends;
+    private Friendship friendship;
 
     public User(String userId, String email, String username, String password, Date dateOfBirth, String status) throws NoSuchAlgorithmException, InvalidKeySpecException {
         this.userId = userId;
@@ -30,6 +28,7 @@ public class User {
         this.status = status;
         this.hashingBehaviour = new PBKDF2Hashing();
         this.hashedPasswordWithSalt = hashingBehaviour.hash(password);
+        this.friendship = new Friendship(this);
     }
 
 
@@ -86,4 +85,9 @@ public class User {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public Friendship getFriendShip() {
+        return friendship;
+    }
+
 }
