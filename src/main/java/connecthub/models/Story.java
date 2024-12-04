@@ -1,4 +1,4 @@
-package connecthub.models;
+package main.java.connecthub.models;
 
 public class Story {
 }

@@ -1,10 +1,7 @@
-package connecthub.database;
+package main.java.connecthub.database;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import connecthub.models.Friendship;
-import connecthub.models.Post;
-import connecthub.models.Story;
-import connecthub.models.User;
+import main.java.connecthub.models.*;
 
 import java.util.HashMap;
 import java.util.List;

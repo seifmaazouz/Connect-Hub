@@ -1,9 +1,9 @@
-package connecthub.services;
+package main.java.connecthub.services;
 
-import connecthub.database.DatabaseManager;
-import connecthub.models.User;
-import connecthub.utils.password.PBKDF2Validation;
-import connecthub.utils.password.ValidationBehaviour;
+import main.java.connecthub.database.*;
+import main.java.connecthub.models.*;
+import main.java.connecthub.utils.password.PBKDF2Validation;
+import main.java.connecthub.utils.password.ValidationBehaviour;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;

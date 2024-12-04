@@ -1,4 +1,4 @@
-package connecthub.models;
+package main.java.connecthub.models;
 
 import connecthub.utils.hashing.HashingBehaviour;
 import connecthub.utils.hashing.PBKDF2Hashing;
@@ -6,6 +6,7 @@ import connecthub.utils.hashing.SHA256Hashing;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class User {
@@ -17,6 +18,8 @@ public class User {
     private String status;
     private String[] hashedPasswordWithSalt;
     private HashingBehaviour hashingBehaviour;
+
+    private ArrayList <Friendship> friends;
 
     public User(String userId, String email, String username, String password, Date dateOfBirth, String status) throws NoSuchAlgorithmException, InvalidKeySpecException {
         this.userId = userId;

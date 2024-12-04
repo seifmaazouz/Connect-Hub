@@ -1,4 +1,4 @@
-package connecthub.utils.password;
+package main.java.connecthub.utils.password;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

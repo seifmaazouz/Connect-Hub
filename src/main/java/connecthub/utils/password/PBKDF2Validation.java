@@ -1,4 +1,4 @@
-package connecthub.utils.password;
+package main.java.connecthub.utils.password;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
