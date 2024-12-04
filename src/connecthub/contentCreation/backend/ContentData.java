@@ -4,20 +4,23 @@ public class ContentData {
     String text;
     String[] imagePaths; // optional image paths
 
-    public String getText() {
-        return text;
+    // without images
+    public ContentData(String text) {
+        this.text = text;
+        this.imagePaths = null;
     }
 
-    public void setText(String text) {
+    // with optional images
+    public ContentData(String text, String[] imagePaths) {
         this.text = text;
+        this.imagePaths = imagePaths;
+    }
+
+    public String getText() {
+        return text;
     }
 
     public String[] getImages() {
         return imagePaths;
     }
-
-    public void setImages(String[] imagePaths) {
-        this.imagePaths = imagePaths;
-    }
-    
 }

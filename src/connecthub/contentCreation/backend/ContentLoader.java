@@ -2,10 +2,8 @@ package connecthub.contentCreation.backend;
 
 import java.util.List;
 
-public class ContentLoader {
+public interface ContentLoader<T extends Content> {
 
-    public List<Content> loadContentsFromFile() {
-        // TODO: insert logic for loading contents from json file (SRP)
-        return null;
-    }
+    List<T> loadContentsFromFile();  // Load content from JSON file
+    void saveContentsToFile(List<T> contents); // Save updated content to JSON file
 }
