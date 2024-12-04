@@ -31,7 +31,7 @@ public class DatabaseManager {
      */
     public HashMap<String, User> getUserMap() {
         try {
-            return jsonParser.readJSON(usersFilePath, new TypeReference<>() {
+            return jsonParser.readJSON(usersFilePath, new TypeReference<HashMap<String, User>>() {
             });
         } catch (Exception e) {
             e.printStackTrace();
