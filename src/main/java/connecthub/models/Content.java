@@ -1,4 +1,4 @@
-package connecthub.contentCreation.backend;
+package main.java.connecthub.models;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

@@ -1,4 +1,6 @@
-package connecthub.contentCreation.backend;
+package main.java.connecthub.loaders;
+
+import main.java.connecthub.models.Content;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package connecthub.contentCreation.backend;
+package main.java.connecthub.models;
 
 public class Post extends Content {
 

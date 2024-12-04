@@ -1,4 +1,8 @@
-package connecthub.contentCreation.backend;
+package main.java.connecthub.services;
+
+import main.java.connecthub.database.ContentDatabase;
+import main.java.connecthub.database.StoryDatabase;
+import main.java.connecthub.models.Content;
 
 import java.util.List;
 

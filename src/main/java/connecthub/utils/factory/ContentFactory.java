@@ -1,4 +1,9 @@
-package connecthub.contentCreation.backend;
+package main.java.connecthub.utils.factory;
+
+import main.java.connecthub.models.ContentData;
+import main.java.connecthub.models.Content;
+import main.java.connecthub.models.Post;
+import main.java.connecthub.models.Story;
 
 // Applied Factory Design Pattern
 public class ContentFactory {

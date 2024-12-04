@@ -1,4 +1,7 @@
-package connecthub.contentCreation.backend;
+package main.java.connecthub.database;
+
+import main.java.connecthub.loaders.ContentLoader;
+import main.java.connecthub.models.Story;
 
 // apply singleton design pattern
 public class StoryDatabase extends ContentDatabase<Story> {

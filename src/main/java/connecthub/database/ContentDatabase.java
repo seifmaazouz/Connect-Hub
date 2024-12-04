@@ -1,4 +1,7 @@
-package connecthub.contentCreation.backend;
+package main.java.connecthub.database;
+
+import main.java.connecthub.models.Content;
+import main.java.connecthub.loaders.ContentLoader;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

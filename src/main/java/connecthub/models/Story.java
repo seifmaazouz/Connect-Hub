@@ -1,4 +1,4 @@
-package connecthub.contentCreation.backend;
+package main.java.connecthub.models;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
