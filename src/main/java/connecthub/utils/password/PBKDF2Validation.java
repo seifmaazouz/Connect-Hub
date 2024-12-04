@@ -7,6 +7,9 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.Base64;
 
+import static connecthub.constants.Constants.ITERATIONS_FOR_PBKDF2;
+import static connecthub.constants.Constants.KEY_LENGTH_FOR_PBKDF2;
+
 public class PBKDF2Validation implements ValidationBehaviour {
     @Override
     public boolean validatePassword(String password, String storedHash, String storedSalt) throws InvalidKeySpecException, NoSuchAlgorithmException {
@@ -17,7 +20,7 @@ public class PBKDF2Validation implements ValidationBehaviour {
         String passwordAndSalt = password + storedSalt;
 
         // Hash the concatenated password+salt
-        KeySpec spec = new PBEKeySpec(passwordAndSalt.toCharArray(), salt, 65536, 256);
+        KeySpec spec = new PBEKeySpec(passwordAndSalt.toCharArray(), salt, ITERATIONS_FOR_PBKDF2, KEY_LENGTH_FOR_PBKDF2);
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
         byte[] hash = factory.generateSecret(spec).getEncoded();
 

@@ -5,13 +5,15 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
 
+import static connecthub.constants.Constants.SALT_LENGTH;
+
 public class SHA256Hashing implements HashingBehaviour {
 
     @Override
     public String[] hash(String password) throws NoSuchAlgorithmException {
         // Generate a random salt
         SecureRandom random = new SecureRandom();
-        byte[] salt = new byte[16];
+        byte[] salt = new byte[SALT_LENGTH];
         random.nextBytes(salt);
 
         // Concatenate password and salt
