@@ -26,13 +26,13 @@ public class MainTest {
 
     public static ContentService<Post> createPostService() {
         ContentLoader<Post> postLoader = new PostLoader();
-        ContentDatabase<Post> postDatabase = new PostDatabase(postLoader);
+        ContentDatabase<Post> postDatabase = PostDatabase.getInstance(postLoader);
         return new ContentService<>(postDatabase);
     }
 
     public static ContentService<Story> createStoryService() {
         ContentLoader<Story> storyLoader = new StoryLoader();
-        ContentDatabase<Story> storyDatabase = new StoryDatabase(storyLoader);
+        ContentDatabase<Story> storyDatabase = StoryDatabase.getInstance(storyLoader);
         return new ContentService<>(storyDatabase);
     }
 
