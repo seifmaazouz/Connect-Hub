@@ -1,51 +1,90 @@
 package main.java.connecthub.models;
 
+import java.util.ArrayList;
+
 public class Friendship {
-    private User user;
-    private User friend;
-    private String status;
+    private final ArrayList<User> friends;
+    private final ArrayList<User> blocked;
+    private final ArrayList<User> blockedBy;
+    private final ArrayList<User> friendRequests;
+    private final ArrayList<User> sentRequests;
+    private final User user;
 
-    public Friendship(User user, User friend, String status) {
+    public Friendship(User user) {
         this.user = user;
-        this.friend = friend;
-        this.status = status;
+        friends = new ArrayList<>();
+        blocked = new ArrayList<>();
+        blockedBy = new ArrayList<>();
+        friendRequests = new ArrayList<>();
+        sentRequests = new ArrayList<>();
     }
 
-    public User getUser() {
-        return user;
+    public User getUser() { return this.user;}
+
+    public void addSentFriendRequest(User receiver) {
+        sentRequests.add(receiver);
     }
 
-    public User getFriend() {
-        return friend;
+    public void addReceivedFriendRequest(User sender) {
+        friendRequests.add(sender);
     }
 
-    public String getStatus() {
-        return status;
+    public void addUserToFriends(User user) {
+        friends.add(user);
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void addUserToBlocked(User user) {
+        blocked.add(user);
     }
 
-    public void acceptFriendRequest() {
-        this.status = "accepted";
+    public void removeSentFriendRequest(User receiver) {
+        sentRequests.remove(receiver);
     }
 
-    public void rejectFriendRequest() {
-        this.status = "rejected";
+    public void removeReceivedFriendRequest(User sender) {
+        friendRequests.remove(sender);
     }
 
-    public void blockFriend() {
-        this.status = "blocked";
+    public void removeUserFromFriends(User user) {
+        friends.remove(user);
     }
 
-    public void unblockFriend() {
-        this.status = "unblocked";
+    public void removeUserFromBlocked(User user) {
+        blocked.remove(user);
     }
 
-    public boolean isBlocked() {
-        return this.status.equals("blocked");
+    public void getBlockedHAHA(User user) {
+        blockedBy.add(user);
+    }
+
+    public void removeUserFromBlockedBy(User user) {
+        blockedBy.remove(user);
+    }
+
+    public ArrayList<User> getFriends() {
+        return friends;
+    }
+
+    public ArrayList<User> getBlockedUsers() {
+        return blocked;
+    }
+
+    public ArrayList<User> getBlockedByUsers() {
+        return blockedBy;
+    }
+
+    public ArrayList<User> getSentRequests() {
+        return sentRequests;
+    }
+
+    public ArrayList<User> getFriendRequests() {
+        return friendRequests;
     }
 
 
+
+    public boolean isFriend(User other) {
+        //todo
+        return false;
+    }
 }
