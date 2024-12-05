@@ -1,4 +1,4 @@
-package main.java.connecthub.models;
+package connecthub.models;
 
 import connecthub.utils.hashing.HashingBehaviour;
 import connecthub.utils.hashing.PBKDF2Hashing;
