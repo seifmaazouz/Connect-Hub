@@ -1,6 +1,6 @@
-package main.java.connecthub.backend.services.friendship;
+package main.java.connecthub.services.friendship;
 
-import main.java.connecthub.backend.models.User;
+import main.java.connecthub.models.User;
 
 public class FriendRequestManager {
     private final User sender;

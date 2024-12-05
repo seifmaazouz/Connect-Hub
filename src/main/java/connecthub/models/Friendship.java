@@ -1,4 +1,4 @@
-package main.java.connecthub.backend.models;
+package main.java.connecthub.models;
 
 import java.util.ArrayList;
 

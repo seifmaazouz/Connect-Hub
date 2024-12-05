@@ -1,4 +1,4 @@
-package main.java.connecthub.backend.database;
+package main.java.connecthub.database;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;

@@ -1,13 +1,14 @@
-package main.java.connecthub.backend.services;
+package main.java.connecthub.services;
 
-import main.java.connecthub.backend.database.*;
-import main.java.connecthub.backend.models.*;
-import main.java.connecthub.backend.utils.password.PBKDF2Validation;
-import main.java.connecthub.backend.utils.password.ValidationBehaviour;
+import main.java.connecthub.database.*;
+import main.java.connecthub.models.*;
+import main.java.connecthub.utils.password.PBKDF2Validation;
+import main.java.connecthub.utils.password.ValidationBehaviour;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.HashMap;
+import java.util.Map;
 
 public class UserService {
 

@@ -1,9 +1,11 @@
-package main.java.connecthub.backend.database;
+package main.java.connecthub.database;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import main.java.connecthub.backend.models.*;
+import main.java.connecthub.models.*;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static connecthub.constants.FilePath.*;
 
