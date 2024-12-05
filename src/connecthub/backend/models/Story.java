@@ -17,5 +17,4 @@ public class Story extends Content implements Expirable {
     public boolean isExpired() {
         return Duration.between(getTimestamp(), LocalDateTime.now()).toHours() >= EXPIRATION_AFTER_SET_HOURS;
     }
-    
 }
