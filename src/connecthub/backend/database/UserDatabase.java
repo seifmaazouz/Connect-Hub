@@ -4,8 +4,6 @@ import connecthub.backend.loaders.UserLoader;
 import connecthub.backend.models.User;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class UserDatabase {
 
