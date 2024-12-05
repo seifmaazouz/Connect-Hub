@@ -6,7 +6,7 @@ import connecthub.backend.models.*;
 import connecthub.backend.services.*;
 import connecthub.backend.utils.factory.ContentFactory;
 
-public class Main  {
+public class ContentMainTest {
     public static void main(String[] args) {
         // Create Post and Story Service
         ContentService<Post> postService = createPostService();
