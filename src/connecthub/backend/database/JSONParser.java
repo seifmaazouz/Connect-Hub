@@ -2,6 +2,7 @@ package connecthub.backend.database;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,7 +12,9 @@ public class JSONParser {
     private final ObjectMapper objectMapper;
 
     public JSONParser() {
-        this.objectMapper = new ObjectMapper(); 
+        this.objectMapper = new ObjectMapper();
+        // Register the JavaTimeModule to handle LocalDateTime and other Java 8 date/time types
+        objectMapper.registerModule(new JavaTimeModule());
     }
 
     /**

@@ -12,7 +12,6 @@ import java.util.HashMap;
 
 public class UserService {
 
-
     private final UserDatabase databaseManager;
     private final ValidationBehaviour validationBehaviour;
     private HashMap<String, User> userMap;
@@ -33,7 +32,6 @@ public class UserService {
     public User getUserById(String userId) {
         return (userMap != null) ? userMap.get(userId) : null;
     }
-
 
     /**
      * Update an existing user's information.
