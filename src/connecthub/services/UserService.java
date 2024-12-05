@@ -1,10 +1,11 @@
-package connecthub.backend.services;
+package connecthub.services;
 
-import connecthub.backend.database.UserDatabase;
-import connecthub.backend.models.User;
-import connecthub.backend.utils.email.EmailValidator;
-import connecthub.backend.utils.password.PBKDF2Validation;
-import connecthub.backend.utils.password.ValidationBehaviour;
+import connecthub.database.DatabaseManager;
+import connecthub.models.User;
+import main.java.connecthub.database.*;
+import main.java.connecthub.models.*;
+import connecthub.utils.password.PBKDF2Validation;
+import connecthub.utils.password.ValidationBehaviour;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -12,15 +13,14 @@ import java.util.HashMap;
 
 public class UserService {
 
-    private final UserDatabase databaseManager;
+    private final DatabaseManager databaseManager;
     private final ValidationBehaviour validationBehaviour;
     private HashMap<String, User> userMap;
-    public static int numberOfUsers = 0;
+
     public UserService() {
         this.validationBehaviour = new PBKDF2Validation();
-        this.databaseManager = new UserDatabase();
-        this.userMap = databaseManager.getUsers();
-        numberOfUsers++;
+        this.databaseManager = new DatabaseManager();
+        this.userMap = databaseManager.getUserMap();
     }
 
     /**
@@ -34,6 +34,21 @@ public class UserService {
     }
 
     /**
+     * Add a new user.
+     *
+     * @param newUser The User object to add.
+     * @return true if the user was added successfully, false if the userId already exists.
+     */
+    public boolean addUser(User newUser) {
+        if (userMap != null && !userMap.containsKey(newUser.getUserId())) {
+            userMap.put(newUser.getUserId(), newUser);
+            databaseManager.saveUserMap(userMap);
+            return true;
+        }
+        return false; // User already exists
+    }
+
+    /**
      * Update an existing user's information.
      *
      * @param userId      The ID of the user to update.
@@ -42,8 +57,8 @@ public class UserService {
      */
     public boolean updateUser(String userId, User updatedUser) {
         if (userExists(userId)) {
-            databaseManager.deleteUser(userId);
-            databaseManager.saveUser(updatedUser);
+            userMap.put(userId, updatedUser); // Replace the existing user with the updated one
+            databaseManager.saveUserMap(userMap);
             return true;
         }
         return false; // UserId does not exist
@@ -57,7 +72,8 @@ public class UserService {
      */
     public boolean deleteUser(String userId) {
         if (userExists(userId)) {
-            databaseManager.deleteUser(userId);
+            userMap.remove(userId);
+            databaseManager.saveUserMap(userMap);
             return true;
         }
         return false; // UserId does not exist
@@ -72,7 +88,9 @@ public class UserService {
      */
     public boolean signup(User newUser) {
         if (userMap != null && !userMap.containsKey(newUser.getUserId())) {
-            databaseManager.saveUser(newUser);
+            // User does not already exist, so we can add them
+            userMap.put(newUser.getUserId(), newUser);
+            databaseManager.saveUserMap(userMap); // Save the updated user map to file
             return true;
         }
         return false; // UserId already exists, signup failed
@@ -90,18 +108,18 @@ public class UserService {
 
         if (user != null) {
             user.setStatus("online");
-            databaseManager.saveUser(user);
+            databaseManager.saveUserMap(userMap);
         }
 
         return user; // Return the authenticated user, or null if login failed
     }
 
-    public User getUser(String email, String password) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    private User getUser(String email, String password) throws InvalidKeySpecException, NoSuchAlgorithmException {
         if (userMap != null) {
             for (User user : userMap.values()) {
                 String storedHash = user.getHashedPassword();
                 String storedSalt = user.getSalt();
-                if (user.getEmail().equals(email) && EmailValidator.isValidEmail(email) && validationBehaviour.validatePassword(password, storedHash, storedSalt)) {
+                if (user.getEmail().equals(email) && validationBehaviour.validatePassword(password, storedHash, storedSalt)) {
                     return user; // Authentication successful
                 }
             }
@@ -119,7 +137,7 @@ public class UserService {
         if (userExists(userId)) {
             User user = userMap.get(userId);
             user.setStatus("offline"); // Set the user's status to offline
-            databaseManager.saveUser(user); // Save the updated user data
+            databaseManager.saveUserMap(userMap); // Save the updated user data
             return true;
         }
 
@@ -130,5 +148,6 @@ public class UserService {
     public boolean userExists(String userId) {
         return userMap != null && userMap.containsKey(userId);
     }
+
 }
 

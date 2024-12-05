@@ -1,8 +1,7 @@
-package connecthub.backend.models;
+package connecthub.models;
 
-import connecthub.backend.services.UserService;
-import connecthub.backend.utils.hashing.HashingBehaviour;
-import connecthub.backend.utils.hashing.PBKDF2Hashing;
+import connecthub.utils.hashing.HashingBehaviour;
+import connecthub.utils.hashing.PBKDF2Hashing;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -15,35 +14,30 @@ public class User {
     private String password;
     private Date dateOfBirth;
     private String status;
-    private String hashedPassword;
-    private String salt;
-    private transient HashingBehaviour hashingBehaviour;
+    private String[] hashedPasswordWithSalt;
+    private HashingBehaviour hashingBehaviour;
 
-    public User() {
+    private Friendship friendship;
 
-    }
-
-    public User(String email, String username, String password, Date dateOfBirth, String status) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        this.userId = UserService.numberOfUsers + "";
+    public User(String userId, String email, String username, String password, Date dateOfBirth, String status) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        this.userId = userId;
         this.email = email;
         this.username = username;
         this.password = password;
         this.dateOfBirth = dateOfBirth;
         this.status = status;
         this.hashingBehaviour = new PBKDF2Hashing();
-        String[] hashedPasswordWithSalt = hashingBehaviour.hash(password);
-        this.hashedPassword = hashedPasswordWithSalt[0];
-        this.salt = hashedPasswordWithSalt[1];
+        this.hashedPasswordWithSalt = hashingBehaviour.hash(password);
+        this.friendship = new Friendship(this);
     }
+
 
     public String getHashedPassword() {
-        return hashedPassword;
+        return hashedPasswordWithSalt[0];
     }
-
     public String getSalt() {
-        return salt;
+        return hashedPasswordWithSalt[1];
     }
-
     public String getUserId() {
         return userId;
     }
@@ -91,4 +85,9 @@ public class User {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public Friendship getFriendShip() {
+        return friendship;
+    }
+
 }
