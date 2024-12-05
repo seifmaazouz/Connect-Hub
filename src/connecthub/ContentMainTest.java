@@ -12,20 +12,19 @@ public class ContentMainTest {
         StoryService storyService = ServiceFactory.createStoryService();
 
         // Create and save Post content
-        ContentData postContentData = new ContentData("This is the first post content","image1.jpg");
-        Content post1 = ContentFactory.createContent("post", "author1", postContentData);
-        postService.createContent((Post) post1);
+        Post post1 = ContentFactory.createPost("post", "author1", "This is the first post content","image1.jpg");
+        postService.createContent(post1);
 
         // Create and save Story content
-        ContentData storyContentData = new ContentData("This is the first story content");
-        Content story1 = ContentFactory.createContent("story", "author2", storyContentData);
-        storyService.createContent((Story) story1);
+        Story story1 = ContentFactory.createStory("story", "author2", "This is the first story content", null);
+        storyService.createContent(story1);
 
         // Print content list after adding content
         System.out.println("After creating content:");
         printContentList(postService, storyService);
 
         // Delete expired content and refresh content
+        storyService.deleteExpiredStories();
         postService.refreshContents();
         storyService.refreshContents();
         System.out.println("After deleting expired content:");
