@@ -1,4 +1,4 @@
-package connecthub.backend.utils.factory;
+package connecthub.backend.utils.factories;
 
 import connecthub.backend.models.ContentData;
 import connecthub.backend.models.Content;
