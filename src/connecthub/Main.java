@@ -1,12 +1,10 @@
 package connecthub;
 
-import connecthub.database.*;
-import connecthub.loaders.*;
-import connecthub.models.*;
-import connecthub.services.*;
-import connecthub.utils.factory.ContentFactory;
-
-import java.time.LocalDateTime;
+import connecthub.backend.database.*;
+import connecthub.backend.loaders.*;
+import connecthub.backend.models.*;
+import connecthub.backend.services.*;
+import connecthub.backend.utils.factory.ContentFactory;
 
 public class Main  {
     public static void main(String[] args) {
