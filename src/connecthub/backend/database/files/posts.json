@@ -118,4 +118,12 @@
     "imagePath" : "image1.jpg"
   },
   "timestamp" : [ 2024, 12, 5, 2, 19, 50, 261209700 ]
+}, {
+  "contentId" : "bc334905-bcc2-46a5-bdb7-e3c99672571c",
+  "authorId" : "author1",
+  "contentData" : {
+    "text" : "This is the first post content",
+    "imagePath" : "image1.jpg"
+  },
+  "timestamp" : [ 2024, 12, 5, 16, 6, 51, 135114500 ]
 } ]

@@ -62,4 +62,12 @@
     "imagePath" : null
   },
   "timestamp" : [ 2024, 12, 5, 2, 19, 50, 294214000 ]
+}, {
+  "contentId" : "e61a4b81-b37b-418b-a4b2-c0d53961c805",
+  "authorId" : "author2",
+  "contentData" : {
+    "text" : "This is the first story content",
+    "imagePath" : null
+  },
+  "timestamp" : [ 2024, 12, 5, 16, 6, 51, 175108900 ]
 } ]
