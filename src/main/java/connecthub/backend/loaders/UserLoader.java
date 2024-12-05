@@ -1,0 +1,37 @@
+package connecthub.backend.loaders;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import connecthub.backend.database.JSONParser;
+import connecthub.backend.models.User;
+
+import java.util.LinkedHashMap;
+
+import static connecthub.backend.constants.FilePath.USERS_FILE_PATH;
+
+public class UserLoader {
+    JSONParser jsonParser;
+
+    public UserLoader() {
+        this.jsonParser = new JSONParser();
+    }
+
+    public LinkedHashMap<String, User> loadUsers() {
+        LinkedHashMap<String, User> users = new LinkedHashMap<>();
+
+        try {
+            users = jsonParser.readJSON(USERS_FILE_PATH, new TypeReference<LinkedHashMap<String, User>>() {});
+        } catch (Exception e) {
+            System.err.println("Error loading users from file: " + e.getMessage());
+        }
+
+        return users;
+    }
+
+    public void saveUsers(LinkedHashMap<String, User> users) {
+        try {
+            jsonParser.writeJSON(USERS_FILE_PATH, users);
+        } catch (Exception e) {
+            System.err.println("Error saving users to file: " + e.getMessage());
+        }
+    }
+}

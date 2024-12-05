@@ -1,4 +1,4 @@
-package connecthub.constants;
+package connecthub.backend.constants;
 
 public interface FilePath {
     String USERS_FILE_PATH = "db/users.json";

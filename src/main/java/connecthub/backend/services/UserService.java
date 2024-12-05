@@ -1,14 +1,12 @@
-package connecthub.services;
+package connecthub.backend.services;
 
-import connecthub.database.DatabaseManager;
-import connecthub.models.User;
-import connecthub.utils.password.PBKDF2Validation;
-import connecthub.utils.password.ValidationBehaviour;
+import connecthub.backend.models.User;
+import connecthub.backend.utils.password.PBKDF2Validation;
+import connecthub.backend.utils.password.ValidationBehaviour;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.HashMap;
-import java.util.Map;
 
 public class UserService {
 

@@ -1,4 +1,4 @@
-package connecthub.constants;
+package connecthub.backend.constants;
 
 public interface Constants {
     int SALT_LENGTH = 16;

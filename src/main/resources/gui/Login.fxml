@@ -5,7 +5,7 @@
 <?import javafx.scene.control.Button?>
 
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="connecthub.controllers.LoginController"
+      fx:controller="connecthub.backend.controllers.LoginController"
       stylesheets="@../styles/login.css"
       spacing="10" alignment="CENTER">
     <TextField fx:id="emailField" promptText="Enter Username" />

@@ -1,4 +1,4 @@
-package connecthub.utils.hashing;
+package connecthub.backend.utils.hashing;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -8,7 +8,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.Base64;
 
-import static connecthub.constants.Constants.*;
+import static connecthub.backend.constants.Constants.*;
 
 public class PBKDF2Hashing implements HashingBehaviour {
     @Override

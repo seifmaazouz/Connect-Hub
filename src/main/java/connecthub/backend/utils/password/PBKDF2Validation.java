@@ -1,4 +1,4 @@
-package connecthub.utils.password;
+package connecthub.backend.utils.password;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -7,8 +7,8 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.Base64;
 
-import static connecthub.constants.Constants.ITERATIONS_FOR_PBKDF2;
-import static connecthub.constants.Constants.KEY_LENGTH_FOR_PBKDF2;
+import static connecthub.backend.constants.Constants.ITERATIONS_FOR_PBKDF2;
+import static connecthub.backend.constants.Constants.KEY_LENGTH_FOR_PBKDF2;
 
 public class PBKDF2Validation implements ValidationBehaviour {
     @Override

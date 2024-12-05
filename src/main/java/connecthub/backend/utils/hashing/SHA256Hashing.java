@@ -1,11 +1,11 @@
-package connecthub.utils.hashing;
+package connecthub.backend.utils.hashing;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
 
-import static connecthub.constants.Constants.SALT_LENGTH;
+import static connecthub.backend.constants.Constants.SALT_LENGTH;
 
 public class SHA256Hashing implements HashingBehaviour {
 

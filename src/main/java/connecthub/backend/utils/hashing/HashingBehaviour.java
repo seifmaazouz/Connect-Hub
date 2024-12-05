@@ -1,4 +1,4 @@
-package connecthub.utils.hashing;
+package connecthub.backend.utils.hashing;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;

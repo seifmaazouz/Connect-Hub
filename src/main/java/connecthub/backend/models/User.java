@@ -1,8 +1,7 @@
-package connecthub.models;
+package connecthub.backend.models;
 
-import connecthub.utils.hashing.HashingBehaviour;
-import connecthub.utils.hashing.PBKDF2Hashing;
-import connecthub.utils.hashing.SHA256Hashing;
+import connecthub.backend.utils.hashing.HashingBehaviour;
+import connecthub.backend.utils.hashing.PBKDF2Hashing;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;

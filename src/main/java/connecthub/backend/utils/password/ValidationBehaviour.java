@@ -1,4 +1,4 @@
-package connecthub.utils.password;
+package connecthub.backend.utils.password;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
