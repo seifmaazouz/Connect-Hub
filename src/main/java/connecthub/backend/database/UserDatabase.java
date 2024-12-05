@@ -3,15 +3,17 @@ package connecthub.backend.database;
 import connecthub.backend.loaders.UserLoader;
 import connecthub.backend.models.User;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class UserDatabase {
 
-    protected final LinkedHashMap<String, User> users;
+    protected final HashMap<String, User> users;
     protected final UserLoader userLoader;
 
     public UserDatabase() {
-        this.users = new LinkedHashMap<>();
+        this.users = new HashMap<>();
         this.userLoader = new UserLoader();
         loadAllContents();
     }
@@ -26,8 +28,8 @@ public class UserDatabase {
         saveChangesToFile();
     }
 
-    public LinkedHashMap<String, User> getUsers() {
-        return new LinkedHashMap<>(users);
+    public HashMap<String, User> getUsers() {
+        return new HashMap<>(users);
     }
 
     protected void saveChangesToFile() {

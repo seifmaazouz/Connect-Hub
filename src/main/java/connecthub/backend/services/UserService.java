@@ -16,11 +16,12 @@ public class UserService {
     private final UserDatabase databaseManager;
     private final ValidationBehaviour validationBehaviour;
     private HashMap<String, User> userMap;
-
+    public static int numberOfUsers = 0;
     public UserService() {
         this.validationBehaviour = new PBKDF2Validation();
         this.databaseManager = new UserDatabase();
         this.userMap = databaseManager.getUsers();
+        numberOfUsers++;
     }
 
     /**
@@ -97,7 +98,7 @@ public class UserService {
         return user; // Return the authenticated user, or null if login failed
     }
 
-    private User getUser(String email, String password) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    public User getUser(String email, String password) throws InvalidKeySpecException, NoSuchAlgorithmException {
         if (userMap != null) {
             for (User user : userMap.values()) {
                 String storedHash = user.getHashedPassword();

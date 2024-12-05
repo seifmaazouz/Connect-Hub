@@ -1,5 +1,6 @@
 package connecthub.backend.models;
 
+import connecthub.backend.services.UserService;
 import connecthub.backend.utils.hashing.HashingBehaviour;
 import connecthub.backend.utils.hashing.PBKDF2Hashing;
 
@@ -14,27 +15,35 @@ public class User {
     private String password;
     private Date dateOfBirth;
     private String status;
-    private String[] hashedPasswordWithSalt;
-    private HashingBehaviour hashingBehaviour;
+    private String hashedPassword;
+    private String salt;
+    private transient HashingBehaviour hashingBehaviour;
 
-    public User(String userId, String email, String username, String password, Date dateOfBirth, String status) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        this.userId = userId;
+    public User() {
+
+    }
+
+    public User(String email, String username, String password, Date dateOfBirth, String status) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        this.userId = UserService.numberOfUsers + "";
         this.email = email;
         this.username = username;
         this.password = password;
         this.dateOfBirth = dateOfBirth;
         this.status = status;
         this.hashingBehaviour = new PBKDF2Hashing();
-        this.hashedPasswordWithSalt = hashingBehaviour.hash(password);
+        String[] hashedPasswordWithSalt = hashingBehaviour.hash(password);
+        this.hashedPassword = hashedPasswordWithSalt[0];
+        this.salt = hashedPasswordWithSalt[1];
     }
-
 
     public String getHashedPassword() {
-        return hashedPasswordWithSalt[0];
+        return hashedPassword;
     }
+
     public String getSalt() {
-        return hashedPasswordWithSalt[1];
+        return salt;
     }
+
     public String getUserId() {
         return userId;
     }
