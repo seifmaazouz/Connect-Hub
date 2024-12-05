@@ -10,9 +10,9 @@ public class UserDatabase {
     protected final LinkedHashMap<String, User> users;
     protected final UserLoader userLoader;
 
-    public UserDatabase(UserLoader userLoader) {
+    public UserDatabase() {
         this.users = new LinkedHashMap<>();
-        this.userLoader = userLoader;
+        this.userLoader = new UserLoader();
         loadAllContents();
     }
 

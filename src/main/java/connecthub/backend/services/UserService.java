@@ -1,6 +1,8 @@
 package connecthub.backend.services;
 
+import connecthub.backend.database.UserDatabase;
 import connecthub.backend.models.User;
+import connecthub.backend.utils.email.EmailValidator;
 import connecthub.backend.utils.password.PBKDF2Validation;
 import connecthub.backend.utils.password.ValidationBehaviour;
 
@@ -10,14 +12,15 @@ import java.util.HashMap;
 
 public class UserService {
 
-    private final DatabaseManager databaseManager;
+
+    private final UserDatabase databaseManager;
     private final ValidationBehaviour validationBehaviour;
     private HashMap<String, User> userMap;
 
     public UserService() {
         this.validationBehaviour = new PBKDF2Validation();
-        this.databaseManager = new DatabaseManager();
-        this.userMap = databaseManager.getUserMap();
+        this.databaseManager = new UserDatabase();
+        this.userMap = databaseManager.getUsers();
     }
 
     /**
@@ -30,20 +33,6 @@ public class UserService {
         return (userMap != null) ? userMap.get(userId) : null;
     }
 
-    /**
-     * Add a new user.
-     *
-     * @param newUser The User object to add.
-     * @return true if the user was added successfully, false if the userId already exists.
-     */
-    public boolean addUser(User newUser) {
-        if (userMap != null && !userMap.containsKey(newUser.getUserId())) {
-            userMap.put(newUser.getUserId(), newUser);
-            databaseManager.saveUserMap(userMap);
-            return true;
-        }
-        return false; // User already exists
-    }
 
     /**
      * Update an existing user's information.
@@ -54,8 +43,8 @@ public class UserService {
      */
     public boolean updateUser(String userId, User updatedUser) {
         if (userExists(userId)) {
-            userMap.put(userId, updatedUser); // Replace the existing user with the updated one
-            databaseManager.saveUserMap(userMap);
+            databaseManager.deleteUser(userId);
+            databaseManager.saveUser(updatedUser);
             return true;
         }
         return false; // UserId does not exist
@@ -69,8 +58,7 @@ public class UserService {
      */
     public boolean deleteUser(String userId) {
         if (userExists(userId)) {
-            userMap.remove(userId);
-            databaseManager.saveUserMap(userMap);
+            databaseManager.deleteUser(userId);
             return true;
         }
         return false; // UserId does not exist
@@ -85,9 +73,7 @@ public class UserService {
      */
     public boolean signup(User newUser) {
         if (userMap != null && !userMap.containsKey(newUser.getUserId())) {
-            // User does not already exist, so we can add them
-            userMap.put(newUser.getUserId(), newUser);
-            databaseManager.saveUserMap(userMap); // Save the updated user map to file
+            databaseManager.saveUser(newUser);
             return true;
         }
         return false; // UserId already exists, signup failed
@@ -105,7 +91,7 @@ public class UserService {
 
         if (user != null) {
             user.setStatus("online");
-            databaseManager.saveUserMap(userMap);
+            databaseManager.saveUser(user);
         }
 
         return user; // Return the authenticated user, or null if login failed
@@ -116,7 +102,7 @@ public class UserService {
             for (User user : userMap.values()) {
                 String storedHash = user.getHashedPassword();
                 String storedSalt = user.getSalt();
-                if (user.getEmail().equals(email) && validationBehaviour.validatePassword(password, storedHash, storedSalt)) {
+                if (user.getEmail().equals(email) && EmailValidator.isValidEmail(email) && validationBehaviour.validatePassword(password, storedHash, storedSalt)) {
                     return user; // Authentication successful
                 }
             }
@@ -134,7 +120,7 @@ public class UserService {
         if (userExists(userId)) {
             User user = userMap.get(userId);
             user.setStatus("offline"); // Set the user's status to offline
-            databaseManager.saveUserMap(userMap); // Save the updated user data
+            databaseManager.saveUser(user); // Save the updated user data
             return true;
         }
 
@@ -145,6 +131,5 @@ public class UserService {
     public boolean userExists(String userId) {
         return userMap != null && userMap.containsKey(userId);
     }
-
 }
 
