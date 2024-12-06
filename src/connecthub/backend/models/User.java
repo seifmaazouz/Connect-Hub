@@ -30,6 +30,7 @@ public class User {
         this.dateOfBirth = dateOfBirth;
         this.status = status;
         this.hashedPassword = hashedPassword;
+        this.friendship = new Friendship(this);
         this.salt = salt;
         this.profilePhoto = "src\\connecthub\\backend\\database\\images\\defaultProfilePhoto.jpg";
         this.coverPhoto = "src\\connecthub\\backend\\database\\images\\defaultCoverPhoto.jpg";

@@ -1,18 +1,18 @@
 package connecthub.backend.profile;
 
+import connecthub.backend.models.User;
 import java.util.List;
 
 public class FetchFriends {
 
-    private String userId;
+    private User user;
 
-    public FetchFriends(String userId) {
-        this.userId = userId;
+    public FetchFriends(User user) {
+        this.user = user;
     }
 
-//    public List<Friend> fetch() {
-//        FriendService friend = ServiceFactory.createFriendService();
-//        List<Friend> friends = friend.getListOfUserFriends(userId);
-//        return friends;
-//    }
+    public List<User> fetch() {
+        List<User> friends = user.getFriendship().getFriends();
+        return friends;
+    }
 }

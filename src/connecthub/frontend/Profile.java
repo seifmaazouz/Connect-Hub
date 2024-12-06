@@ -3,6 +3,7 @@ package connecthub.frontend;
 import connecthub.backend.database.UserDatabase;
 import connecthub.backend.models.Post;
 import connecthub.backend.models.User;
+import connecthub.backend.profile.FetchFriends;
 import connecthub.backend.profile.FetchPosts;
 import connecthub.backend.profile.UpdateBio;
 import connecthub.backend.profile.UpdateCoverPhoto;
@@ -211,10 +212,9 @@ public class Profile extends javax.swing.JFrame {
     }//GEN-LAST:event_viewPostsActionPerformed
 
     private void viewFriendsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewFriendsActionPerformed
-//        //fetch friends
-//        FetchFriends fetch = new FetchFriends(user.getUserId());
-//        //new posts JDialog
-//        new ViewFriends(this, true, friends).setVisible(true);
+        FetchFriends fetch = new FetchFriends(user);
+        List<User> friends = fetch.fetch();
+        new ViewFriends(this, true, friends).setVisible(true);
     }//GEN-LAST:event_viewFriendsActionPerformed
 
     public static void main(String args[]) {
