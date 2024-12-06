@@ -1,6 +1,6 @@
-package connecthub.services.friendship;
+package connecthub.backend.services.friendship;
 
-import connecthub.models.User;
+import connecthub.backend.models.User;
 
 public class BlockManager {
     private final User user;
