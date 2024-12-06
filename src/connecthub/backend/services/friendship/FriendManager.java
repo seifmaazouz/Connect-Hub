@@ -11,13 +11,13 @@ public class FriendManager {
 
     public void addFriend(User friend) {
         // Add friend to user's friend list
-        user.getFriendShip().addUserToFriends(friend);
-        friend.getFriendShip().addUserToFriends(user);
+        user.getFriendship().addUserToFriends(friend);
+        friend.getFriendship().addUserToFriends(user);
     }
 
     public void removeFriend(User friend) {
         // Remove friend from user's friend list
-        user.getFriendShip().removeUserFromFriends(friend);
-        friend.getFriendShip().removeUserFromFriends(user);
+        user.getFriendship().removeUserFromFriends(friend);
+        friend.getFriendship().removeUserFromFriends(user);
     }
 }

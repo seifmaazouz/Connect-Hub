@@ -10,24 +10,24 @@ public class FriendRequestManager {
     }
 
     public void sendFriendRequest(User receiver) {
-        sender.getFriendShip().addSentFriendRequest(receiver);
-        receiver.getFriendShip().addReceivedFriendRequest(sender);
+        sender.getFriendship().addSentFriendRequest(receiver);
+        receiver.getFriendship().addReceivedFriendRequest(sender);
     }
 
     public void acceptFriendRequest(User receiver) {
-        sender.getFriendShip().removeSentFriendRequest(receiver);
-        receiver.getFriendShip().removeReceivedFriendRequest(sender);
+        sender.getFriendship().removeSentFriendRequest(receiver);
+        receiver.getFriendship().removeReceivedFriendRequest(sender);
         FriendManager friendManager = new FriendManager(sender);
         friendManager.addFriend(receiver);
     }
 
     public void rejectFriendRequest(User receiver) {
-        sender.getFriendShip().removeSentFriendRequest(receiver);
-        receiver.getFriendShip().removeReceivedFriendRequest(sender);
+        sender.getFriendship().removeSentFriendRequest(receiver);
+        receiver.getFriendship().removeReceivedFriendRequest(sender);
     }
 
     public void cancelFriendRequest(User receiver) {
-        sender.getFriendShip().removeSentFriendRequest(receiver);
-        receiver.getFriendShip().removeReceivedFriendRequest(sender);
+        sender.getFriendship().removeSentFriendRequest(receiver);
+        receiver.getFriendship().removeReceivedFriendRequest(sender);
     }
 }
