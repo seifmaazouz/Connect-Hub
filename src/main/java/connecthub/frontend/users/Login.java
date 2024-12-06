@@ -72,8 +72,7 @@ public class Login {
                             "Login successful!",
                             "Success",
                             JOptionPane.INFORMATION_MESSAGE);
-                }
-                else {
+                } else {
                     JOptionPane.showMessageDialog(frame,
                             "Login failed: Invalid email or password.",
                             "Error",
@@ -125,12 +124,22 @@ public class Login {
             String password = new String(passwordField.getPassword());
 
             try {
-                userService.getUser(email, password).setStatus("offline");
+                User user = userService.getUser(email, password);
+
                 // If logout is successful, display a success message
-                JOptionPane.showMessageDialog(frame,
-                        "Logout successful!",
-                        "Success",
-                        JOptionPane.INFORMATION_MESSAGE);
+                if (user != null) {
+                    userService.logout(user.getUserId());
+                    JOptionPane.showMessageDialog(frame,
+                            "Logout successful!",
+                            "Success",
+                            JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(frame,
+                            "Logout failed: Invalid email or password.",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+
             } catch (InvalidKeySpecException ex) {
                 // Handle InvalidKeySpecException specifically
                 JOptionPane.showMessageDialog(frame,
@@ -151,8 +160,7 @@ public class Login {
                         "Logout failed: " + ex.getMessage(),
                         "Error",
                         JOptionPane.ERROR_MESSAGE);
-            }
-        });
+            }});
     }
 
     private void openSignUpDialog(JFrame parent) {
