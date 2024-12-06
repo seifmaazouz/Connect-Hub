@@ -1,6 +1,8 @@
 package connecthub.frontend;
 
+import connecthub.backend.models.Post;
 import connecthub.backend.models.User;
+import connecthub.backend.services.PostService;
 import java.awt.Image;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -8,6 +10,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import connecthub.backend.services.UserService;
+import connecthub.backend.utils.factories.ServiceFactory;
+import java.util.ArrayList;
+import java.util.List;
 
 public class NewsFeed extends javax.swing.JFrame {
     private final User user;
@@ -21,7 +26,15 @@ public class NewsFeed extends javax.swing.JFrame {
         Image image = profilePhoto.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH); // Width and height in pixels
         profilePhoto = new ImageIcon(image);
         profilePhotoLabel.setIcon(profilePhoto);
-        lblUsername.setText(user.getUsername());
+        String userName = user.getUsername();
+        lblUsername.setText(userName);
+        viewPostsPanel.setUserName(userName);
+        PostService postService = ServiceFactory.createPostService();
+        List<Post> posts = new ArrayList<>();
+        for(User friend : user.getFriendship().getFriends()) {
+            posts.addAll(postService.getListOfUserContents(friend.getUserId()));
+        }
+        viewPostsPanel.setPosts(posts);
     }
 
     @SuppressWarnings("unchecked")
@@ -34,6 +47,7 @@ public class NewsFeed extends javax.swing.JFrame {
         lblUsername = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
         btnLogout = new javax.swing.JButton();
+        viewPostsPanel = new connecthub.frontend.ViewPostsPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Newsfeed ");
@@ -91,16 +105,24 @@ public class NewsFeed extends javax.swing.JFrame {
             }
         });
 
+        viewPostsPanel.setMinimumSize(new java.awt.Dimension(400, 300));
+        viewPostsPanel.setPreferredSize(new java.awt.Dimension(400, 300));
+
+        javax.swing.GroupLayout viewPostsPanelLayout = new javax.swing.GroupLayout(viewPostsPanel);
+        viewPostsPanel.setLayout(viewPostsPanelLayout);
+        viewPostsPanelLayout.setHorizontalGroup(
+            viewPostsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        viewPostsPanelLayout.setVerticalGroup(
+            viewPostsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(172, 172, 172)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(161, 161, 161)
-                .addComponent(jButton3)
-                .addContainerGap(334, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -110,6 +132,17 @@ public class NewsFeed extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(lblUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(172, 172, 172)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(161, 161, 161)
+                        .addComponent(jButton3))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(213, 213, 213)
+                        .addComponent(viewPostsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(334, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addContainerGap(901, Short.MAX_VALUE)
@@ -127,7 +160,9 @@ public class NewsFeed extends javax.swing.JFrame {
                 .addComponent(lblUsername)
                 .addGap(1, 1, 1)
                 .addComponent(btnLogout)
-                .addContainerGap(416, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                .addComponent(viewPostsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(143, 143, 143))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addContainerGap()
@@ -145,7 +180,7 @@ public class NewsFeed extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 658, Short.MAX_VALUE)
         );
 
         pack();
@@ -226,5 +261,6 @@ public class NewsFeed extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblUsername;
     private javax.swing.JLabel profilePhotoLabel;
+    private connecthub.frontend.ViewPostsPanel viewPostsPanel;
     // End of variables declaration//GEN-END:variables
 }

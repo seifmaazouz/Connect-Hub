@@ -33,6 +33,7 @@ public class User {
         this.status = status;
         this.hashedPassword = hashedPassword;
         this.salt = salt;
+        this.friendship = new Friendship(this);
         this.profilePhoto = IMAGE_SAVE_DIRECTORY + File.separator + "defaultProfilePhoto.jpg";
         this.coverPhoto = IMAGE_SAVE_DIRECTORY + File.separator + "defaultCoverPhoto.jpg";
         this.bio = null;
