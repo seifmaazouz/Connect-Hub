@@ -1,7 +1,7 @@
 package connecthub;
 
-import connecthub.backend.models.User;
 import connecthub.frontend.ContentCreator;
+import connecthub.frontend.Login;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -11,11 +11,7 @@ import javax.swing.*;
 public class GUIMain {
     public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException {
         setLook();
-        User user = new User("userID" ,"email", "asser", null, "online", "hashedpass", "salt");
-        ContentCreator window = new ContentCreator(null, true, user);
-        window.setVisible(true);
-//        Profile p = new Profile(user);
-//        p.setVisible(true);
+        new Login().createAndShowGUI();
     }
     
     private static void setLook() {

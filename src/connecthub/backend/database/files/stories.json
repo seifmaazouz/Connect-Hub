@@ -1,0 +1,9 @@
+[ {
+  "contentId" : "988bfb70-ab17-45c5-8863-87476daa91e4",
+  "authorId" : "userID",
+  "contentData" : {
+    "text" : "test2",
+    "imagePath" : "src\\connecthub\\backend\\database\\images\\userID_2024-12-06_21-28-04.jpg"
+  },
+  "timestamp" : [ 2024, 12, 6, 21, 28, 4, 147928500 ]
+} ]

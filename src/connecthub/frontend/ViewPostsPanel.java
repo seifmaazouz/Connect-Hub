@@ -7,16 +7,22 @@ import javax.swing.ImageIcon;
 
 public class ViewPostsPanel extends javax.swing.JPanel {
     
-    List<Post> posts;
+    private List<Post> posts;
     private static int postIndex;
     
-    public ViewPostsPanel(List<Post> posts, String userName) {
+    public ViewPostsPanel() {
         initComponents();
-        authorName.setText(userName);
-        this.posts = posts;
         postIndex = 1;
         postNumber.setText(Integer.toString(postIndex));
-        totalPostsNumber.setText(Integer.toString(posts.size()));
+    }
+    
+    public void setUserName(String userName) {
+        authorName.setText(userName);
+    }
+    
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+        totalPostsNumber.setText(Integer.toString(this.posts.size()));
         changePost(0);
     }
 

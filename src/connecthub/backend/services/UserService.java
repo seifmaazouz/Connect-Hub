@@ -165,6 +165,8 @@ public class UserService {
             }
             if (!userMap.containsKey(newUser.getUserId()) && !UserMetadataValidator.emailExists(newUser.getEmail(), userMap)) {
                 databaseManager.saveUser(newUser);
+                // update database
+                userMap = databaseManager.getUsers();
                 return Alert.alerts.PROCESS_SUCCEEDED;
             }
         }

@@ -1,6 +1,8 @@
 package connecthub.frontend;
 
 import connecthub.backend.models.Story;
+import connecthub.backend.models.User;
+import connecthub.backend.services.UserService;
 import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,10 +13,9 @@ public class ViewStories extends javax.swing.JDialog {
     List<Story> stories;
     private static int storyIndex;
 
-    public ViewStories(java.awt.Frame parent, boolean modal, List<Story> stories, String userName) {
+    public ViewStories(java.awt.Frame parent, boolean modal, List<Story> stories) {
         super(parent, modal);
         initComponents();
-        authorName.setText(userName);
         this.stories = stories;
         storyIndex = 1;
         storyNumber.setText(Integer.toString(storyIndex));
@@ -122,6 +123,10 @@ public class ViewStories extends javax.swing.JDialog {
 
     private void changeStory(int i) {
         storyIndex += i;
+        String autherId = stories.get(stories.size() - storyIndex).getAuthorId();
+        UserService userService = new UserService();
+        User user = userService.getUserById(autherId);
+        authorName.setText(user.getUsername());
         timeStamp.setText(stories.get(stories.size() - storyIndex).getTimestamp().toString());
         storyText.setText(stories.get(stories.size() - storyIndex).getContentData().getText());
         String path = stories.get(stories.size() - storyIndex).getContentData().getImagePath();
@@ -151,21 +156,6 @@ public class ViewStories extends javax.swing.JDialog {
             changeStory(1);
         }
     }//GEN-LAST:event_nextStoryActionPerformed
-
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                ViewStories dialog = new ViewStories(new javax.swing.JFrame(), true, new ArrayList<>(), "asser");
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel authorName;
