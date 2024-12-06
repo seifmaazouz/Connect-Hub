@@ -2,6 +2,7 @@ package connecthub.frontend;
 
 import connecthub.backend.models.Post;
 import connecthub.backend.models.Story;
+import connecthub.backend.models.User;
 import connecthub.backend.services.PostService;
 import connecthub.backend.services.StoryService;
 import connecthub.backend.utils.factories.ContentFactory;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import javax.imageio.IIOException;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
+
 import connecthub.frontend.utils.ImageManager;
 
 public class ContentCreatorWindow extends javax.swing.JFrame {

@@ -5,16 +5,16 @@ import java.util.UUID;
 
 // Prototype Design Pattern
 public abstract class Content {
-    private String contentId;
-    private String authorId;
-    private ContentData contentData; // text and image paths (optional)
-    private LocalDateTime timestamp;
-    
+    private  String contentId;
+    private  String authorId;
+    private  ContentData contentData; // text and image paths (optional)
+    private  LocalDateTime timestamp;
+
     // Default constructor (required for Jackson deserialization)
     public Content() {}
 
-    public Content(String contentId, String authorId, ContentData content) {
-        this.contentId = contentId;
+    public Content(String authorId, ContentData content) {
+        contentId = UUID.randomUUID().toString(); // TODO: change this to handle unique numbers even after closing and re-opening program
         this.authorId = authorId;
         this.contentData = content;
         timestamp = LocalDateTime.now();
