@@ -1,7 +1,5 @@
 package connecthub.frontend;
 
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
@@ -219,7 +217,7 @@ public class Profile extends javax.swing.JFrame {
     }//GEN-LAST:event_viewFriendsActionPerformed
 
     private Image getImageFromFile() throws IOException {
-        JFileChooser fileChooser = new JFileChooser(new File("C:\\Users\\Asser Hanafy\\Desktop\\FInal\\src\\connecthub\\Images"));
+        JFileChooser fileChooser = new JFileChooser(new File("D:\\Connect-Hub\\src\\connecthub\\backend\\database\\images"));
         fileChooser.setFileFilter(new FileNameExtensionFilter("Image Files", "jpg", "png", "jpeg"));
         fileChooser.setAcceptAllFileFilterUsed(false);
         fileChooser.setDialogTitle("Upload Image");
