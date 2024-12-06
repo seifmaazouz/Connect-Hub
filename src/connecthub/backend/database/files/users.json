@@ -6,7 +6,11 @@
     "dateOfBirth" : 944949600000,
     "status" : "online",
     "hashedPassword" : "38nawFMBTxxi1HvDlHxmv++u5IfZT5g1dO8nAQO0q50=",
-    "salt" : "UY/kmPa00IGX+fumIViakQ=="
+    "salt" : "UY/kmPa00IGX+fumIViakQ==",
+    "profilePhoto" : null,
+    "coverPhoto" : null,
+    "bio" : null,
+    "friendship" : null
   },
   "1018" : {
     "userId" : "1018",
@@ -15,7 +19,11 @@
     "dateOfBirth" : 944949600000,
     "status" : "online",
     "hashedPassword" : "eqP6M/5n9wEd1RkuOJsDHpP3otyImAep4liuHHahlq4=",
-    "salt" : "3gHbxOBz2U5jkklDzAnzHg=="
+    "salt" : "3gHbxOBz2U5jkklDzAnzHg==",
+    "profilePhoto" : null,
+    "coverPhoto" : null,
+    "bio" : null,
+    "friendship" : null
   },
   "1020" : {
     "userId" : "1020",
@@ -24,6 +32,23 @@
     "dateOfBirth" : 944949600000,
     "status" : "online",
     "hashedPassword" : "8/wCZMxNVVs54ENWoB+3s9gis89sZEDijPdh1e3UJ0k=",
-    "salt" : "vCqyNI4rblairlawWxUrHg=="
+    "salt" : "vCqyNI4rblairlawWxUrHg==",
+    "profilePhoto" : null,
+    "coverPhoto" : null,
+    "bio" : null,
+    "friendship" : null
+  },
+  "userID" : {
+    "userId" : "userID",
+    "email" : "email",
+    "username" : "asser",
+    "dateOfBirth" : null,
+    "status" : "online",
+    "hashedPassword" : "hashedpass",
+    "salt" : "salt",
+    "profilePhoto" : "src\\connecthub\\backend\\database\\images\\defaultProfilePhoto.jpg",
+    "coverPhoto" : "src\\connecthub\\backend\\database\\images\\defaultCoverPhoto.jpg",
+    "bio" : "yarab",
+    "friendship" : null
   }
 }
