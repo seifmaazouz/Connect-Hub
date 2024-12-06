@@ -29,6 +29,8 @@ public abstract class ContentService<T extends Content> {
 
     public List<T> getListOfUserContents(String userId) {
         List<T> contents = contentDatabase.getListOfContents();
+        if(contents == null)
+            return null;
         List<T> userContents = new ArrayList<>();
         for (T content : contents) {
             if (content.getAuthorId().equals(userId)) {
@@ -36,5 +38,13 @@ public abstract class ContentService<T extends Content> {
             }
         }
         return userContents;
+    }
+    
+    public long getLastId() {
+        List<T> contents = contentDatabase.getListOfContents();
+        if(contents == null)
+            return 0;
+        else
+            return Long.parseLong(contents.getLast().getContentId());
     }
 }

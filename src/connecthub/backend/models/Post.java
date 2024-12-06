@@ -7,7 +7,7 @@ public class Post extends Content {
         super();
     }
 
-    public Post(String authorId, ContentData contentData) {
-        super(authorId, contentData);
+    public Post(String contentId, String authorId, ContentData contentData) {
+        super(contentId, authorId, contentData);
     }
 }
