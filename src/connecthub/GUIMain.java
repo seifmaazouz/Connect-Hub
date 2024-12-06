@@ -12,7 +12,7 @@ import javax.swing.*;
 public class GUIMain {
     public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException {
         setLook();
-        User user = new User("email", "seif", "password", null, "online");
+        User user = new User("userID" ,"email", "asser", null, "online", "hashedpass", "salt");
         ContentCreatorWindow window = new ContentCreatorWindow(user);
         window.setVisible(true);
 //        Profile p = new Profile(user);

@@ -254,7 +254,7 @@ public class Profile extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    new Profile(new User("email", "asser", "password", null, "online")).setVisible(true);
+                    new Profile(new User("userID" ,"email", "asser", null, "online", "hashedpass", "salt")).setVisible(true);
                 } catch (NoSuchAlgorithmException ex) {
                     Logger.getLogger(Profile.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (InvalidKeySpecException ex) {

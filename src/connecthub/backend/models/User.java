@@ -19,8 +19,6 @@ public class User {
 
     private Friendship friendship;
 
-    private Friendship friendship;
-
     public User() {
 
     }
@@ -93,9 +91,5 @@ public class User {
 
     public void setSalt(String salt) {
         this.salt = salt;
-    }
-  
-    public Friendship getFriendShip() {
-        return friendship;
     }
 }
