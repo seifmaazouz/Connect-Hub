@@ -14,9 +14,9 @@ import javax.swing.JPasswordField;
 
 public class UpdatePassword {
 
-    User user;
-    ValidationBehaviour validationBehaviour;
-    UserService userService;
+    private User user;
+    private ValidationBehaviour validationBehaviour;
+    private UserService userService;
 
     public UpdatePassword(User user) {
         this.user = user;

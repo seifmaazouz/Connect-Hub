@@ -10,8 +10,8 @@ import javax.swing.ImageIcon;
 
 public class UpdateProfilePhoto {
 
-    User user;
-    UserDatabase userDatabase;
+    private User user;
+    private UserDatabase userDatabase;
 
     public UpdateProfilePhoto(User user, UserDatabase userDatabase) {
         this.user = user;

@@ -6,8 +6,8 @@ import javax.swing.JOptionPane;
 
 public class UpdateBio {
 
-    User user;
-    UserDatabase userDatabase;
+    private User user;
+    private UserDatabase userDatabase;
 
     public UpdateBio(User user, UserDatabase userDatabase) {
         this.user = user;
