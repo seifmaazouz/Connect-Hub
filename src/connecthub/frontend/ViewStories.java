@@ -1,6 +1,5 @@
 package connecthub.frontend;
 
-import connecthub.backend.models.Post;
 import connecthub.backend.models.Story;
 import java.awt.Image;
 import java.util.ArrayList;
@@ -11,7 +10,7 @@ public class ViewStories extends javax.swing.JDialog {
 
     List<Story> stories;
     private static int storyIndex;
-    
+
     public ViewStories(java.awt.Frame parent, boolean modal, List<Story> stories, String userName) {
         super(parent, modal);
         initComponents();
@@ -120,9 +119,8 @@ public class ViewStories extends javax.swing.JDialog {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-    
-    private void changeStory(int i)
-    {
+
+    private void changeStory(int i) {
         storyIndex += i;
         timeStamp.setText(stories.get(stories.size() - storyIndex).getTimestamp().toString());
         storyText.setText(stories.get(stories.size() - storyIndex).getContentData().getText());
@@ -134,7 +132,7 @@ public class ViewStories extends javax.swing.JDialog {
             storyImage.setIcon(icon);
         }
     }
-    
+
     private void previousStoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_previousStoryActionPerformed
         int i = Integer.parseInt(storyNumber.getText());
         if (i > 1) {
