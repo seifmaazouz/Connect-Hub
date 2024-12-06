@@ -78,4 +78,12 @@ public class User {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public void setHashedPassword(String hashedPassword) {
+        this.hashedPassword = hashedPassword;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
 }

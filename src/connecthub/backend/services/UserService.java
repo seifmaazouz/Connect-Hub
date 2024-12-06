@@ -3,6 +3,8 @@ package connecthub.backend.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import connecthub.backend.database.UserDatabase;
 import connecthub.backend.models.User;
+import connecthub.backend.utils.hashing.HashingBehaviour;
+import connecthub.backend.utils.hashing.PBKDF2Hashing;
 import connecthub.backend.utils.user.UserMetadataValidator;
 import connecthub.backend.utils.errors.Alert;
 import connecthub.backend.utils.password.PBKDF2Validation;
@@ -20,6 +22,7 @@ public class UserService {
 
     private static AtomicInteger userIdCounter;
     private static final ObjectMapper objectMapper = new ObjectMapper();
+    private final HashingBehaviour hashingBehaviour;
 
     private static class CounterData {
         private int counter;
@@ -49,6 +52,7 @@ public class UserService {
         this.validationBehaviour = new PBKDF2Validation();
         this.databaseManager = new UserDatabase();
         this.userMap = databaseManager.getUsers();
+        this.hashingBehaviour = new PBKDF2Hashing();
     }
 
     static {
@@ -219,5 +223,20 @@ public class UserService {
     // Helper method to check if a user exists in the database
     public boolean userExists(String userId) {
         return userMap != null && userMap.containsKey(userId);
+    }
+
+    public void setUserPassword(String userId, String password) throws InvalidKeySpecException, NoSuchAlgorithmException {
+        if (userExists(userId)) {
+            User user = userMap.get(userId);
+            String[] hashedPasswordAndSalt = hashingBehaviour.hash(password);
+
+            String hashedPassword = hashedPasswordAndSalt[0];
+            String salt = hashedPasswordAndSalt[1];
+
+            user.setHashedPassword(hashedPassword);
+            user.setSalt(salt);
+
+            databaseManager.saveUser(user);
+        }
     }
 }
