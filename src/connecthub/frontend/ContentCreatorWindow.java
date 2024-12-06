@@ -17,7 +17,6 @@ import connecthub.frontend.utils.ImageManager;
 
 public class ContentCreatorWindow extends javax.swing.JFrame {
     private User user;
-    private final File UPLOAD_IMAGE_DIRECTORY = new File(System.getProperty("user.home"), "Desktop");
     private  File imageFile;
     private StoryService storyService;
     private PostService postService;
@@ -287,7 +286,7 @@ public class ContentCreatorWindow extends javax.swing.JFrame {
     }
     
     private void btnUploadImagePostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImagePostActionPerformed
-        File selectedFile = ImageManager.uploadImage(UPLOAD_IMAGE_DIRECTORY);
+        File selectedFile = ImageManager.uploadImage();
         // Set global selected imageFile to this imageFile;
         imageFile = selectedFile;
         // Set label status to selected file
@@ -296,7 +295,7 @@ public class ContentCreatorWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUploadImagePostActionPerformed
 
     private void btnUploadImageStoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageStoryActionPerformed
-        File selectedFile = ImageManager.uploadImage(UPLOAD_IMAGE_DIRECTORY);
+        File selectedFile = ImageManager.uploadImage();
         // Set global selected imageFile to this imageFile;
         imageFile = selectedFile;
         // Set label status to selected file

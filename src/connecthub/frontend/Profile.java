@@ -1,8 +1,18 @@
 package connecthub.frontend;
 
+import connecthub.backend.models.Post;
+import connecthub.backend.models.User;
+import connecthub.backend.profile.FetchPosts;
+import connecthub.backend.services.PostService;
+import connecthub.backend.utils.factories.ServiceFactory;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -11,15 +21,17 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Profile extends javax.swing.JFrame {
 
-    ImageIcon profilePhoto;
-    ImageIcon coverPhoto;
-    ImageIcon scaledProfilePhoto;
-    ImageIcon scaledCoverPhoto;
+    private User user;
+    private ImageIcon profilePhoto;
+    private ImageIcon coverPhoto;
+    private ImageIcon scaledProfilePhoto;
+    private ImageIcon scaledCoverPhoto;
 
-    public Profile() {
+    public Profile(User user) {
         initComponents();
         //get profile photo, cover photo, bio from database
         try {
+            this.user = user;
             profilePhoto = new ImageIcon(getClass().getResource("prof.jpg"));
             coverPhoto = new ImageIcon(getClass().getResource("cov.jpg"));
             Image image1 = profilePhoto.getImage();
@@ -153,8 +165,7 @@ public class Profile extends javax.swing.JFrame {
     private void coverPhotoLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_coverPhotoLabelMouseClicked
         try {
             Image image = getImageFromFile();
-            if (image != null)
-            {
+            if (image != null) {
                 Image scaledImage = image.getScaledInstance(600, 150, Image.SCALE_SMOOTH); // Width and height in pixels
                 scaledCoverPhoto = new ImageIcon(scaledImage);
                 coverPhotoLabel.setIcon(scaledCoverPhoto);
@@ -170,8 +181,7 @@ public class Profile extends javax.swing.JFrame {
     private void profilePhotoLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profilePhotoLabelMouseClicked
         try {
             Image image = getImageFromFile();
-            if (image != null)
-            {
+            if (image != null) {
                 Image scaledImage = image.getScaledInstance(125, 125, Image.SCALE_SMOOTH); // Width and height in pixels
                 scaledCoverPhoto = new ImageIcon(scaledImage);
                 profilePhotoLabel.setIcon(scaledCoverPhoto);
@@ -208,6 +218,8 @@ public class Profile extends javax.swing.JFrame {
 
     private void viewPostsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewPostsActionPerformed
         //fetch posts
+        PostService post = ServiceFactory.createPostService();
+        List<Post> posts = post.getListOfUserContents(user.getUserId());
         //new posts JDialog
     }//GEN-LAST:event_viewPostsActionPerformed
 
@@ -238,7 +250,13 @@ public class Profile extends javax.swing.JFrame {
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Profile().setVisible(true);
+                try {
+                    new Profile(new User("email", "asser", "password", null, "online")).setVisible(true);
+                } catch (NoSuchAlgorithmException ex) {
+                    Logger.getLogger(Profile.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InvalidKeySpecException ex) {
+                    Logger.getLogger(Profile.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
