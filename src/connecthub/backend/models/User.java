@@ -9,6 +9,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
 
 public class User {
+
     private String userId;
     private String email;
     private String username;
@@ -16,7 +17,9 @@ public class User {
     private String status;
     private String hashedPassword;
     private String salt;
-
+    private String profilePhoto;
+    private String coverPhoto;
+    private String bio;
     private Friendship friendship;
 
     public User() {
@@ -31,6 +34,9 @@ public class User {
         this.status = status;
         this.hashedPassword = hashedPassword;
         this.salt = salt;
+        this.profilePhoto = "src\\connecthub\\backend\\database\\images\\defaultProfilePhoto.jpg";
+        this.coverPhoto = "src\\connecthub\\backend\\database\\images\\defaultCoverPhoto.jpg";
+        this.bio = null;
     }
 
     public String getHashedPassword() {
@@ -81,15 +87,39 @@ public class User {
         this.status = status;
     }
 
-    public Friendship getFriendShip() {
-        return friendship;
-    }
-
     public void setHashedPassword(String hashedPassword) {
         this.hashedPassword = hashedPassword;
     }
 
     public void setSalt(String salt) {
         this.salt = salt;
+    }
+
+    public Friendship getFriendship() {
+        return friendship;
+    }
+
+    public String getProfilePhoto() {
+        return profilePhoto;
+    }
+
+    public String getCoverPhoto() {
+        return coverPhoto;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setProfilePhoto(String profilePhoto) {
+        this.profilePhoto = profilePhoto;
+    }
+
+    public void setCoverPhoto(String coverPhoto) {
+        this.coverPhoto = coverPhoto;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
     }
 }

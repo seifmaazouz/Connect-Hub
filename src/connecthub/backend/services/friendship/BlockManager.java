@@ -13,12 +13,12 @@ public class BlockManager {
         FriendManager friendManager = new FriendManager(user);
         friendManager.removeFriend(other);
 
-        user.getFriendShip().addUserToBlocked(other);
-        other.getFriendShip().getBlockedHAHA(user);
+        user.getFriendship().addUserToBlocked(other);
+        other.getFriendship().getBlockedHAHA(user);
     }
 
     public void unblockUser(User other) {
-        user.getFriendShip().removeUserFromBlocked(other);
-        other.getFriendShip().removeUserFromBlockedBy(user);
+        user.getFriendship().removeUserFromBlocked(other);
+        other.getFriendship().removeUserFromBlockedBy(user);
     }
 }
