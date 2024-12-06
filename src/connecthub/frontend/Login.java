@@ -1,4 +1,4 @@
-package connecthub.frontend.users;
+package connecthub.frontend;
 
 import connecthub.backend.models.User;
 import connecthub.backend.services.UserService;
@@ -27,7 +27,7 @@ public class Login {
         SwingUtilities.invokeLater(() -> new Login().createAndShowGUI());
     }
 
-    private void createAndShowGUI() {
+    public void createAndShowGUI() {
         JFrame frame = new JFrame("Login");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(350, 200);
@@ -74,13 +74,14 @@ public class Login {
                             "Login successful!",
                             "Success",
                             JOptionPane.INFORMATION_MESSAGE);
+                    frame.dispose();
+                    new NewsFeed(user).setVisible(true);
                 } else {
                     JOptionPane.showMessageDialog(frame,
                             "Login failed: Invalid email or password.",
                             "Error",
                             JOptionPane.ERROR_MESSAGE);
                 }
-                // TODO: Open the newsfeed window here
 
             } catch (InvalidKeySpecException ex) {
                 // Handle InvalidKeySpecException specifically

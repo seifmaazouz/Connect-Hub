@@ -30,4 +30,20 @@
     "imagePath" : "src\\connecthub\\backend\\database\\images\\userID_2024-12-06_17-35-02.jpg"
   },
   "timestamp" : [ 2024, 12, 6, 17, 35, 2, 61150100 ]
+}, {
+  "contentId" : "927e673b-eda6-4309-9d4a-4f7dc644bf06",
+  "authorId" : "userID",
+  "contentData" : {
+    "text" : "testtttt",
+    "imagePath" : null
+  },
+  "timestamp" : [ 2024, 12, 6, 21, 27, 16, 808331800 ]
+}, {
+  "contentId" : "f6b4bb54-cf1e-4caf-91c6-fd91921c46c6",
+  "authorId" : "userID",
+  "contentData" : {
+    "text" : "testt2",
+    "imagePath" : null
+  },
+  "timestamp" : [ 2024, 12, 6, 21, 27, 47, 339503800 ]
 } ]

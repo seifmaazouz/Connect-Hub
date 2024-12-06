@@ -58,8 +58,16 @@ public class Profile extends javax.swing.JFrame {
         viewPosts = new javax.swing.JToggleButton();
         viewFriends = new javax.swing.JToggleButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         coverPhotoLabel.setToolTipText("Click to change cover photo.");
         coverPhotoLabel.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -213,6 +221,14 @@ public class Profile extends javax.swing.JFrame {
 //        //new posts JDialog
 //        new ViewFriends(this, true, friends).setVisible(true);
     }//GEN-LAST:event_viewFriendsActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        new NewsFeed(user).setVisible(true);
+    }//GEN-LAST:event_formWindowClosed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        new NewsFeed(user).setVisible(true);
+    }//GEN-LAST:event_formWindowClosing
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {

@@ -1,12 +1,11 @@
 package connecthub.backend.models;
 
-import connecthub.backend.services.UserService;
-import connecthub.backend.utils.hashing.HashingBehaviour;
-import connecthub.backend.utils.hashing.PBKDF2Hashing;
-
+import java.io.File;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
+
+import static connecthub.backend.constants.FilePath.IMAGE_SAVE_DIRECTORY;
 
 public class User {
 
@@ -34,8 +33,8 @@ public class User {
         this.status = status;
         this.hashedPassword = hashedPassword;
         this.salt = salt;
-        this.profilePhoto = "src\\connecthub\\backend\\database\\images\\defaultProfilePhoto.jpg";
-        this.coverPhoto = "src\\connecthub\\backend\\database\\images\\defaultCoverPhoto.jpg";
+        this.profilePhoto = IMAGE_SAVE_DIRECTORY + File.separator + "defaultProfilePhoto.jpg";
+        this.coverPhoto = IMAGE_SAVE_DIRECTORY + File.separator + "defaultCoverPhoto.jpg";
         this.bio = null;
     }
 
