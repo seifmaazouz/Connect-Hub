@@ -17,6 +17,8 @@ public class User {
     private String hashedPassword;
     private String salt;
 
+    private Friendship friendship;
+
     public User() {
 
     }
@@ -85,5 +87,9 @@ public class User {
 
     public void setSalt(String salt) {
         this.salt = salt;
+    }
+  
+    public Friendship getFriendShip() {
+        return friendship;
     }
 }
