@@ -1,5 +1,6 @@
 package connecthub.backend.profile;
 
+import connecthub.backend.database.UserDatabase;
 import connecthub.backend.models.User;
 import connecthub.frontend.utils.ImageManager;
 import java.awt.Image;
@@ -10,9 +11,11 @@ import javax.swing.ImageIcon;
 public class UpdateProfilePhoto {
 
     User user;
+    UserDatabase userDatabase;
 
-    public UpdateProfilePhoto(User user) {
+    public UpdateProfilePhoto(User user, UserDatabase userDatabase) {
         this.user = user;
+        this.userDatabase = userDatabase;
     }
 
     public ImageIcon update() throws IOException {
@@ -22,6 +25,7 @@ public class UpdateProfilePhoto {
             ImageIcon profilePhoto = new ImageIcon(image);
             String path = ImageManager.copyImageToProgramFiles(user, file);
             user.setProfilePhoto(path);
+            userDatabase.saveUser(user);
             return profilePhoto;
         }
         return null;
