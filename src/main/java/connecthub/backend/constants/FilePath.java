@@ -5,4 +5,6 @@ public interface FilePath {
     String POSTS_FILE_PATH = "db/posts.json";
     String STORIES_FILE_PATH = "db/stories.json";
     String FRIENDS_FILE_PATH = "db/friends.json";
+    String COUNTER_FILE = "db/userIdCounter.json";
+
 }

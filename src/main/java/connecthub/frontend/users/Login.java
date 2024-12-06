@@ -2,11 +2,12 @@ package connecthub.frontend.users;
 
 import connecthub.backend.models.User;
 import connecthub.backend.services.UserService;
+import connecthub.backend.utils.errors.Alert;
+import connecthub.backend.utils.hashing.HashingBehaviour;
+import connecthub.backend.utils.hashing.PBKDF2Hashing;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.text.ParseException;
@@ -15,9 +16,10 @@ import java.util.Date;
 
 public class Login {
     private UserService userService;
-
+    private HashingBehaviour hashingBehaviour;
     public Login() {
         this.userService = new UserService();
+        this.hashingBehaviour = new PBKDF2Hashing();
     }
 
     public static void main(String[] args) {
@@ -126,7 +128,6 @@ public class Login {
             try {
                 User user = userService.getUser(email, password);
 
-                // If logout is successful, display a success message
                 if (user != null) {
                     userService.logout(user.getUserId());
                     JOptionPane.showMessageDialog(frame,
@@ -141,21 +142,18 @@ public class Login {
                 }
 
             } catch (InvalidKeySpecException ex) {
-                // Handle InvalidKeySpecException specifically
                 JOptionPane.showMessageDialog(frame,
                         "An error occurred while processing your logout. Please try again.",
                         "Error",
                         JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
             } catch (NoSuchAlgorithmException ex) {
-                // Handle NoSuchAlgorithmException specifically
                 JOptionPane.showMessageDialog(frame,
                         "A technical error occurred. Please contact support.",
                         "Error",
                         JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
             } catch (Exception ex) {
-                // General catch block for login failures
                 JOptionPane.showMessageDialog(frame,
                         "Logout failed: " + ex.getMessage(),
                         "Error",
@@ -170,7 +168,7 @@ public class Login {
 
         // Create panel for inputs
         JPanel inputPanel = new JPanel();
-        inputPanel.setLayout(new GridLayout(5, 2, 10, 10)); // Updated grid layout: 5 rows
+        inputPanel.setLayout(new GridLayout(5, 2, 10, 10));
 
         JLabel emailLabel = createCenteredLabel("Email:");
         JTextField emailField = createSizedTextField();
@@ -211,6 +209,8 @@ public class Login {
             String password = new String(passwordField.getPassword());
             String dobText = dobField.getText();
             String status = (String) statusComboBox.getSelectedItem();
+            String[] hashedPasswordWithSalt;
+
 
             if (email.isEmpty() || username.isEmpty() || password.isEmpty() || dobText.isEmpty() || status == null) {
                 JOptionPane.showMessageDialog(signUpDialog, "Please fill all fields.", "Warning", JOptionPane.WARNING_MESSAGE);
@@ -218,19 +218,27 @@ public class Login {
             }
 
             try {
+                hashedPasswordWithSalt = hashingBehaviour.hash(password);
+            } catch (NoSuchAlgorithmException ex) {
+                throw new RuntimeException(ex);
+            } catch (InvalidKeySpecException ex) {
+                throw new RuntimeException(ex);
+            }
+
+            String hashedPassword = hashedPasswordWithSalt[0];
+            String salt = hashedPasswordWithSalt[1];
+
+            String userId = UserService.generateUserId() + "";
+
+            try {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 Date dob = sdf.parse(dobText);
 
-                User newUser = new User(email, username, password, dob, status);
+                User newUser = new User(userId, email, username, dob, status, hashedPassword, salt);
 
-                boolean isSignedUp = userService.signup(newUser);
+                Alert.alerts isSignedUp = userService.signup(newUser);
 
-                if (isSignedUp) {
-                    JOptionPane.showMessageDialog(signUpDialog, "Sign Up Successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                    signUpDialog.dispose();
-                } else {
-                    JOptionPane.showMessageDialog(signUpDialog, "Sign Up failed: User already exists.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+                handleSignUpErrors(signUpDialog, isSignedUp);
 
             } catch (ParseException ex) {
                 JOptionPane.showMessageDialog(signUpDialog, "Invalid Date of Birth format. Please use yyyy-MM-dd.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -250,6 +258,24 @@ public class Login {
         signUpDialog.setVisible(true);
     }
 
+    private void handleSignUpErrors(JDialog signUpDialog, Alert.alerts isSignedUp) {
+        if (isSignedUp == Alert.alerts.INVALID_EMAIL_FORMAT) {
+            JOptionPane.showMessageDialog(signUpDialog, "Invalid Email Format!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        else if (isSignedUp == Alert.alerts.USER_EMAIL_EXISTS) {
+            JOptionPane.showMessageDialog(signUpDialog, "User email already exists!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        else if (isSignedUp == Alert.alerts.USER_NAME_EXISTS) {
+            JOptionPane.showMessageDialog(signUpDialog, "Username already exists!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        else if (isSignedUp == Alert.alerts.PROCESS_FAILED) {
+            JOptionPane.showMessageDialog(signUpDialog, "An error occurred!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        else if (isSignedUp == Alert.alerts.PROCESS_SUCCEEDED){
+            JOptionPane.showMessageDialog(signUpDialog, "Sign Up Successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            signUpDialog.dispose();
+        }
+    }
 
     private JLabel createCenteredLabel(String text) {
         JLabel label = new JLabel(text, SwingConstants.CENTER);
