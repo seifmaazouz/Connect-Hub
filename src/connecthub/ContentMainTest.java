@@ -1,50 +1,34 @@
 package connecthub;
 
-import connecthub.backend.database.*;
-import connecthub.backend.loaders.*;
 import connecthub.backend.models.*;
 import connecthub.backend.services.*;
-import connecthub.backend.utils.factory.ContentFactory;
+import connecthub.backend.utils.factories.ContentFactory;
+import connecthub.backend.utils.factories.ServiceFactory;
 
 public class ContentMainTest {
     public static void main(String[] args) {
         // Create Post and Story Service
-        ContentService<Post> postService = createPostService();
-        ContentService<Story> storyService = createStoryService();
+        PostService postService = ServiceFactory.createPostService();
+        StoryService storyService = ServiceFactory.createStoryService();
 
         // Create and save Post content
-        ContentData postContentData = new ContentData("This is the first post content","image1.jpg");
-        Content post1 = ContentFactory.createContent("post", "author1", postContentData);
-        postService.createContent((Post) post1);
+        Post post1 = ContentFactory.createPost("post", "author1", "This is the first post content","image1.jpg");
+        postService.createContent(post1);
 
         // Create and save Story content
-        ContentData storyContentData = new ContentData("This is the first story content");
-        Content story1 = ContentFactory.createContent("story", "author2", storyContentData);
-        storyService.createContent((Story) story1);
+        Story story1 = ContentFactory.createStory("story", "author2", "This is the first story content", null);
+        storyService.createContent(story1);
 
         // Print content list after adding content
         System.out.println("After creating content:");
         printContentList(postService, storyService);
 
         // Delete expired content and refresh content
-        postService.deleteExpiredContent();
-        storyService.deleteExpiredContent();
+        storyService.deleteExpiredStories();
         postService.refreshContents();
         storyService.refreshContents();
         System.out.println("After deleting expired content:");
         printContentList(postService, storyService);
-    }
-
-    public static ContentService<Post> createPostService() {
-        ContentLoader<Post> postLoader = new PostLoader();
-        ContentDatabase<Post> postDatabase = PostDatabase.getInstance(postLoader);
-        return new ContentService<>(postDatabase);
-    }
-
-    public static ContentService<Story> createStoryService() {
-        ContentLoader<Story> storyLoader = new StoryLoader();
-        ContentDatabase<Story> storyDatabase = StoryDatabase.getInstance(storyLoader);
-        return new ContentService<>(storyDatabase);
     }
 
     public static void printContentList(ContentService<Post> postService, ContentService<Story> storyService) {

@@ -3,6 +3,7 @@ package connecthub.backend.models;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+// Prototype Design Pattern
 public abstract class Content {
     private  String contentId;
     private  String authorId;
