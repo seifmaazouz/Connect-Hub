@@ -1,5 +1,6 @@
 package connecthub.frontend;
 
+import connecthub.backend.models.Friendship;
 import connecthub.backend.models.Post;
 import connecthub.backend.models.Story;
 import connecthub.backend.models.User;
@@ -26,7 +27,11 @@ public class NewsFeed extends javax.swing.JFrame {
     public NewsFeed(User user) {
         initComponents();
         this.user = user;
-        friends = user.getFriendship().getFriends();
+        Friendship friendship = user.getFriendship();
+        if(friendship == null)
+            friends = null;
+        else
+            friends = friendship.getFriends();
         profilePhoto = new ImageIcon(user.getProfilePhoto());
         Image image = profilePhoto.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH); // Width and height in pixels
         profilePhoto = new ImageIcon(image);
