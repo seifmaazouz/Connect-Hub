@@ -17,7 +17,7 @@ public class UpdateCoverPhoto {
 
     public ImageIcon update() throws IOException {
         File file = ImageManager.uploadImage();
-        Image image = ImageManager.getImageFromFile(file, 600, 400);
+        Image image = ImageManager.getImageFromFile(file, 600, 300);
         if (image != null) {
             ImageIcon coverPhoto = new ImageIcon(image);
             String path = ImageManager.copyImageToProgramFiles(user, file);
