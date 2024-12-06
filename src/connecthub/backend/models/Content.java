@@ -13,8 +13,8 @@ public abstract class Content {
     // Default constructor (required for Jackson deserialization)
     public Content() {}
 
-    public Content(String authorId, ContentData content) {
-        contentId = UUID.randomUUID().toString(); // TODO: change this to handle unique numbers even after closing and re-opening program
+    public Content(String contentId, String authorId, ContentData content) {
+        this.contentId = contentId;
         this.authorId = authorId;
         this.contentData = content;
         timestamp = LocalDateTime.now();
