@@ -1,4 +1,6 @@
-package connecthub.backend.services.friendship;
+package connecthub.services.friendship;
+
+import connecthub.models.User;
 
 public class FriendRequestManager {
     private final User sender;

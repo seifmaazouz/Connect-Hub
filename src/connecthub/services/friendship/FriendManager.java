@@ -1,4 +1,6 @@
-package connecthub.backend.services.friendship;
+package connecthub.services.friendship;
+
+import connecthub.models.User;
 
 public class FriendManager {
     private final User user;
