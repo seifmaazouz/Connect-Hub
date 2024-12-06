@@ -17,7 +17,7 @@
     "email" : "seif@gmail.com",
     "username" : "Jeff21erson",
     "dateOfBirth" : 1117832400000,
-    "status" : "offline",
+    "status" : "online",
     "hashedPassword" : "Nb6x0yXmUwKkkVTec1MIM5lYAWVUVNnhOPHOg0bYOIo=",
     "salt" : "V1y+7aH1p3EbtNZHyTliYA==",
     "profilePhoto" : "src/connecthub/backend/database/images\\defaultProfilePhoto.jpg",

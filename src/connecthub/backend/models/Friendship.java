@@ -62,7 +62,10 @@ public class Friendship {
     }
 
     public ArrayList<User> getFriends() {
-        return friends;
+        if(friends.isEmpty())
+            return null;
+        else
+            return friends;
     }
 
     public ArrayList<User> getBlockedUsers() {

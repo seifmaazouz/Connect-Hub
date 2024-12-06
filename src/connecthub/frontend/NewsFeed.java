@@ -1,7 +1,9 @@
 package connecthub.frontend;
 
 import connecthub.backend.models.Post;
+import connecthub.backend.models.Story;
 import connecthub.backend.models.User;
+import connecthub.backend.services.StoryService;
 import connecthub.backend.services.PostService;
 import java.awt.Image;
 import java.security.NoSuchAlgorithmException;
@@ -13,15 +15,18 @@ import connecthub.backend.services.UserService;
 import connecthub.backend.utils.factories.ServiceFactory;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 public class NewsFeed extends javax.swing.JFrame {
     private final User user;
     private ImageIcon profilePhoto;
+    private final List<User> friends;
 
     
     public NewsFeed(User user) {
         initComponents();
         this.user = user;
+        friends = user.getFriendship().getFriends();
         profilePhoto = new ImageIcon(user.getProfilePhoto());
         Image image = profilePhoto.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH); // Width and height in pixels
         profilePhoto = new ImageIcon(image);
@@ -31,7 +36,9 @@ public class NewsFeed extends javax.swing.JFrame {
         viewPostsPanel.setUserName(userName);
         PostService postService = ServiceFactory.createPostService();
         List<Post> posts = new ArrayList<>();
-        for(User friend : user.getFriendship().getFriends()) {
+        if(friends == null)
+            return;
+        for(User friend : friends) {
             posts.addAll(postService.getListOfUserContents(friend.getUserId()));
         }
         viewPostsPanel.setPosts(posts);
@@ -48,6 +55,7 @@ public class NewsFeed extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         btnLogout = new javax.swing.JButton();
         viewPostsPanel = new connecthub.frontend.ViewPostsPanel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Newsfeed ");
@@ -119,6 +127,9 @@ public class NewsFeed extends javax.swing.JFrame {
             .addGap(0, 300, Short.MAX_VALUE)
         );
 
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Posts");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -141,7 +152,9 @@ public class NewsFeed extends javax.swing.JFrame {
                         .addComponent(jButton3))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(213, 213, 213)
-                        .addComponent(viewPostsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(viewPostsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(334, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
@@ -160,7 +173,9 @@ public class NewsFeed extends javax.swing.JFrame {
                 .addComponent(lblUsername)
                 .addGap(1, 1, 1)
                 .addComponent(btnLogout)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(viewPostsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(143, 143, 143))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -199,7 +214,17 @@ public class NewsFeed extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+        StoryService storyService = ServiceFactory.createStoryService();
+        if(friends == null) {
+            JOptionPane.showMessageDialog(null, "No friend Stories!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        List<Story> stories = new ArrayList<>();
+        for(User friend : friends) {
+            stories.addAll(storyService.getListOfUserContents(friend.getUserId()));
+        }
+        ViewStories viewStories = new ViewStories(this, true, stories);
+        viewStories.setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
@@ -258,6 +283,7 @@ public class NewsFeed extends javax.swing.JFrame {
     private javax.swing.JButton btnLogout;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblUsername;
     private javax.swing.JLabel profilePhotoLabel;
