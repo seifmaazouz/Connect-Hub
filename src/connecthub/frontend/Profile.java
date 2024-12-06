@@ -1,5 +1,6 @@
 package connecthub.frontend;
 
+import connecthub.backend.database.UserDatabase;
 import connecthub.backend.models.Post;
 import connecthub.backend.models.User;
 import connecthub.backend.profile.FetchPosts;
@@ -20,6 +21,7 @@ import javax.swing.JOptionPane;
 public class Profile extends javax.swing.JFrame {
 
     private User user;
+    private UserDatabase userDatabase;
     private ImageIcon profilePhoto;
     private ImageIcon coverPhoto;
     private ImageIcon scaledProfilePhoto;
@@ -30,6 +32,7 @@ public class Profile extends javax.swing.JFrame {
         //get profile photo, cover photo, bio from database
         try {
             this.user = user;
+            userDatabase = new UserDatabase();
             bio.setText(user.getBio());
             profilePhoto = new ImageIcon(user.getProfilePhoto());
             coverPhoto = new ImageIcon(user.getCoverPhoto());
@@ -84,7 +87,7 @@ public class Profile extends javax.swing.JFrame {
         });
 
         bio.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        bio.setText("One day I'll be something you've never expected!");
+        bio.setText("Enter bio.");
         bio.setToolTipText("Click to change bio.");
         bio.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         bio.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -169,7 +172,7 @@ public class Profile extends javax.swing.JFrame {
 
     private void coverPhotoLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_coverPhotoLabelMouseClicked
         try {
-            UpdateCoverPhoto updateCoverPhoto = new UpdateCoverPhoto(user);
+            UpdateCoverPhoto updateCoverPhoto = new UpdateCoverPhoto(user, userDatabase);
             coverPhoto = updateCoverPhoto.update();
             if (coverPhoto != null) {
                 coverPhotoLabel.setIcon(coverPhoto);
@@ -183,7 +186,7 @@ public class Profile extends javax.swing.JFrame {
 
     private void profilePhotoLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profilePhotoLabelMouseClicked
         try {
-            UpdateProfilePhoto updateProfilePhoto = new UpdateProfilePhoto(user);
+            UpdateProfilePhoto updateProfilePhoto = new UpdateProfilePhoto(user, userDatabase);
             profilePhoto = updateProfilePhoto.update();
             if (profilePhoto != null) {
                 profilePhotoLabel.setIcon(profilePhoto);
@@ -196,7 +199,7 @@ public class Profile extends javax.swing.JFrame {
     }//GEN-LAST:event_profilePhotoLabelMouseClicked
 
     private void bioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bioMouseClicked
-        UpdateBio updateBio = new UpdateBio(user);
+        UpdateBio updateBio = new UpdateBio(user, userDatabase);
         String text = updateBio.update();
         if (text != null) {
             bio.setText(text);

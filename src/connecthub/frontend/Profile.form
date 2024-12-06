@@ -101,7 +101,7 @@
     <Component class="javax.swing.JLabel" name="bio">
       <Properties>
         <Property name="horizontalAlignment" type="int" value="0"/>
-        <Property name="text" type="java.lang.String" value="One day I&apos;ll be something you&apos;ve never expected!"/>
+        <Property name="text" type="java.lang.String" value="Enter bio."/>
         <Property name="toolTipText" type="java.lang.String" value="Click to change bio."/>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
