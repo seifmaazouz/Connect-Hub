@@ -24,4 +24,9 @@ public abstract class ContentService<T extends Content> {
     public List<T> getListOfContents() {
         return contentDatabase.getListOfContents();
     }
+
+    public long getLastId() {
+        List<T> contents = contentDatabase.getListOfContents();
+        return Long.parseLong(contents.getLast().getContentId());
+    }
 }

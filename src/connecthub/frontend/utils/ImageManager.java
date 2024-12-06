@@ -1,6 +1,5 @@
 package connecthub.frontend.utils;
 
-import connecthub.backend.models.User;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
