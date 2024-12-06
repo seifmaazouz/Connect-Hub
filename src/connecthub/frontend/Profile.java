@@ -216,13 +216,21 @@ public class Profile extends javax.swing.JFrame {
     private void viewPostsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewPostsActionPerformed
         FetchPosts fetch = new FetchPosts(user.getUserId());
         List<Post> posts = fetch.fetch();
-        new ViewPosts(this, true, posts, user.getUsername()).setVisible(true);
+        if (posts.size() == 0) {
+            JOptionPane.showMessageDialog(null, "No Posts!");
+        } else {
+            new ViewPosts(this, true, posts, user.getUsername()).setVisible(true);
+        }
     }//GEN-LAST:event_viewPostsActionPerformed
 
     private void viewFriendsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewFriendsActionPerformed
         FetchFriends fetch = new FetchFriends(user);
         List<User> friends = fetch.fetch();
-        new ViewFriends(this, true, friends).setVisible(true);
+        if (friends.size() == 0) {
+            JOptionPane.showMessageDialog(null, "No Friends!");
+        } else {
+            new ViewFriends(this, true, friends).setVisible(true);
+        }
     }//GEN-LAST:event_viewFriendsActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
