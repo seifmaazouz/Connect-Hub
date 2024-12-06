@@ -5,7 +5,6 @@ import connecthub.backend.database.JSONParser;
 import connecthub.backend.models.User;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static connecthub.backend.constants.FilePath.USERS_FILE_PATH;
