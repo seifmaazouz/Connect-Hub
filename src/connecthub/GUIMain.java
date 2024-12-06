@@ -11,7 +11,7 @@ import javax.swing.*;
 public class GUIMain {
     public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException {
         setLook();
-        ContentCreatorWindow window = new ContentCreatorWindow(new User("userIdTest", "a", "seif", "password", null, "online"));
+        ContentCreatorWindow window = new ContentCreatorWindow(new User("email", "seif", "password", null, "online"));
         window.setVisible(true);
     }
     

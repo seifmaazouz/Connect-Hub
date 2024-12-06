@@ -2,8 +2,6 @@ package connecthub.services;
 
 import connecthub.database.DatabaseManager;
 import connecthub.models.User;
-import main.java.connecthub.database.*;
-import main.java.connecthub.models.*;
 import connecthub.utils.password.PBKDF2Validation;
 import connecthub.utils.password.ValidationBehaviour;
 
