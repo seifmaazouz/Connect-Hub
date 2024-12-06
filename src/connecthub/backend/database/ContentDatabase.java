@@ -3,8 +3,8 @@ package connecthub.backend.database;
 import connecthub.backend.models.Content;
 import connecthub.backend.loaders.ContentLoader;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +30,10 @@ public abstract class ContentDatabase<T extends Content> {
     }
 
     public List<T> getListOfContents() {
-        return new ArrayList<>(contents.values());
+        if(contents.isEmpty())
+            return null;
+        else
+            return new LinkedList<>(contents.values());
     }
 
     // save content to file if changes made
