@@ -75,13 +75,10 @@ public class ImageManager {
         fileChooser.setFileFilter(new FileNameExtensionFilter("Image Files", "jpg", "png", "jpeg")); // Show only image files
         fileChooser.setAcceptAllFileFilterUsed(false);
         fileChooser.setDialogTitle("Upload Image");
-        // Create the folder if it doesn't exist in documents
+        // Xheck if directory doesn't exist in documents
         if (!UPLOAD_IMAGE_DIRECTORY.exists()) {
-            boolean isCreated = UPLOAD_IMAGE_DIRECTORY.mkdirs();
-            if (!isCreated) {
-                System.out.println("Failed to create the directory.");
+                System.out.println("Failed to load the directory.");
                 return null;
-            }
         }
         fileChooser.setCurrentDirectory(UPLOAD_IMAGE_DIRECTORY);
         return fileChooser;
