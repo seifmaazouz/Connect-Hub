@@ -9,18 +9,11 @@ import connecthub.backend.utils.factories.ContentFactory;
 import connecthub.backend.utils.factories.ServiceFactory;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import javax.imageio.IIOException;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import static connecthub.backend.constants.FilePath.IMAGE_SAVE_DIRECTORY;
+
 import connecthub.frontend.utils.ImageManager;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class ContentCreatorWindow extends javax.swing.JFrame {
     private User user;

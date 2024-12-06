@@ -19,6 +19,8 @@ public class User {
     private String salt;
     private transient HashingBehaviour hashingBehaviour;
 
+    private Friendship friendship;
+
     public User() {
 
     }
@@ -91,4 +93,9 @@ public class User {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public Friendship getFriendShip() {
+        return friendship;
+    }
+
 }
