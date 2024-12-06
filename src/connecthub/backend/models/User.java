@@ -81,15 +81,15 @@ public class User {
         this.status = status;
     }
 
+    public Friendship getFriendShip() {
+        return friendship;
+    }
+
     public void setHashedPassword(String hashedPassword) {
         this.hashedPassword = hashedPassword;
     }
 
     public void setSalt(String salt) {
         this.salt = salt;
-    }
-  
-    public Friendship getFriendShip() {
-        return friendship;
     }
 }

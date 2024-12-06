@@ -17,7 +17,6 @@ import connecthub.frontend.utils.ImageManager;
 
 public class ContentCreatorWindow extends javax.swing.JFrame {
     private User user;
-    private final File UPLOAD_IMAGE_DIRECTORY = new File(System.getProperty("user.home"), "Desktop");
     private  File imageFile;
     private StoryService storyService;
     private PostService postService;
@@ -287,7 +286,7 @@ public class ContentCreatorWindow extends javax.swing.JFrame {
     }
     
     private void btnUploadImagePostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImagePostActionPerformed
-        File selectedFile = ImageManager.uploadImage(UPLOAD_IMAGE_DIRECTORY);
+        File selectedFile = ImageManager.uploadImage();
         // Set global selected imageFile to this imageFile;
         imageFile = selectedFile;
         // Set label status to selected file
@@ -296,7 +295,7 @@ public class ContentCreatorWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUploadImagePostActionPerformed
 
     private void btnUploadImageStoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageStoryActionPerformed
-        File selectedFile = ImageManager.uploadImage(UPLOAD_IMAGE_DIRECTORY);
+        File selectedFile = ImageManager.uploadImage();
         // Set global selected imageFile to this imageFile;
         imageFile = selectedFile;
         // Set label status to selected file
@@ -313,7 +312,7 @@ public class ContentCreatorWindow extends javax.swing.JFrame {
             // copy selected image to database and get new image path
             String imagePath = ImageManager.copyImageToProgramFiles(user, imageFile);
             // create post
-            Post newPost = ContentFactory.createPost("Post", "user3Id", userText, imagePath);
+            Post newPost = ContentFactory.createPost(user.getUserId(), userText, imagePath);
             // add post
             postService.createContent(newPost);
             imageFile = null;
@@ -332,7 +331,7 @@ public class ContentCreatorWindow extends javax.swing.JFrame {
             // copy selected image to database and get new image path
             String imagePath = ImageManager.copyImageToProgramFiles(user, imageFile);
             // create story
-            Story newStory = ContentFactory.createStory("Story", "user3Id", userText, imagePath);
+            Story newStory = ContentFactory.createStory(user.getUserId(), userText, imagePath);
             // add story
             storyService.createContent(newStory);
             imageFile = null;
