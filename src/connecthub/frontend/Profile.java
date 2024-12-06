@@ -218,14 +218,17 @@ public class Profile extends javax.swing.JFrame {
 
     private void viewPostsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewPostsActionPerformed
         //fetch posts
-        PostService post = ServiceFactory.createPostService();
-        List<Post> posts = post.getListOfUserContents(user.getUserId());
+        FetchPosts fetch = new FetchPosts(user.getUserId());
+        List<Post> posts = fetch.fetch();
         //new posts JDialog
+        new ViewPosts(this, true, posts, user.getUsername()).setVisible(true);
     }//GEN-LAST:event_viewPostsActionPerformed
 
     private void viewFriendsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewFriendsActionPerformed
-        //fetch friends
-        //new posts JDialog
+//        //fetch friends
+//        FetchFriends fetch = new FetchFriends(user.getUserId());
+//        //new posts JDialog
+//        new ViewFriends(this, true, friends).setVisible(true);
     }//GEN-LAST:event_viewFriendsActionPerformed
 
     private Image getImageFromFile() throws IOException {

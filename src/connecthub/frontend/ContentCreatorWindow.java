@@ -312,7 +312,7 @@ public class ContentCreatorWindow extends javax.swing.JFrame {
             // copy selected image to database and get new image path
             String imagePath = ImageManager.copyImageToProgramFiles(user, imageFile);
             // create post
-            Post newPost = ContentFactory.createPost("Post", "user3Id", userText, imagePath);
+            Post newPost = ContentFactory.createPost(user.getUserId(), userText, imagePath);
             // add post
             postService.createContent(newPost);
             imageFile = null;
@@ -331,7 +331,7 @@ public class ContentCreatorWindow extends javax.swing.JFrame {
             // copy selected image to database and get new image path
             String imagePath = ImageManager.copyImageToProgramFiles(user, imageFile);
             // create story
-            Story newStory = ContentFactory.createStory("Story", "user3Id", userText, imagePath);
+            Story newStory = ContentFactory.createStory(user.getUserId(), userText, imagePath);
             // add story
             storyService.createContent(newStory);
             imageFile = null;

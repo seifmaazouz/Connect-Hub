@@ -1,9 +1,21 @@
 package connecthub.backend.profile;
 
-public class FetchPosts implements Fetchable {
+import connecthub.backend.models.Post;
+import connecthub.backend.services.PostService;
+import connecthub.backend.utils.factories.ServiceFactory;
+import java.util.List;
 
-    @Override
-    public void fetch() {
-        //fetch list of posts from database
+public class FetchPosts {
+
+    private String userId;
+
+    public FetchPosts(String userId) {
+        this.userId = userId;
+    }
+
+    public List<Post> fetch() {
+        PostService post = ServiceFactory.createPostService();
+        List<Post> posts = post.getListOfUserContents(userId);
+        return posts;
     }
 }

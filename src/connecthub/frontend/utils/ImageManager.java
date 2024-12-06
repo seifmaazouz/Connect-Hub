@@ -15,7 +15,6 @@ import static connecthub.backend.constants.FilePath.IMAGE_SAVE_DIRECTORY;
 import static connecthub.backend.constants.FilePath.UPLOAD_IMAGE_DIRECTORY;
 import java.awt.Image;
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 
 public class ImageManager {
 

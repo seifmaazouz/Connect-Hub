@@ -1,9 +1,18 @@
 package connecthub.backend.profile;
 
-public class FetchFriends implements Fetchable {
+import java.util.List;
 
-    @Override
-    public void fetch() {
-        //fetch list of friends from database
+public class FetchFriends {
+
+    private String userId;
+
+    public FetchFriends(String userId) {
+        this.userId = userId;
     }
+
+//    public List<Friend> fetch() {
+//        FriendService friend = ServiceFactory.createFriendService();
+//        List<Friend> friends = friend.getListOfUserFriends(userId);
+//        return friends;
+//    }
 }
