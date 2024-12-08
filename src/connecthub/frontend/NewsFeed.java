@@ -46,7 +46,8 @@ public class NewsFeed extends javax.swing.JFrame {
         for(User friend : friends) {
             posts.addAll(postService.getListOfUserContents(friend.getUserId()));
         }
-        viewPostsPanel.setPosts(posts);
+        if(!posts.isEmpty())
+            viewPostsPanel.setPosts(posts);
     }
 
     @SuppressWarnings("unchecked")
@@ -228,8 +229,10 @@ public class NewsFeed extends javax.swing.JFrame {
         for(User friend : friends) {
             stories.addAll(storyService.getListOfUserContents(friend.getUserId()));
         }
-        ViewStories viewStories = new ViewStories(this, true, stories);
-        viewStories.setVisible(true);
+        if(!stories.isEmpty()) {
+            ViewStories viewStories = new ViewStories(this, true, stories);
+            viewStories.setVisible(true);
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
