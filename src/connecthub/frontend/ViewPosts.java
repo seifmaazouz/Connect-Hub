@@ -132,6 +132,8 @@ public class ViewPosts extends javax.swing.JDialog {
             ImageIcon icon = new ImageIcon(image);
             postImage.setIcon(icon);
         }
+        else
+            postImage.setIcon(null);
     }
     
     private void previousPostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_previousPostActionPerformed

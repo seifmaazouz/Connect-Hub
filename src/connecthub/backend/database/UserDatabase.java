@@ -9,11 +9,19 @@ public class UserDatabase {
 
     protected final HashMap<String, User> users;
     protected final UserLoader userLoader;
+    private static UserDatabase instance;
 
-    public UserDatabase() {
+    private UserDatabase() {
         this.users = new HashMap<>();
         this.userLoader = new UserLoader();
         loadAllContents();
+    }
+
+    public static UserDatabase getInstance() {
+        if (instance == null) {
+            instance = new UserDatabase();
+        }
+        return instance;
     }
 
     public void saveUser(User user) {

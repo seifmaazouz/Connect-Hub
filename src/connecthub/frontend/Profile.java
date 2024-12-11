@@ -33,7 +33,7 @@ public class Profile extends javax.swing.JFrame {
         //get profile photo, cover photo, bio from database
         try {
             this.user = user;
-            userDatabase = new UserDatabase();
+            userDatabase = UserDatabase.getInstance();
             bio.setText(user.getBio());
             profilePhoto = new ImageIcon(user.getProfilePhoto());
             coverPhoto = new ImageIcon(user.getCoverPhoto());
@@ -67,9 +67,6 @@ public class Profile extends javax.swing.JFrame {
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
-            }
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                formWindowClosing(evt);
             }
         });
 
@@ -216,22 +213,20 @@ public class Profile extends javax.swing.JFrame {
     private void viewPostsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewPostsActionPerformed
         FetchPosts fetch = new FetchPosts(user.getUserId());
         List<Post> posts = fetch.fetch();
-        new ViewPosts(this, true, posts, user.getUsername()).setVisible(true);
+        if(posts != null && !posts.isEmpty())
+            new ViewPosts(this, true, posts, user.getUsername()).setVisible(true);
     }//GEN-LAST:event_viewPostsActionPerformed
 
     private void viewFriendsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewFriendsActionPerformed
         FetchFriends fetch = new FetchFriends(user);
         List<User> friends = fetch.fetch();
-        new ViewFriends(this, true, friends).setVisible(true);
+        if(friends != null && !friends.isEmpty())
+            new ViewFriends(this, true, friends).setVisible(true);
     }//GEN-LAST:event_viewFriendsActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         new NewsFeed(user).setVisible(true);
     }//GEN-LAST:event_formWindowClosed
-
-    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        new NewsFeed(user).setVisible(true);
-    }//GEN-LAST:event_formWindowClosing
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {

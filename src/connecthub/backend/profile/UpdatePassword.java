@@ -35,6 +35,7 @@ public class UpdatePassword {
                 try {
                     boolean validated = validationBehaviour.validatePassword(enteredPassword, user.getHashedPassword(), user.getSalt());
                     if (validated) {
+                        passwordField.setText("");
                         choice = JOptionPane.showConfirmDialog(null, passwordField, "Enter new password", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
                         String newPassword = null;
                         if (choice == JOptionPane.OK_OPTION) {
