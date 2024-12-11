@@ -33,7 +33,7 @@ public class Profile extends javax.swing.JFrame {
         //get profile photo, cover photo, bio from database
         try {
             this.user = user;
-            userDatabase = new UserDatabase();
+            userDatabase = UserDatabase.getInstance();
             bio.setText(user.getBio());
             profilePhoto = new ImageIcon(user.getProfilePhoto());
             coverPhoto = new ImageIcon(user.getCoverPhoto());

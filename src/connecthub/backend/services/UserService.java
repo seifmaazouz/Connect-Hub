@@ -50,7 +50,7 @@ public class UserService {
 
     public UserService() {
         this.validationBehaviour = new PBKDF2Validation();
-        this.databaseManager = new UserDatabase();
+        this.databaseManager = UserDatabase.getInstance();
         this.userMap = databaseManager.getUsers();
         this.hashingBehaviour = new PBKDF2Hashing();
     }
@@ -240,5 +240,10 @@ public class UserService {
 
             databaseManager.saveUser(user);
         }
+    }
+
+    public void refreshContents() {
+        databaseManager.loadAllContents();
+        userMap = databaseManager.getUsers();
     }
 }
