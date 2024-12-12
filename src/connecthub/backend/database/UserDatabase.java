@@ -6,7 +6,6 @@ import connecthub.backend.models.User;
 import java.util.HashMap;
 
 public class UserDatabase {
-
     protected final HashMap<String, User> users;
     protected final UserLoader userLoader;
 
@@ -27,7 +26,7 @@ public class UserDatabase {
     }
 
     public HashMap<String, User> getUsers() {
-        return new HashMap<>(users);
+        return users;
     }
 
     protected void saveChangesToFile() {

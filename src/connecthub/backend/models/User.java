@@ -1,9 +1,5 @@
 package connecthub.backend.models;
 
-import connecthub.backend.services.UserService;
-import connecthub.backend.utils.hashing.HashingBehaviour;
-import connecthub.backend.utils.hashing.PBKDF2Hashing;
-
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
@@ -32,6 +28,8 @@ public class User {
         this.hashedPassword = hashedPassword;
         this.salt = salt;
     }
+
+
 
     public String getHashedPassword() {
         return hashedPassword;

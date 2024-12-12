@@ -2,7 +2,6 @@ package connecthub;
 
 import connecthub.backend.models.User;
 import connecthub.frontend.ContentCreatorWindow;
-import connecthub.frontend.Profile;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -16,7 +15,7 @@ public class GUIMain {
         ContentCreatorWindow window = new ContentCreatorWindow(user);
         window.setVisible(true);
 //        Profile p = new Profile(user);
-//        p.setVisible(true);
+//        p.setVisible(true);f
     }
     
     private static void setLook() {

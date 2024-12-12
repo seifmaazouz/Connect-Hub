@@ -11,6 +11,8 @@ import java.util.Base64;
 import static connecthub.backend.constants.Constants.*;
 
 public class PBKDF2Hashing implements HashingBehaviour {
+
+
     @Override
     public String[] hash(String password) throws InvalidKeySpecException, NoSuchAlgorithmException {
         // Generate a random salt
@@ -32,4 +34,5 @@ public class PBKDF2Hashing implements HashingBehaviour {
 
         return new String[]{encodedHash, encodedSalt};
     }
+
 }

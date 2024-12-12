@@ -228,7 +228,7 @@ public class Login {
             String hashedPassword = hashedPasswordWithSalt[0];
             String salt = hashedPasswordWithSalt[1];
 
-            String userId = UserService.generateUserId() + "";
+            String userId = UserService.generateUserId();
 
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
