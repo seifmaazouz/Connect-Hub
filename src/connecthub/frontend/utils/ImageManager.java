@@ -12,13 +12,19 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import static connecthub.backend.constants.FilePath.IMAGE_SAVE_DIRECTORY;
-
+import static connecthub.backend.constants.FilePath.UPLOAD_IMAGE_DIRECTORY;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
 
 public class ImageManager {
-    
+
     public static String copyImageToProgramFiles(User user, File imageFile) {
-        if(imageFile == null)
+        if (imageFile == null) {
             return null;
+        }
         // Convert the File objects to Path objects
         Path sourcePath = imageFile.toPath();
         // check if directory exists, if it doesnt crrate directory
@@ -29,7 +35,7 @@ public class ImageManager {
         // Format LocalDateTime without invalid characters
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
         String timestamp = LocalDateTime.now().format(formatter);
-        
+
         // Create path with filename consisting of userId + current time to be unique
         File destinationFile = new File(IMAGE_SAVE_DIRECTORY + File.separator + user.getUserId() + "_" + timestamp + ".jpg");
         Path destinationPath = destinationFile.toPath();
@@ -41,11 +47,13 @@ public class ImageManager {
         }
         return destinationPath.toString();
     }
-    
+
     // uploads image
-    public static File uploadImage(File UPLOAD_IMAGE_DIRECTORY) {
-        JFileChooser fileChooser = createFileChooser(UPLOAD_IMAGE_DIRECTORY);
-        if (fileChooser == null) return null;
+    public static File uploadImage() {
+        JFileChooser fileChooser = createFileChooser();
+        if (fileChooser == null) {
+            return null;
+        }
         int choice = fileChooser.showOpenDialog(null);
         if (choice == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
@@ -63,22 +71,39 @@ public class ImageManager {
         }
         return null;
     }
-    
+
     // creates file chooser for uploading image
-    public static JFileChooser createFileChooser(File UPLOAD_IMAGE_DIRECTORY) {
+    public static JFileChooser createFileChooser() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new FileNameExtensionFilter("Image Files", "jpg", "png", "jpeg")); // Show only image files
         fileChooser.setAcceptAllFileFilterUsed(false);
         fileChooser.setDialogTitle("Upload Image");
-        // Create the folder if it doesn't exist in documents
+        // Xheck if directory doesn't exist in documents
         if (!UPLOAD_IMAGE_DIRECTORY.exists()) {
-            boolean isCreated = UPLOAD_IMAGE_DIRECTORY.mkdirs();
-            if (!isCreated) {
-                System.out.println("Failed to create the directory.");
+                System.out.println("Failed to load the directory.");
                 return null;
-            }
         }
         fileChooser.setCurrentDirectory(UPLOAD_IMAGE_DIRECTORY);
         return fileChooser;
+    }
+
+    public static Image getImageFromFile(File file, int x, int y) throws IOException {
+        if (file == null) {
+            return null;
+        }
+        Image image = ImageIO.read(file);
+        image = image.getScaledInstance(x, y, Image.SCALE_SMOOTH);
+        return image;
+    }
+    
+    public static Image getScaledImage(Image srcImg, int w, int h) {
+        BufferedImage resizedImg = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = resizedImg.createGraphics();
+        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.drawImage(srcImg, 0, 0, w, h, null);
+        g2.dispose();
+        return resizedImg;
     }
 }

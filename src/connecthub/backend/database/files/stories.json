@@ -1,25 +1,9 @@
 [ {
-  "contentId" : "61b0a637-0c51-4998-831c-89bec750113f",
-  "authorId" : "author2",
+  "contentId" : "988bfb70-ab17-45c5-8863-87476daa91e4",
+  "authorId" : "userID",
   "contentData" : {
-    "text" : "This is the first story content",
-    "imagePath" : null
+    "text" : "test2",
+    "imagePath" : "src\\connecthub\\backend\\database\\images\\userID_2024-12-06_21-28-04.jpg"
   },
-  "timestamp" : [ 2024, 12, 6, 13, 54, 38, 619811200 ]
-}, {
-  "contentId" : "4238ef29-04e9-44ea-93c5-d734f1f147db",
-  "authorId" : "author2",
-  "contentData" : {
-    "text" : "This is the first story content",
-    "imagePath" : null
-  },
-  "timestamp" : [ 2024, 12, 6, 13, 55, 1, 119043300 ]
-}, {
-  "contentId" : "92465b38-0a27-4823-93bb-78ca19f65a75",
-  "authorId" : "user3Id",
-  "contentData" : {
-    "text" : "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnngggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg",
-    "imagePath" : null
-  },
-  "timestamp" : [ 2024, 12, 6, 14, 11, 55, 120024200 ]
+  "timestamp" : [ 2024, 12, 6, 21, 28, 4, 147928500 ]
 } ]

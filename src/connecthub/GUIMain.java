@@ -1,7 +1,7 @@
 package connecthub;
 
-import connecthub.backend.models.User;
-import connecthub.frontend.ContentCreatorWindow;
+import connecthub.frontend.ContentCreator;
+import connecthub.frontend.Login;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -12,8 +12,7 @@ import javax.swing.*;
 public class GUIMain {
     public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
         setLook();
-        ContentCreatorWindow window = new ContentCreatorWindow(new User("email", "seif", "password", null, "online"));
-        window.setVisible(true);
+        new Login().createAndShowGUI();
     }
     
     private static void setLook() {
@@ -31,7 +30,7 @@ public class GUIMain {
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
                  UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ContentCreatorWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
     }

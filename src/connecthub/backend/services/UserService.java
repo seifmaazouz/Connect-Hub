@@ -1,26 +1,107 @@
 package connecthub.backend.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import connecthub.backend.database.UserDatabase;
 import connecthub.backend.models.User;
-import connecthub.backend.utils.email.EmailValidator;
+import connecthub.backend.utils.hashing.HashingBehaviour;
+import connecthub.backend.utils.hashing.PBKDF2Hashing;
+import connecthub.backend.utils.user.UserMetadataValidator;
+import connecthub.backend.utils.errors.Alert;
 import connecthub.backend.utils.password.PBKDF2Validation;
 import connecthub.backend.utils.password.ValidationBehaviour;
 
+import java.io.*;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static connecthub.backend.constants.FilePath.COUNTER_FILE;
 
 public class UserService {
+
+    private static AtomicInteger userIdCounter;
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private final HashingBehaviour hashingBehaviour;
+
+    private static class CounterData {
+        private int counter;
+
+        public CounterData() {
+        }
+
+        public CounterData(int counter) {
+            this.counter = counter;
+        }
+
+        public int getCounter() {
+            return counter;
+        }
+
+        public void setCounter(int counter) {
+            this.counter = counter;
+        }
+    }
+
 
     private final UserDatabase databaseManager;
     private final ValidationBehaviour validationBehaviour;
     private HashMap<String, User> userMap;
-    public static int numberOfUsers = 0;
+
     public UserService() {
         this.validationBehaviour = new PBKDF2Validation();
-        this.databaseManager = new UserDatabase();
+        this.databaseManager = UserDatabase.getInstance();
         this.userMap = databaseManager.getUsers();
-        numberOfUsers++;
+        this.hashingBehaviour = new PBKDF2Hashing();
+    }
+
+    static {
+        // Initialize counter from file
+        userIdCounter = new AtomicInteger(loadCounter());
+    }
+
+    /**
+     * Loads the counter value from the JSON file. If the file doesn't exist or is invalid,
+     * it initializes the counter to 0.
+     *
+     * @return the initial counter value
+     */
+    private static int loadCounter() {
+        File file = new File(COUNTER_FILE);
+        if (!file.exists()) {
+            return 0; // Start from 0 if the file doesn't exist
+        }
+        try {
+            CounterData counterData = objectMapper.readValue(file, CounterData.class);
+            return counterData.getCounter();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    /**
+     * Saves the current counter value to the JSON file.
+     */
+    private static void saveCounter() {
+        File file = new File(COUNTER_FILE);
+        try {
+            CounterData counterData = new CounterData(userIdCounter.get());
+            objectMapper.writeValue(file, counterData);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Generates a unique ID for a new user. Increments the counter and saves it to the JSON file.
+     *
+     * @return the generated user ID
+     */
+    public static synchronized int generateUserId() {
+        int newId = userIdCounter.incrementAndGet();
+        saveCounter(); // Persist the updated counter
+        return newId;
     }
 
     /**
@@ -32,6 +113,7 @@ public class UserService {
     public User getUserById(String userId) {
         return (userMap != null) ? userMap.get(userId) : null;
     }
+
 
     /**
      * Update an existing user's information.
@@ -70,12 +152,26 @@ public class UserService {
      * @param newUser The User object containing the user's details.
      * @return true if user is successfully created, false if userId already exists.
      */
-    public boolean signup(User newUser) {
-        if (userMap != null && !userMap.containsKey(newUser.getUserId())) {
-            databaseManager.saveUser(newUser);
-            return true;
+    public Alert.alerts signup(User newUser) {
+        if (userMap != null) {
+            if (!UserMetadataValidator.isValidEmail(newUser.getEmail())) {
+                return Alert.alerts.INVALID_EMAIL_FORMAT;
+            }
+            if (UserMetadataValidator.usernameExists(newUser.getUsername(), userMap)) {
+                return Alert.alerts.USER_NAME_EXISTS;
+            }
+            if (UserMetadataValidator.emailExists(newUser.getEmail(), userMap)) {
+                return Alert.alerts.USER_EMAIL_EXISTS;
+            }
+            if (!userMap.containsKey(newUser.getUserId()) && !UserMetadataValidator.emailExists(newUser.getEmail(), userMap)) {
+                databaseManager.saveUser(newUser);
+                // update database
+                userMap = databaseManager.getUsers();
+                return Alert.alerts.PROCESS_SUCCEEDED;
+            }
         }
-        return false; // UserId already exists, signup failed
+
+        return Alert.alerts.PROCESS_FAILED;
     }
 
     /**
@@ -101,7 +197,7 @@ public class UserService {
             for (User user : userMap.values()) {
                 String storedHash = user.getHashedPassword();
                 String storedSalt = user.getSalt();
-                if (user.getEmail().equals(email) && EmailValidator.isValidEmail(email) && validationBehaviour.validatePassword(password, storedHash, storedSalt)) {
+                if (user.getEmail().equals(email) && UserMetadataValidator.isValidEmail(email) && validationBehaviour.validatePassword(password, storedHash, storedSalt)) {
                     return user; // Authentication successful
                 }
             }
@@ -131,20 +227,23 @@ public class UserService {
         return userMap != null && userMap.containsKey(userId);
     }
 
-//    public HashMap<String, User> searchUsers(HashMap<String, User> users, String searchQuery, User activeUser) {
-//        HashMap<String, User> searchResults = new HashMap<>();
-//        if (userMap != null) {
-//            for (User user : users.values()) {
-//                if (user.getUsername().contains(searchQuery) &&
-//                        !user.getUserId().equals(activeUser.getUserId()) &&
-//                        !activeUser.getFriendShip().isBlockedBy(user) &&
-//                        !activeUser.getFriendShip().isBlocked(user)
-//                ) {
-//                    searchResults.put(user.getUserId(), user);
-//                }
-//            }
-//        }
-//        return searchResults;
-//    }
-}
+    public void setUserPassword(String userId, String password) throws InvalidKeySpecException, NoSuchAlgorithmException {
+        if (userExists(userId)) {
+            User user = userMap.get(userId);
+            String[] hashedPasswordAndSalt = hashingBehaviour.hash(password);
 
+            String hashedPassword = hashedPasswordAndSalt[0];
+            String salt = hashedPasswordAndSalt[1];
+
+            user.setHashedPassword(hashedPassword);
+            user.setSalt(salt);
+
+            databaseManager.saveUser(user);
+        }
+    }
+
+    public void refreshContents() {
+        databaseManager.loadAllContents();
+        userMap = databaseManager.getUsers();
+    }
+}

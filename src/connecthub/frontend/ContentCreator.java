@@ -14,18 +14,30 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
 import connecthub.frontend.utils.ImageManager;
+import java.awt.Image;
+import javax.swing.ImageIcon;
 
-public class ContentCreatorWindow extends javax.swing.JFrame {
+public class ContentCreator extends javax.swing.JDialog {
     private User user;
-    private final File UPLOAD_IMAGE_DIRECTORY = new File(System.getProperty("user.home"), "Desktop");
     private  File imageFile;
     private StoryService storyService;
     private PostService postService;
 
-    public ContentCreatorWindow(User user) {
+    
+    public ContentCreator(java.awt.Frame parent, boolean modal, User user) {
+        super(parent, modal);
         initComponents();
         this.user = user;
         imageFile = null;
+    }
+    
+    // validate input text is not empty
+    private String ValidateInputText(JTextArea textArea) throws IOException {
+        String text = textArea.getText().strip();
+        if(text.isEmpty())
+            throw new IIOException("Text field cannot be left empty!");
+        else
+             return text;
     }
 
     @SuppressWarnings("unchecked")
@@ -42,6 +54,7 @@ public class ContentCreatorWindow extends javax.swing.JFrame {
         lblImageStatusPost = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         textAreaPost = new javax.swing.JTextArea();
+        previewPost = new javax.swing.JLabel();
         createStoryPanel = new javax.swing.JPanel();
         lblTextStory = new javax.swing.JLabel();
         lblImageStory = new javax.swing.JLabel();
@@ -51,13 +64,18 @@ public class ContentCreatorWindow extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         textAreaStory = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
+        previewStory = new javax.swing.JLabel();
         Title = new java.awt.Label();
+        jButton1 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Content Creator");
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(635, 700));
+        setUndecorated(true);
         setResizable(false);
 
         backgroundPanel.setBackground(new java.awt.Color(255, 204, 102));
+        backgroundPanel.setMinimumSize(new java.awt.Dimension(635, 700));
+        backgroundPanel.setPreferredSize(new java.awt.Dimension(635, 700));
 
         jTabbedPane1.setBackground(new java.awt.Color(255, 204, 102));
         jTabbedPane1.setForeground(new java.awt.Color(0, 0, 0));
@@ -72,6 +90,7 @@ public class ContentCreatorWindow extends javax.swing.JFrame {
 
         createPostPanel.setBackground(new java.awt.Color(251, 224, 170));
         createPostPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Post Creator Menu", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP));
+        createPostPanel.setAutoscrolls(true);
 
         lblTextPost.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblTextPost.setText("Enter Text To Post:");
@@ -106,12 +125,14 @@ public class ContentCreatorWindow extends javax.swing.JFrame {
         textAreaPost.setRows(5);
         jScrollPane2.setViewportView(textAreaPost);
 
+        previewPost.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
         javax.swing.GroupLayout createPostPanelLayout = new javax.swing.GroupLayout(createPostPanel);
         createPostPanel.setLayout(createPostPanelLayout);
         createPostPanelLayout.setHorizontalGroup(
             createPostPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, createPostPanelLayout.createSequentialGroup()
-                .addContainerGap(106, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(createPostPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, createPostPanelLayout.createSequentialGroup()
@@ -121,13 +142,15 @@ public class ContentCreatorWindow extends javax.swing.JFrame {
                     .addComponent(lblTextPost, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(126, 126, 126))
             .addGroup(createPostPanelLayout.createSequentialGroup()
-                .addGap(165, 165, 165)
-                .addComponent(btnPublishPost, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(createPostPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblImageStatusPost, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(createPostPanelLayout.createSequentialGroup()
+                .addGap(165, 165, 165)
+                .addGroup(createPostPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnPublishPost, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(previewPost, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(190, Short.MAX_VALUE))
         );
         createPostPanelLayout.setVerticalGroup(
             createPostPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -140,11 +163,12 @@ public class ContentCreatorWindow extends javax.swing.JFrame {
                 .addGroup(createPostPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblImagePost, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnUploadImagePost))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblImageStatusPost, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
-                .addComponent(btnPublishPost, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addComponent(previewPost, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnPublishPost, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jTabbedPane1.addTab("Create Post", createPostPanel);
@@ -189,6 +213,8 @@ public class ContentCreatorWindow extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Note: Story will expire after 24-hours upon publishing");
 
+        previewStory.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
         javax.swing.GroupLayout createStoryPanelLayout = new javax.swing.GroupLayout(createStoryPanel);
         createStoryPanel.setLayout(createStoryPanelLayout);
         createStoryPanelLayout.setHorizontalGroup(
@@ -205,13 +231,15 @@ public class ContentCreatorWindow extends javax.swing.JFrame {
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(126, 126, 126))
             .addGroup(createStoryPanelLayout.createSequentialGroup()
-                .addGap(165, 165, 165)
-                .addComponent(btnPublishStory, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(createStoryPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblImageStatusStory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(createStoryPanelLayout.createSequentialGroup()
+                .addGap(165, 165, 165)
+                .addGroup(createStoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnPublishStory, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(previewStory, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         createStoryPanelLayout.setVerticalGroup(
             createStoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -226,11 +254,12 @@ public class ContentCreatorWindow extends javax.swing.JFrame {
                 .addGroup(createStoryPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblImageStory, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnUploadImageStory))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblImageStatusStory, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
-                .addComponent(btnPublishStory, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addComponent(previewStory, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnPublishStory, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jTabbedPane1.addTab("Create Story", createStoryPanel);
@@ -240,35 +269,53 @@ public class ContentCreatorWindow extends javax.swing.JFrame {
         Title.setForeground(new java.awt.Color(51, 51, 51));
         Title.setText("Content Creator");
 
+        jButton1.setBackground(new java.awt.Color(204, 0, 51));
+        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(0, 0, 0));
+        jButton1.setText("Cancel");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout backgroundPanelLayout = new javax.swing.GroupLayout(backgroundPanel);
         backgroundPanel.setLayout(backgroundPanelLayout);
         backgroundPanelLayout.setHorizontalGroup(
             backgroundPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Title, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, backgroundPanelLayout.createSequentialGroup()
-                .addContainerGap(33, Short.MAX_VALUE)
+            .addGroup(backgroundPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Title, javax.swing.GroupLayout.PREFERRED_SIZE, 454, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addContainerGap())
+            .addGroup(backgroundPanelLayout.createSequentialGroup()
+                .addGap(32, 32, 32)
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 568, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
         backgroundPanelLayout.setVerticalGroup(
             backgroundPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, backgroundPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(Title, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addGroup(backgroundPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Title, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 598, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(backgroundPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(backgroundPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 0, 0)
                 .addComponent(backgroundPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
         );
@@ -277,32 +324,24 @@ public class ContentCreatorWindow extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    // validate input text is not empty
-    private String ValidateInputText(JTextArea textArea) throws IOException {
-        String text = textArea.getText().strip();
-        if(text.isEmpty())
-            throw new IIOException("Text field cannot be left empty!");
-        else
-             return text;
-    }
-    
     private void btnUploadImagePostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImagePostActionPerformed
-        File selectedFile = ImageManager.uploadImage(UPLOAD_IMAGE_DIRECTORY);
+        File selectedFile = ImageManager.uploadImage();
         // Set global selected imageFile to this imageFile;
         imageFile = selectedFile;
-        // Set label status to selected file
-        if(imageFile != null)
+        // Set label status to selected file and preview image
+        if(imageFile != null) {
             lblImageStatusPost.setText("Selected File: " + selectedFile.getName());
+            try {
+                Image image = ImageManager.getImageFromFile(imageFile, 200, 200);
+                previewPost.setIcon(new ImageIcon(image));
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "Error: Cannot Load Image!", "Publish Error", JOptionPane.ERROR_MESSAGE);
+                // reset image
+                lblImageStatusPost.setText("");
+                imageFile = null;
+            }
+        }
     }//GEN-LAST:event_btnUploadImagePostActionPerformed
-
-    private void btnUploadImageStoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageStoryActionPerformed
-        File selectedFile = ImageManager.uploadImage(UPLOAD_IMAGE_DIRECTORY);
-        // Set global selected imageFile to this imageFile;
-        imageFile = selectedFile;
-        // Set label status to selected file
-        if(imageFile != null)
-            lblImageStatusStory.setText("Selected File: " + selectedFile.getName());
-    }//GEN-LAST:event_btnUploadImageStoryActionPerformed
 
     private void btnPublishPostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPublishPostActionPerformed
         String userText;
@@ -313,15 +352,34 @@ public class ContentCreatorWindow extends javax.swing.JFrame {
             // copy selected image to database and get new image path
             String imagePath = ImageManager.copyImageToProgramFiles(user, imageFile);
             // create post
-            Post newPost = ContentFactory.createPost("Post", "user3Id", userText, imagePath);
+            Post newPost = ContentFactory.createPost(user.getUserId(), userText, imagePath);
             // add post
             postService.createContent(newPost);
             imageFile = null;
             this.dispose();
         } catch (IOException ex) {
-                JOptionPane.showMessageDialog(null, "Cannot Publish Post: " +ex.getMessage(), "Publish Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Cannot Publish Post: " +ex.getMessage(), "Publish Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnPublishPostActionPerformed
+
+    private void btnUploadImageStoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageStoryActionPerformed
+        File selectedFile = ImageManager.uploadImage();
+        // Set global selected imageFile to this imageFile;
+        imageFile = selectedFile;
+        // Set label status to selected file and preview image
+        if(imageFile != null) {
+            lblImageStatusStory.setText("Selected File: " + selectedFile.getName());
+            try {
+                Image image = ImageManager.getImageFromFile(imageFile, 200, 200);
+                previewStory.setIcon(new ImageIcon(image));
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "Error: Cannot Load Image!", "Publish Error", JOptionPane.ERROR_MESSAGE);
+                // reset image
+                lblImageStatusStory.setText("");
+                imageFile = null;
+            }
+        }
+    }//GEN-LAST:event_btnUploadImageStoryActionPerformed
 
     private void btnPublishStoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPublishStoryActionPerformed
         String userText;
@@ -332,24 +390,30 @@ public class ContentCreatorWindow extends javax.swing.JFrame {
             // copy selected image to database and get new image path
             String imagePath = ImageManager.copyImageToProgramFiles(user, imageFile);
             // create story
-            Story newStory = ContentFactory.createStory("Story", "user3Id", userText, imagePath);
+            Story newStory = ContentFactory.createStory(user.getUserId(), userText, imagePath);
             // add story
             storyService.createContent(newStory);
             imageFile = null;
             this.dispose();
         } catch (IOException ex) {
-                JOptionPane.showMessageDialog(null, "Cannot Publish Story: " +ex.getMessage(), "Publish Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Cannot Publish Story: " +ex.getMessage(), "Publish Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnPublishStoryActionPerformed
 
     private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
+        // reset fields
         textAreaPost.setText("");
         textAreaStory.setText("");
         lblImageStatusPost.setText("");
         lblImageStatusStory.setText("");
+        previewPost.setIcon(null);
+        previewStory.setIcon(null);
         imageFile = null;
     }//GEN-LAST:event_jTabbedPane1StateChanged
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private java.awt.Label Title;
@@ -360,6 +424,7 @@ public class ContentCreatorWindow extends javax.swing.JFrame {
     private javax.swing.JButton btnUploadImageStory;
     private javax.swing.JPanel createPostPanel;
     private javax.swing.JPanel createStoryPanel;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -370,6 +435,8 @@ public class ContentCreatorWindow extends javax.swing.JFrame {
     private javax.swing.JLabel lblImageStory;
     private javax.swing.JLabel lblTextPost;
     private javax.swing.JLabel lblTextStory;
+    private javax.swing.JLabel previewPost;
+    private javax.swing.JLabel previewStory;
     private javax.swing.JTextArea textAreaPost;
     private javax.swing.JTextArea textAreaStory;
     // End of variables declaration//GEN-END:variables
