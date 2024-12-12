@@ -1,5 +1,6 @@
 package connecthub.backend.profile;
 
+import static connecthub.backend.constants.FilePath.DEFAULT_PROFILE_PHOTO;
 import connecthub.backend.database.UserDatabase;
 import connecthub.backend.models.User;
 import connecthub.frontend.utils.ImageManager;
@@ -22,6 +23,13 @@ public class UpdateProfilePhoto {
         File file = ImageManager.uploadImage();
         Image image = ImageManager.getImageFromFile(file, 150, 150);
         if (image != null) {
+            // delete old profile photo path first
+            String oldImagePath = user.getProfilePhoto();
+            File oldImageFile = new File(oldImagePath);
+            if(oldImageFile.exists() && !oldImagePath.equals(DEFAULT_PROFILE_PHOTO)) {
+                oldImageFile.delete();
+            }
+                
             ImageIcon profilePhoto = new ImageIcon(image);
             String path = ImageManager.copyImageToProgramFiles(user, file);
             user.setProfilePhoto(path);

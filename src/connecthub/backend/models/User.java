@@ -6,6 +6,8 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
 
 import static connecthub.backend.constants.FilePath.IMAGE_SAVE_DIRECTORY;
+import static connecthub.backend.constants.FilePath.DEFAULT_PROFILE_PHOTO;
+import static connecthub.backend.constants.FilePath.DEFAULT_COVER_PHOTO;
 
 public class User {
 
@@ -35,8 +37,8 @@ public class User {
         this.friendship = new Friendship(this);
         this.salt = salt;
         this.friendship = new Friendship(this);
-        this.profilePhoto = IMAGE_SAVE_DIRECTORY + File.separator + "defaultProfilePhoto.jpg";
-        this.coverPhoto = IMAGE_SAVE_DIRECTORY + File.separator + "defaultCoverPhoto.jpg";
+        this.profilePhoto = DEFAULT_PROFILE_PHOTO;
+        this.coverPhoto = DEFAULT_COVER_PHOTO;
         this.bio = null;
     }
 

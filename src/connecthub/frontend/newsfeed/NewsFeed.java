@@ -1,12 +1,12 @@
-package connecthub.frontend;
+package connecthub.frontend.newsfeed;
 
-import connecthub.backend.models.Friendship;
 import connecthub.backend.models.Post;
 import connecthub.backend.models.Story;
 import connecthub.backend.models.User;
 import connecthub.backend.services.StoryService;
 import connecthub.backend.services.PostService;
-import java.awt.Image;
+
+import java.awt.*;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.logging.Level;
@@ -14,103 +14,64 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import connecthub.backend.services.UserService;
 import connecthub.backend.utils.factories.ServiceFactory;
+import connecthub.frontend.ContentCreator;
+import connecthub.frontend.Login;
+import connecthub.frontend.Profile;
+import connecthub.frontend.ViewStories;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 public class NewsFeed extends javax.swing.JFrame {
     private final User user;
-    private ImageIcon profilePhoto;
     private final List<User> friends = null;
-    private UserService userService;
-    private PostService postService;
-    private StoryService storyService;
+    private final UserService userService;
+    private final PostService postService;
+    private final StoryService storyService;
+    private boolean profileMode = false, exitMode = true;
 
-    
+
     public NewsFeed(User user) {
         initComponents();
         this.user = user;
         userService = new UserService();
         postService = ServiceFactory.createPostService();
-        //Friendship friendship = user.getFriendship();
-//        if(friendship == null)
-//            friends = null;
-//        else
-//            friends = friendship.getFriends();
-        profilePhoto = new ImageIcon(user.getProfilePhoto());
-        Image image = profilePhoto.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH); // Width and height in pixels
-        profilePhoto = new ImageIcon(image);
-        profilePhotoLabel.setIcon(profilePhoto);
+        storyService = ServiceFactory.createStoryService();
+        
+        // set profile photo
+        Image profileImage = new ImageIcon(user.getProfilePhoto()).getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+        ProfilePhoto profilePhotoPanel = new ProfilePhoto(profileImage, 100, 2);
+        profilePhotoLabel.setLayout(new BorderLayout());
+        profilePhotoLabel.add(profilePhotoPanel, BorderLayout.CENTER);
+
+        // set username
         String userName = user.getUsername();
         lblUsername.setText(userName);
-//        viewPostsPanel.setUserName(userName);
-//        PostService postService = ServiceFactory.createPostService();
-//        List<Post> posts = new ArrayList<>();
-//        if(friends == null)
-//            return;
-//        for(User friend : friends) {
-//            posts.addAll(postService.getListOfUserContents(friend.getUserId()));
-//        }
-//        if(!posts.isEmpty())
-//            viewPostsPanel.setPosts(posts);
-
+        
+        // display posts
         List<Post> posts;
         posts = postService.getListOfContents();
         displayPosts(posts);
     }
 
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+        Graphics2D g2d = (Graphics2D) g.create();
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g2d.dispose();
+    }
+
     private void displayPosts(List<Post> posts) {
-        JPanel postsPanel = new JPanel();
-        postsPanel.setLayout(new BoxLayout(postsPanel, BoxLayout.Y_AXIS));
-        postsPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding around the panel
-
-        for (int i = posts.size() - 1; i >= 0; i--) {
-            Post post = posts.get(i);
-            JPanel postPanel = new JPanel();
-            postPanel.setLayout(new BoxLayout(postPanel, BoxLayout.Y_AXIS));
-            postPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding around each post
-            postPanel.setBackground(new java.awt.Color(255, 255, 255)); // Set background color to white
-            postPanel.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT); // Center align the post panel
-
-            User user = userService.getUserById(post.getAuthorId());
-            JLabel authorLabel = new JLabel(user.getUsername());
-            authorLabel.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 14)); // Set font for author label
-            postPanel.add(authorLabel);
-
-            JLabel timeStampLabel = new JLabel(post.getTimestamp().toString());
-            timeStampLabel.setFont(new java.awt.Font("Arial", java.awt.Font.ITALIC, 12)); // Set font for timestamp label
-            postPanel.add(timeStampLabel);
-
-            JLabel postTextLabel = new JLabel("<html>" + post.getContentData().getText() + "</html>");
-            postTextLabel.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 14)); // Set font for post text label
-            postPanel.add(postTextLabel);
-
-            String imagePath = post.getContentData().getImagePath();
-            if (imagePath != null) {
-                Image image = new ImageIcon(imagePath).getImage();
-                image = image.getScaledInstance(400, 400, Image.SCALE_SMOOTH);
-                ImageIcon icon = new ImageIcon(image);
-                JLabel postImageLabel = new JLabel(icon);
-                postPanel.add(postImageLabel);
-            }
-
-            postPanel.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-                    javax.swing.BorderFactory.createLineBorder(new java.awt.Color(200, 200, 200)), // Add border around each post
-                    javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10) // Add padding inside the border
-            ));
-
-            postsPanel.add(postPanel);
-            postsPanel.add(javax.swing.Box.createVerticalStrut(10)); // Add space between posts
-        }
-
+        PostsPanel postsPanel = new PostsPanel(posts, userService);
         jDisplayPosts.setViewportView(postsPanel);
+        jDisplayPosts.getVerticalScrollBar().setUnitIncrement(16); // Make scroll bar smoother
         postsPanel.revalidate();
         postsPanel.repaint();
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -147,8 +108,8 @@ public class NewsFeed extends javax.swing.JFrame {
             }
         });
 
+        profilePhotoLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         profilePhotoLabel.setToolTipText("Click to view Profile");
-        profilePhotoLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         profilePhotoLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 profilePhotoLabelMouseClicked(evt);
@@ -237,8 +198,8 @@ public class NewsFeed extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnLogout)
                 .addGap(43, 43, 43)
-                .addComponent(jDisplayPosts, javax.swing.GroupLayout.PREFERRED_SIZE, 548, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 54, Short.MAX_VALUE))
+                .addComponent(jDisplayPosts, javax.swing.GroupLayout.PREFERRED_SIZE, 575, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 27, Short.MAX_VALUE))
             .addGroup(backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(backgroundLayout.createSequentialGroup()
                     .addContainerGap()
@@ -266,21 +227,21 @@ public class NewsFeed extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        UserService userService = new UserService();
-        userService.logout(user.getUserId());
-        this.dispose();
-        new Login();
+        if(!profileMode) {
+            userService.logout(user.getUserId());
+            if(exitMode)
+                System.exit(0);
+        }
     }//GEN-LAST:event_formWindowClosed
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
-        UserService userService = new UserService();
-        userService.logout(user.getUserId());
-        this.dispose();
+        exitMode = false;
+        profileMode = false;
         new Login().createAndShowGUI();
+        this.dispose();
     }//GEN-LAST:event_btnLogoutActionPerformed
 
     private void btnViewStoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewStoriesActionPerformed
-        StoryService storyService = ServiceFactory.createStoryService();
         if(friends == null) {
             JOptionPane.showMessageDialog(null, "No friend Stories!", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -296,9 +257,10 @@ public class NewsFeed extends javax.swing.JFrame {
     }//GEN-LAST:event_btnViewStoriesActionPerformed
 
     private void profilePhotoLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profilePhotoLabelMouseClicked
+        profileMode = true;
+        exitMode = false;
         this.dispose();
-        Profile profile = new Profile(user);
-        profile.setVisible(true);
+        new Profile(user).setVisible(true);
     }//GEN-LAST:event_profilePhotoLabelMouseClicked
 
     private void btnCreateContentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateContentActionPerformed
@@ -308,7 +270,7 @@ public class NewsFeed extends javax.swing.JFrame {
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
         postService.refreshContents();
-        userService.refreshContents();
+//        userService.refreshContents();
         storyService.refreshContents();
         displayPosts(postService.getListOfContents());
         revalidate();
@@ -344,7 +306,7 @@ public class NewsFeed extends javax.swing.JFrame {
             public void run() {
                 try {
                     UserService u = new UserService();
-                    new NewsFeed(u.getUser("seif@gmail.com", "noura123")).setVisible(true);
+                    new NewsFeed(u.getUser("seif@gmail.com", "seif123")).setVisible(true);
                 } catch (NoSuchAlgorithmException ex) {
                     Logger.getLogger(NewsFeed.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (InvalidKeySpecException ex) {

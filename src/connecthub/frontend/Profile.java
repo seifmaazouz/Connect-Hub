@@ -1,5 +1,6 @@
 package connecthub.frontend;
 
+import connecthub.frontend.newsfeed.NewsFeed;
 import connecthub.backend.database.UserDatabase;
 import connecthub.backend.models.Post;
 import connecthub.backend.models.User;
