@@ -1,5 +1,6 @@
 package connecthub.backend.profile;
 
+import static connecthub.backend.constants.FilePath.DEFAULT_COVER_PHOTO;
 import connecthub.backend.database.UserDatabase;
 import connecthub.backend.models.User;
 import connecthub.frontend.utils.ImageManager;
@@ -19,6 +20,13 @@ public class UpdateCoverPhoto {
     }
 
     public ImageIcon update() throws IOException {
+        // delete old cover photo path first
+        String oldImagePath = user.getCoverPhoto();
+        File oldImageFile = new File(oldImagePath);
+        if(oldImageFile.exists() && oldImagePath.equals(DEFAULT_COVER_PHOTO)) {
+            oldImageFile.delete();
+        }
+            
         File file = ImageManager.uploadImage();
         Image image = ImageManager.getImageFromFile(file, 600, 300);
         if (image != null) {

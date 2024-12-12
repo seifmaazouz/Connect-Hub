@@ -20,7 +20,7 @@
     "status" : "offline",
     "hashedPassword" : "Nb6x0yXmUwKkkVTec1MIM5lYAWVUVNnhOPHOg0bYOIo=",
     "salt" : "V1y+7aH1p3EbtNZHyTliYA==",
-    "profilePhoto" : "src/connecthub/backend/database/images\\defaultProfilePhoto.jpg",
+    "profilePhoto" : "src\\connecthub\\backend\\database\\images\\1022_2024-12-12_17-23-12.jpg",
     "coverPhoto" : "src/connecthub/backend/database/images\\defaultCoverPhoto.jpg",
     "bio" : null,
     "friendship" : null
@@ -69,10 +69,10 @@
     "email" : "asser@yahoo.com",
     "username" : "Asser Hanafy",
     "dateOfBirth" : 1108159200000,
-    "status" : "online",
+    "status" : "offline",
     "hashedPassword" : "WnVEdrivD0phRerVGmsdz8IVRssdgPXelxC/mkaXiSQ=",
     "salt" : "E0d3ZiqVXwICvN+c2jnZ5Q==",
-    "profilePhoto" : "src/connecthub/backend/database/images\\defaultProfilePhoto.jpg",
+    "profilePhoto" : "src\\connecthub\\backend\\database\\images\\1023_2024-12-12_15-30-13.jpg",
     "coverPhoto" : "src/connecthub/backend/database/images\\defaultCoverPhoto.jpg",
     "bio" : null,
     "friendship" : null
