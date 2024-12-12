@@ -1,5 +1,10 @@
 package connecthub.backend.models;
 
+import connecthub.backend.services.UserService;
+import connecthub.backend.utils.hashing.HashingBehaviour;
+import connecthub.backend.utils.hashing.PBKDF2Hashing;
+
+import java.io.IOException;
 import java.io.File;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -18,14 +23,15 @@ public class User {
     private String status;
     private String hashedPassword;
     private String salt;
+    private transient HashingBehaviour hashingBehaviour;
     private String profilePhoto;
     private String coverPhoto;
     private String bio;
-    private Friendship friendship;
 
     public User() {
 
     }
+
 
     public User(String userId, String email, String username, Date dateOfBirth, String status, String hashedPassword, String salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
         this.userId = userId;
@@ -34,9 +40,7 @@ public class User {
         this.dateOfBirth = dateOfBirth;
         this.status = status;
         this.hashedPassword = hashedPassword;
-        this.friendship = new Friendship(this);
         this.salt = salt;
-        this.friendship = new Friendship(this);
         this.profilePhoto = DEFAULT_PROFILE_PHOTO;
         this.coverPhoto = DEFAULT_COVER_PHOTO;
         this.bio = null;
@@ -90,16 +94,16 @@ public class User {
         this.status = status;
     }
 
+    public boolean isOnline() {
+        return status.equals("online");
+    }
+
     public void setHashedPassword(String hashedPassword) {
         this.hashedPassword = hashedPassword;
     }
 
     public void setSalt(String salt) {
         this.salt = salt;
-    }
-
-    public Friendship getFriendship() {
-        return friendship;
     }
 
     public String getProfilePhoto() {

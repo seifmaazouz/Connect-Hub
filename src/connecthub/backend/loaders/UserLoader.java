@@ -16,7 +16,7 @@ public class UserLoader {
         this.jsonParser = new JSONParser();
     }
 
-    public Map<String, User> loadUsers() {
+    public HashMap<String, User> loadUsers() {
         HashMap<String, User> users = new HashMap<>();
 
         try {

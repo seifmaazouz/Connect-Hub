@@ -9,6 +9,7 @@ import connecthub.backend.utils.hashing.PBKDF2Hashing;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.text.ParseException;
@@ -245,6 +246,8 @@ public class Login {
             } catch (ParseException ex) {
                 JOptionPane.showMessageDialog(signUpDialog, "Invalid Date of Birth format. Please use yyyy-MM-dd.", "Error", JOptionPane.ERROR_MESSAGE);
             } catch (NoSuchAlgorithmException | InvalidKeySpecException ex) {
+                throw new RuntimeException(ex);
+            } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
         });
