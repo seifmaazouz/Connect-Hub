@@ -1,12 +1,15 @@
 package connecthub.frontend.newsfeed;
 
+import connecthub.backend.models.Friendship;
 import connecthub.backend.models.Post;
 import connecthub.backend.models.Story;
 import connecthub.backend.models.User;
+import connecthub.backend.services.FriendshipService;
 import connecthub.backend.services.StoryService;
 import connecthub.backend.services.PostService;
 
 import java.awt.*;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.logging.Level;
@@ -22,18 +25,27 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 
+import static connecthub.backend.constants.FilePath.FRIENDS_FILE_PATH;
+
 public class NewsFeed extends javax.swing.JFrame {
     private final User user;
-    private final List<User> friends = null;
     private final UserService userService;
     private final PostService postService;
     private final StoryService storyService;
+    private final FriendshipService friendshipService;
+    private Friendship friendship;
     private boolean profileMode = false, exitMode = true;
 
 
     public NewsFeed(User user) {
         initComponents();
         this.user = user;
+        friendshipService = new FriendshipService(FRIENDS_FILE_PATH);
+        try {
+            friendship = friendshipService.loadFriendship();
+        } catch (IOException e) {
+            System.out.println("No Friends.");
+        }
         userService = new UserService();
         postService = ServiceFactory.createPostService();
         storyService = ServiceFactory.createStoryService();
@@ -49,8 +61,11 @@ public class NewsFeed extends javax.swing.JFrame {
         lblUsername.setText(userName);
         
         // display posts
-        List<Post> posts;
-        posts = postService.getListOfContents();
+        List<String> friends = friendship.getUserFriends(user.getUserId());
+        List<Post> posts = new ArrayList<>();
+        for(String friend : friends) {
+            posts.addAll(postService.getListOfUserContents(friend));
+        }
         displayPosts(posts);
     }
 
@@ -242,18 +257,18 @@ public class NewsFeed extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLogoutActionPerformed
 
     private void btnViewStoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewStoriesActionPerformed
-        if(friends == null) {
-            JOptionPane.showMessageDialog(null, "No friend Stories!", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        List<Story> stories = new ArrayList<>();
-        for(User friend : friends) {
-            stories.addAll(storyService.getListOfUserContents(friend.getUserId()));
-        }
-        if(!stories.isEmpty()) {
-            ViewStories viewStories = new ViewStories(this, true, stories);
-            viewStories.setVisible(true);
-        }
+//        if(friends == null) {
+//            JOptionPane.showMessageDialog(null, "No friend Stories!", "Error", JOptionPane.ERROR_MESSAGE);
+//            return;
+//        }
+//        List<Story> stories = new ArrayList<>();
+//        for(User friend : friends) {
+//            stories.addAll(storyService.getListOfUserContents(friend.getUserId()));
+//        }
+//        if(!stories.isEmpty()) {
+//            ViewStories viewStories = new ViewStories(this, true, stories);
+//            viewStories.setVisible(true);
+//        }
     }//GEN-LAST:event_btnViewStoriesActionPerformed
 
     private void profilePhotoLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profilePhotoLabelMouseClicked
@@ -270,8 +285,14 @@ public class NewsFeed extends javax.swing.JFrame {
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
         postService.refreshContents();
-//        userService.refreshContents();
+        userService.refreshContents();
         storyService.refreshContents();
+        try {
+            friendship = friendshipService.loadFriendship();
+            friendshipService.saveFriendship(friendship);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         displayPosts(postService.getListOfContents());
         revalidate();
         repaint();

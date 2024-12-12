@@ -24,7 +24,7 @@ public class FriendshipMainTest {
         System.out.println(friendship.toString());
 
 //        friendship.makeFriends("1", "89798");
-        friendship.makeFriends("1", "9090");
+        friendship.makeFriends("1022", "1023");
 
         friendshipService.saveFriendship(friendship);
     }

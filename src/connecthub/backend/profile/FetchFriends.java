@@ -11,8 +11,8 @@ public class FetchFriends {
         this.user = user;
     }
 
-    public List<User> fetch() {
-        List<User> friends = user.getFriendship().getFriends();
-        return friends;
-    }
+//    public List<User> fetch() {
+//        List<User> friends = user.getFriendship().getFriends();
+//        return friends;
+//    }
 }
