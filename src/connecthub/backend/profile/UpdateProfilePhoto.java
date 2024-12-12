@@ -26,7 +26,7 @@ public class UpdateProfilePhoto {
             // delete old profile photo path first
             String oldImagePath = user.getProfilePhoto();
             File oldImageFile = new File(oldImagePath);
-            if(oldImageFile.exists() && oldImagePath.equals(DEFAULT_PROFILE_PHOTO)) {
+            if(oldImageFile.exists() && !oldImagePath.equals(DEFAULT_PROFILE_PHOTO)) {
                 oldImageFile.delete();
             }
                 

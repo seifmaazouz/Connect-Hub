@@ -28,7 +28,7 @@ public class NewsFeed extends javax.swing.JFrame {
     private final UserService userService;
     private final PostService postService;
     private final StoryService storyService;
-    private boolean profileMode = false;
+    private boolean profileMode = false, exitMode = true;
 
 
     public NewsFeed(User user) {
@@ -229,15 +229,16 @@ public class NewsFeed extends javax.swing.JFrame {
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         if(!profileMode) {
             userService.logout(user.getUserId());
-            this.dispose();
-            System.exit(0);
+            if(exitMode)
+                System.exit(0);
         }
     }//GEN-LAST:event_formWindowClosed
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
-        userService.logout(user.getUserId());
-        this.dispose();
+        exitMode = false;
+        profileMode = false;
         new Login().createAndShowGUI();
+        this.dispose();
     }//GEN-LAST:event_btnLogoutActionPerformed
 
     private void btnViewStoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewStoriesActionPerformed
@@ -256,8 +257,9 @@ public class NewsFeed extends javax.swing.JFrame {
     }//GEN-LAST:event_btnViewStoriesActionPerformed
 
     private void profilePhotoLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profilePhotoLabelMouseClicked
-        this.dispose();
         profileMode = true;
+        exitMode = false;
+        this.dispose();
         new Profile(user).setVisible(true);
     }//GEN-LAST:event_profilePhotoLabelMouseClicked
 

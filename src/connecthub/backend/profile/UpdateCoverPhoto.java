@@ -23,7 +23,7 @@ public class UpdateCoverPhoto {
         // delete old cover photo path first
         String oldImagePath = user.getCoverPhoto();
         File oldImageFile = new File(oldImagePath);
-        if(oldImageFile.exists() && oldImagePath.equals(DEFAULT_COVER_PHOTO)) {
+        if(oldImageFile.exists() && !oldImagePath.equals(DEFAULT_COVER_PHOTO)) {
             oldImageFile.delete();
         }
             
