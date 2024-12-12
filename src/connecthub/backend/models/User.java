@@ -1,5 +1,7 @@
 package connecthub.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
@@ -13,6 +15,7 @@ public class User {
     private String hashedPassword;
     private String salt;
 
+    @JsonIgnoreProperties
     private Friendship friendship;
 
     public User() {

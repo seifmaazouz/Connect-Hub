@@ -1,0 +1,73 @@
+package connecthub;
+
+import connecthub.backend.models.ContentData;
+import connecthub.backend.models.User;
+import connecthub.backend.models.group.BaseMember;
+import connecthub.backend.models.group.Group;
+import connecthub.backend.models.group.GroupMember;
+import connecthub.backend.models.group.PrimaryAdminDecorator;
+import connecthub.backend.services.GroupService;
+import connecthub.backend.services.UserService;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
+public class GroupTest {
+     public static void main(String[] args) {
+         try {
+             UserService userManager = UserService.getInstance();
+             GroupService groupManager = GroupService.getInstance();
+
+
+
+             // Create a group
+             Image photo = ImageIO.read(new File("/home/ahmednader/Desktop/University/Year 3/semester_05/programming_2/assignments/Connect-Hub/src/connecthub/backend/database/images/0_2024-12-06_15-14-14.jpg"));
+             Group techGroup = groupManager.createGroup("Tech Enthusiasts", "A group for tech lovers", photo, "1019");
+             System.out.println("Group created: " + techGroup.getName());
+
+             GroupMember user1 = new BaseMember(userManager.getUserById("1019"), techGroup);
+             // Join group
+             groupManager.findGroupById(techGroup.getId());
+
+             GroupMember user2 = (GroupMember) userManager.getUserById("1018");
+             groupManager.joinGroup(techGroup, (User) user1);
+             groupManager.joinGroup(techGroup, (User) user2);
+
+             // Add posts
+             groupManager.addPost(techGroup.getId(),new ContentData("Welcome to the Tech Enthusiasts group!"), "user_123");
+             groupManager.addPost(techGroup.getId(),new ContentData( "Hello everyone, excited to be here!"), "user_456");
+
+             // Promote user to admin
+             groupManager.promoteToAdmin(techGroup, user2, user1);
+
+             // Search for groups
+             List<Group> searchResults = groupManager.searchGroups("Tech");
+             for (Group group : searchResults) {
+                 System.out.println("Found group: " + group.getName());
+             }
+
+             // Get updated group data
+             Group updatedGroup = groupManager.findGroupById(techGroup.getId());
+             System.out.println("Group members: " + updatedGroup.getMembers().size());
+             System.out.println("Group posts: " + updatedGroup.getPosts().size());
+
+             // Remove a post
+             String postIdToRemove = updatedGroup.getPosts().get(0).getContentId();
+             groupManager.removePost(techGroup.getId(), postIdToRemove, "user_456");
+
+             // Leave group
+             groupManager.leaveGroup(techGroup, user2);
+
+             // Delete group
+             groupManager.deleteGroup(techGroup);
+             System.out.println("Group deleted");
+
+         } catch (IOException e) {
+             e.printStackTrace();
+         }
+     }
+
+}

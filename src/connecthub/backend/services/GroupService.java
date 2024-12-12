@@ -1,11 +1,14 @@
 package connecthub.backend.services;
 
 import connecthub.backend.database.GroupDatabase;
+import connecthub.backend.models.ContentData;
+import connecthub.backend.models.Post;
 import connecthub.backend.models.User;
 import connecthub.backend.models.group.*;
 
 import java.awt.*;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -15,7 +18,7 @@ public class GroupService {
     private GroupDatabase groupDatabase = GroupDatabase.getInstance();
     private List<Group> groups;
 
-    private GroupService() {
+    public GroupService() {
         groups = new ArrayList<>();
     }
 
@@ -61,13 +64,15 @@ public class GroupService {
                      .toList();
     }
 
-    public void joinGroup(Group group, User user) {
+    public void joinGroup(Group group, User user) throws IOException {
         GroupMember newMember = new BaseMember(user, group);
         group.addMember(newMember);
+        groupDatabase.updateGroup(group);
     }
 
-    public void leaveGroup(Group group, GroupMember member) {
+    public void leaveGroup(Group group, GroupMember member) throws IOException {
         group.removeMember(member);
+        groupDatabase.updateGroup(group);
     }
 
     public void promoteToAdmin(Group group, GroupMember member, GroupMember promoter) throws IOException {
@@ -91,6 +96,30 @@ public class GroupService {
             groupDatabase.updateGroup(group);
         } else {
             System.out.println("Only the Primary Admin can demote Admins");
+        }
+    }
+
+    public void addPost(String groupId, ContentData content, String authorId) throws IOException {
+        Group group = findGroupById(groupId);
+        if (group != null) {
+            Post newPost = new Post(authorId, content);
+            group.addPost(newPost);
+            groupDatabase.updateGroup(group);
+        }
+    }
+
+    public void removePost(String groupId, String postId, String removerId) throws IOException {
+        Group group = findGroupById(groupId);
+        if (group != null) {
+            boolean isAdmin = group.getMembers().stream()
+                    .anyMatch(member -> ((User)member).getUserId().equals(removerId) &&
+                            (member.getRole() == Roles.ADMIN || member.getRole() == Roles.PRIMARY_ADMIN));
+            if (isAdmin) {
+                group.setPosts(group.getPosts().stream()
+                        .filter(post -> !post.getContentId().equals(postId))
+                        .toList());
+                groupDatabase.updateGroup(group);
+            }
         }
     }
 }

@@ -9,9 +9,10 @@ public class AdminRoleDecorator extends GroupMemberDecorator {
         super(member);
     }
 
-    public void editPost(String content) {
-//        member.editPost(content);
+    public void editPost(Post post, Post newPost) {
+        //post.editPost(newPost);
     }
+
 
     public void deletePost(Post post, Group group) {
         group.deletePost(post);
@@ -32,5 +33,10 @@ public class AdminRoleDecorator extends GroupMemberDecorator {
 
     public void declineMembershipRequest(String userName) {
 //        System.out.println(member.getUsername() + " declined membership request for: " + userName);
+    }
+
+    @Override
+    public Roles getRole() {
+        return Roles.ADMIN;
     }
 }

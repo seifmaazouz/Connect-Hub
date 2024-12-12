@@ -23,6 +23,11 @@ public class BaseMember extends User implements GroupMember {
     }
 
     @Override
+    public Roles getRole() {
+        return Roles.MEMBER;
+    }
+
+    @Override
     public String getUsername() {
         return user.getUsername();
     }

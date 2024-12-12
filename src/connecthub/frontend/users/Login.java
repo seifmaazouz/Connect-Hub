@@ -18,7 +18,7 @@ public class Login {
     private UserService userService;
     private HashingBehaviour hashingBehaviour;
     public Login() {
-        this.userService = new UserService();
+        this.userService = UserService.getInstance();
         this.hashingBehaviour = new PBKDF2Hashing();
     }
 
@@ -236,7 +236,7 @@ public class Login {
 
                 User newUser = new User(userId, email, username, dob, status, hashedPassword, salt);
 
-                Alert.alerts isSignedUp = userService.signup(newUser);
+                Alert isSignedUp = userService.signup(newUser);
 
                 handleSignUpErrors(signUpDialog, isSignedUp);
 
@@ -258,20 +258,20 @@ public class Login {
         signUpDialog.setVisible(true);
     }
 
-    private void handleSignUpErrors(JDialog signUpDialog, Alert.alerts isSignedUp) {
-        if (isSignedUp == Alert.alerts.INVALID_EMAIL_FORMAT) {
+    private void handleSignUpErrors(JDialog signUpDialog, Alert isSignedUp) {
+        if (isSignedUp == Alert.INVALID_EMAIL_FORMAT) {
             JOptionPane.showMessageDialog(signUpDialog, "Invalid Email Format!", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        else if (isSignedUp == Alert.alerts.USER_EMAIL_EXISTS) {
+        else if (isSignedUp == Alert.USER_EMAIL_EXISTS) {
             JOptionPane.showMessageDialog(signUpDialog, "User email already exists!", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        else if (isSignedUp == Alert.alerts.USER_NAME_EXISTS) {
+        else if (isSignedUp == Alert.USER_NAME_EXISTS) {
             JOptionPane.showMessageDialog(signUpDialog, "Username already exists!", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        else if (isSignedUp == Alert.alerts.PROCESS_FAILED) {
+        else if (isSignedUp == Alert.PROCESS_FAILED) {
             JOptionPane.showMessageDialog(signUpDialog, "An error occurred!", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        else if (isSignedUp == Alert.alerts.PROCESS_SUCCEEDED){
+        else if (isSignedUp == Alert.PROCESS_SUCCEEDED){
             JOptionPane.showMessageDialog(signUpDialog, "Sign Up Successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
             signUpDialog.dispose();
         }

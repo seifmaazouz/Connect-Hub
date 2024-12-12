@@ -1,0 +1,42 @@
+{
+  "groups": [
+    {
+      "id": "group_001",
+      "name": "Tech Enthusiasts",
+      "description": "A group for tech lovers",
+      "photoUrl": "https://example.com/tech_group.jpg",
+      "primaryAdminId": "user_123",
+      "members": [
+        {
+          "userId": "user_123",
+          "role": "PRIMARY_ADMIN",
+          "joinedAt": "2023-05-15T10:30:00Z"
+        },
+        {
+          "userId": "user_456",
+          "role": "ADMIN",
+          "joinedAt": "2023-05-16T14:45:00Z"
+        },
+        {
+          "userId": "user_789",
+          "role": "MEMBER",
+          "joinedAt": "2023-05-17T09:15:00Z"
+        }
+      ],
+      "posts": [
+        {
+          "id": "post_001",
+          "content": "Welcome to the Tech Enthusiasts group!",
+          "authorId": "user_123",
+          "createdAt": "2023-05-15T11:00:00Z"
+        },
+        {
+          "id": "post_002",
+          "content": "Hello everyone, excited to be here!",
+          "authorId": "user_789",
+          "createdAt": "2023-05-17T10:00:00Z"
+        }
+      ]
+    }
+  ]
+}
