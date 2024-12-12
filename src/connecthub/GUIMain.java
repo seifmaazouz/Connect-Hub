@@ -3,13 +3,14 @@ package connecthub;
 import connecthub.backend.models.User;
 import connecthub.frontend.ContentCreatorWindow;
 
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
 import javax.swing.*;
 
 public class GUIMain {
-    public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
         setLook();
         ContentCreatorWindow window = new ContentCreatorWindow(new User("email", "seif", "password", null, "online"));
         window.setVisible(true);

@@ -46,6 +46,6 @@ public class DatabaseManager {
             e.printStackTrace();
         }
     }
-    
+
     // TODO: Implement methods for fetching and saving friends and stories
 }

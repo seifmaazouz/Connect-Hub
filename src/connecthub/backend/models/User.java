@@ -4,6 +4,7 @@ import connecthub.backend.services.UserService;
 import connecthub.backend.utils.hashing.HashingBehaviour;
 import connecthub.backend.utils.hashing.PBKDF2Hashing;
 
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
@@ -19,13 +20,11 @@ public class User {
     private String salt;
     private transient HashingBehaviour hashingBehaviour;
 
-    private Friendship friendship;
-
     public User() {
 
     }
 
-    public User(String email, String username, String password, Date dateOfBirth, String status) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public User(String email, String username, String password, Date dateOfBirth, String status) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
         this.userId = UserService.numberOfUsers + "";
         this.email = email;
         this.username = username;
@@ -94,8 +93,8 @@ public class User {
         this.status = status;
     }
 
-    public Friendship getFriendShip() {
-        return friendship;
+    public boolean isOnline() {
+        return status.equals("online");
     }
 
 }

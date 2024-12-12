@@ -126,9 +126,25 @@ public class UserService {
         return false; // User not found, logout failed
     }
 
-    // Helper method to check if a user exists in the database
+    // Helper method to check if a user exists in the bdatabase
     public boolean userExists(String userId) {
         return userMap != null && userMap.containsKey(userId);
     }
+
+//    public HashMap<String, User> searchUsers(HashMap<String, User> users, String searchQuery, User activeUser) {
+//        HashMap<String, User> searchResults = new HashMap<>();
+//        if (userMap != null) {
+//            for (User user : users.values()) {
+//                if (user.getUsername().contains(searchQuery) &&
+//                        !user.getUserId().equals(activeUser.getUserId()) &&
+//                        !activeUser.getFriendShip().isBlockedBy(user) &&
+//                        !activeUser.getFriendShip().isBlocked(user)
+//                ) {
+//                    searchResults.put(user.getUserId(), user);
+//                }
+//            }
+//        }
+//        return searchResults;
+//    }
 }
 
