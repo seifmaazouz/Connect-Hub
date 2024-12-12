@@ -14,7 +14,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
+import javax.swing.*;
+
 import connecthub.backend.services.UserService;
 import connecthub.backend.utils.factories.ServiceFactory;
 import connecthub.frontend.ContentCreator;
@@ -23,7 +24,6 @@ import connecthub.frontend.Profile;
 import connecthub.frontend.ViewStories;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JOptionPane;
 
 import static connecthub.backend.constants.FilePath.FRIENDS_FILE_PATH;
 
@@ -39,6 +39,7 @@ public class NewsFeed extends javax.swing.JFrame {
 
     public NewsFeed(User user) {
         initComponents();
+        
         this.user = user;
         friendshipService = new FriendshipService(FRIENDS_FILE_PATH);
         try {
@@ -69,22 +70,34 @@ public class NewsFeed extends javax.swing.JFrame {
         displayPosts(posts);
     }
 
-    @Override
-    public void paint(Graphics g) {
-        super.paint(g);
-        Graphics2D g2d = (Graphics2D) g.create();
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g2d.dispose();
+    private void refresh() {
+        postService.refreshContents();
+        userService.refreshContents();
+        storyService.refreshContents();
+        try {
+            friendship = friendshipService.loadFriendship();
+            friendshipService.saveFriendship(friendship);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        displayPosts(postService.getListOfContents());
+        jDisplayPosts.getVerticalScrollBar().setValue(0); // reset to top
+        revalidate();
+        repaint();
     }
-
+    
     private void displayPosts(List<Post> posts) {
         PostsPanel postsPanel = new PostsPanel(posts, userService);
         jDisplayPosts.setViewportView(postsPanel);
-        jDisplayPosts.getVerticalScrollBar().setUnitIncrement(16); // Make scroll bar smoother
+        jDisplayPosts.getVerticalScrollBar().setUnitIncrement(8); // Make scroll bar smoother
         postsPanel.revalidate();
         postsPanel.repaint();
+        jDisplayPosts.revalidate();
+        jDisplayPosts.repaint();
+        // reset vertical scroll to top
+        SwingUtilities.invokeLater(() -> {
+            jDisplayPosts.getVerticalScrollBar().setValue(0);
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -157,7 +170,6 @@ public class NewsFeed extends javax.swing.JFrame {
         });
 
         jDisplayPosts.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        jDisplayPosts.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         btnRefresh.setText("Refresh");
         btnRefresh.addActionListener(new java.awt.event.ActionListener() {
@@ -212,8 +224,8 @@ public class NewsFeed extends javax.swing.JFrame {
                 .addComponent(lblUsername)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnLogout)
-                .addGap(43, 43, 43)
-                .addComponent(jDisplayPosts, javax.swing.GroupLayout.PREFERRED_SIZE, 575, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
+                .addComponent(jDisplayPosts, javax.swing.GroupLayout.PREFERRED_SIZE, 590, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 27, Short.MAX_VALUE))
             .addGroup(backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(backgroundLayout.createSequentialGroup()
@@ -284,18 +296,7 @@ public class NewsFeed extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCreateContentActionPerformed
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-        postService.refreshContents();
-        userService.refreshContents();
-        storyService.refreshContents();
-        try {
-            friendship = friendshipService.loadFriendship();
-            friendshipService.saveFriendship(friendship);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        displayPosts(postService.getListOfContents());
-        revalidate();
-        repaint();
+        refresh();
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     public static void main(String args[]) {
