@@ -11,4 +11,6 @@ public interface FilePath {
     String COUNTER_FILE = "src/connecthub/backend/database/files/userIdCounter.json";
     String IMAGE_SAVE_DIRECTORY = "src/connecthub/backend/database/images";
     File UPLOAD_IMAGE_DIRECTORY = FileSystemView.getFileSystemView().getHomeDirectory(); // get home directory
+    String DEFAULT_PROFILE_PHOTO = IMAGE_SAVE_DIRECTORY + File.separator + "defaultProfilePhoto.jpg";
+    String DEFAULT_COVER_PHOTO = IMAGE_SAVE_DIRECTORY + File.separator + "defaultCoverPhoto.jpg";
 }
