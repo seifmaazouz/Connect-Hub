@@ -46,4 +46,12 @@
     "imagePath" : "src\\connecthub\\backend\\database\\images\\1023_2024-12-12_17-40-33.jpg"
   },
   "timestamp" : [ 2024, 12, 12, 17, 40, 33, 60561200 ]
+}, {
+  "contentId" : "7",
+  "authorId" : "1022",
+  "contentData" : {
+    "text" : "asddddddddddddddddddddddddddddddddddddddddddddddddddddddddd asdaskdasnjkdasndbkas  asdja sndasdnas djasdasd asdas",
+    "imagePath" : null
+  },
+  "timestamp" : [ 2024, 12, 12, 17, 49, 14, 626655600 ]
 } ]

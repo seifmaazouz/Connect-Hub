@@ -7,7 +7,6 @@ import connecthub.frontend.utils.ImageManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -74,10 +73,17 @@ public class PostsPanel extends javax.swing.JPanel {
                 postPanel.add(authorPanel);
 
                 // Post content
-                JLabel postTextLabel = new JLabel("<html>" + post.getContentData().getText() + "</html>");
-                postTextLabel.setFont(new Font("Arial", Font.PLAIN, 14)); // Set font for post text label
-                postTextLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-                postPanel.add(postTextLabel);
+                JTextArea postTextArea = new JTextArea(post.getContentData().getText());
+                postTextArea.setFont(new Font("Arial", Font.PLAIN, 14)); // Set font for post text
+                postTextArea.setLineWrap(true); // Enable line wrapping
+                postTextArea.setWrapStyleWord(true); // Wrap at word boundaries
+                postTextArea.setEditable(false); // Make it non-editable
+                postTextArea.setOpaque(false); // Set background to transparent to blend with the panel
+                postTextArea.setAlignmentX(Component.LEFT_ALIGNMENT);
+                // Remove the border around the JTextArea
+                postTextArea.setBorder(BorderFactory.createEmptyBorder());
+                postTextArea.setBackground(new Color(0, 0, 0, 0)); // Transparent background
+                postPanel.add(postTextArea);
 
                 // Post image (if any)
                 String imagePath = post.getContentData().getImagePath();
@@ -93,7 +99,7 @@ public class PostsPanel extends javax.swing.JPanel {
                 // Set border and padding
                 postPanel.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createLineBorder(new Color(200, 200, 200)), // Add border around each post
-                        BorderFactory.createEmptyBorder(10, 10, 10, 10) // Add padding inside the border
+                        BorderFactory.createEmptyBorder(10, 20, 10, 20) // Add padding inside the border
                 ));
 
                 // Add the post panel and space between posts
