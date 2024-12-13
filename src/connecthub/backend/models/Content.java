@@ -1,7 +1,6 @@
 package connecthub.backend.models;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 // Prototype Design Pattern
 public abstract class Content {
@@ -30,6 +29,10 @@ public abstract class Content {
 
     public ContentData getContentData() {
         return contentData;
+    }
+    
+    public void setContentData(ContentData contentData) {
+        this.contentData = contentData;
     }
 
     public LocalDateTime getTimestamp() {
