@@ -233,6 +233,7 @@ public class Homepage extends javax.swing.JFrame {
         btnRefresh = new javax.swing.JButton();
         sideBarHolder = new javax.swing.JTabbedPane();
         btnCreateGroup = new javax.swing.JButton();
+        btnNotifications = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Connect Hub Homepage");
@@ -316,6 +317,13 @@ public class Homepage extends javax.swing.JFrame {
             }
         });
 
+        btnNotifications.setText("Notifications");
+        btnNotifications.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNotificationsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout backgroundLayout = new javax.swing.GroupLayout(background);
         background.setLayout(backgroundLayout);
         backgroundLayout.setHorizontalGroup(
@@ -336,7 +344,9 @@ public class Homepage extends javax.swing.JFrame {
                 .addGroup(backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(backgroundLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(btnRefresh)
+                        .addGroup(backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnRefresh)
+                            .addComponent(btnNotifications))
                         .addGap(86, 86, 86)
                         .addComponent(btnCreateContent, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(50, 50, 50)
@@ -355,7 +365,10 @@ public class Homepage extends javax.swing.JFrame {
             .addGroup(backgroundLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnRefresh)
+                    .addGroup(backgroundLayout.createSequentialGroup()
+                        .addComponent(btnRefresh)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnNotifications))
                     .addComponent(profilePhotoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnCreateContent, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -454,6 +467,10 @@ public class Homepage extends javax.swing.JFrame {
         new CreateGroup(this, true, user).setVisible(true);
     }//GEN-LAST:event_btnCreateGroupActionPerformed
 
+    private void btnNotificationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNotificationsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnNotificationsActionPerformed
+
     
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -500,6 +517,7 @@ public class Homepage extends javax.swing.JFrame {
     private javax.swing.JButton btnCreateGroup;
     private javax.swing.JButton btnFriendsManager;
     private javax.swing.JButton btnLogout;
+    private javax.swing.JButton btnNotifications;
     private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnViewStories;
     private javax.swing.JLabel lblUsername;
