@@ -5,6 +5,7 @@ import connecthub.backend.models.Friendship;
 import connecthub.backend.models.User;
 import connecthub.backend.services.FriendshipService;
 import connecthub.backend.services.UserService;
+import connecthub.frontend.FriendProfile;
 import connecthub.frontend.Profile;
 import connecthub.frontend.homepage.ProfilePhoto;
 import connecthub.frontend.utils.ImageManager;
@@ -41,6 +42,7 @@ public class FriendOptionsWindow extends JDialog{
 
         viewProfileButton.addActionListener(e -> {
             System.out.println("View Profile Button Clicked");
+            new FriendProfile(friend).setVisible(true);
         });
 
         blockButton.addActionListener(e -> {
