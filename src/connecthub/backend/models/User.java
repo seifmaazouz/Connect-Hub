@@ -1,5 +1,6 @@
 package connecthub.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import connecthub.backend.services.UserService;
 import connecthub.backend.utils.hashing.HashingBehaviour;
 import connecthub.backend.utils.hashing.PBKDF2Hashing;
@@ -45,6 +46,8 @@ public class User {
         this.coverPhoto = DEFAULT_COVER_PHOTO;
         this.bio = null;
     }
+
+
 
     public String getHashedPassword() {
         return hashedPassword;
@@ -92,10 +95,6 @@ public class User {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public boolean isOnline() {
-        return status.equals("online");
     }
 
     public void setHashedPassword(String hashedPassword) {

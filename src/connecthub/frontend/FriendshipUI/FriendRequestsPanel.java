@@ -31,7 +31,7 @@ public class FriendRequestsPanel extends JPanel {
                     // Show a message when the item is clicked
                     System.out.println("You clicked: " + clickedItem);
                     try {
-                        new FriendRequestOptionsWindow(friendship, activeUserId, new UserService().getUserByUsername(clickedItem));
+                        new FriendRequestOptionsWindow(friendship, activeUserId, UserService.getInstance().getUserByUsername(clickedItem));
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
@@ -48,7 +48,7 @@ public class FriendRequestsPanel extends JPanel {
 
     private ArrayList<String> getListContents() {
         ArrayList<String> userIds = this.friendship.getUserFriendRequests(activeUserId);
-        UserService userService = new UserService();
+        UserService userService = UserService.getInstance();
 
         ArrayList<String> requests = new ArrayList<>();
 

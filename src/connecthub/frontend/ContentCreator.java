@@ -395,6 +395,7 @@ public class ContentCreator extends javax.swing.JDialog {
             storyService.createContent(newStory);
             imageFile = null;
             this.dispose();
+            System.out.println("Here");
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Cannot Publish Story: " +ex.getMessage(), "Publish Error", JOptionPane.ERROR_MESSAGE);
         }

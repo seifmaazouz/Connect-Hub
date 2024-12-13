@@ -16,8 +16,9 @@ public class FriendshipManagementMainWindow extends JFrame {
         this.friendship = friendship;
         setContentPane(panel1);
         setTitle("Friendship Management");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
+        setLocationByPlatform(true);
         pack();
         setVisible(true);
 

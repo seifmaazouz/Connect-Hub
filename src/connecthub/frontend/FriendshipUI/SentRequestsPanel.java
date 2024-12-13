@@ -30,7 +30,7 @@ public class SentRequestsPanel extends JPanel {
                     // Show a message when the item is clicked
                     System.out.println("You clicked: " + clickedItem);
                     try {
-                        new SentRequestsOptionsWindow(friendship, activeUserId, new UserService().getUserByUsername(clickedItem));
+                        new SentRequestsOptionsWindow(friendship, activeUserId, UserService.getInstance().getUserByUsername(clickedItem));
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
@@ -47,7 +47,7 @@ public class SentRequestsPanel extends JPanel {
 
     private ArrayList<String> getListContents() {
         ArrayList<String> userIds = this.friendship.getUserSentRequests(activeUserId);
-        UserService userService = new UserService();
+        UserService userService = UserService.getInstance();
 
         ArrayList<String> sentRequests = new ArrayList<>();
 

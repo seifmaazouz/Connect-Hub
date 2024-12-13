@@ -38,7 +38,7 @@ public class ViewStories extends javax.swing.JDialog {
         totalStoriesNumber = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("View Posts");
+        setTitle("View Stories");
         setResizable(false);
 
         previousStory.setText("Previous Story");
@@ -124,7 +124,7 @@ public class ViewStories extends javax.swing.JDialog {
     private void changeStory(int i) {
         storyIndex += i;
         String autherId = stories.get(stories.size() - storyIndex).getAuthorId();
-        UserService userService = new UserService();
+        UserService userService = UserService.getInstance();
         User user = userService.getUserById(autherId);
         authorName.setText(user.getUsername());
         timeStamp.setText(stories.get(stories.size() - storyIndex).getTimestamp().toString());

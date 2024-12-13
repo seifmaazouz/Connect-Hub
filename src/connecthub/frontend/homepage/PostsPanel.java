@@ -1,4 +1,4 @@
-package connecthub.frontend.newsfeed;
+package connecthub.frontend.homepage;
 
 import connecthub.backend.models.Post;
 import connecthub.backend.models.User;
@@ -128,6 +128,8 @@ public class PostsPanel extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+
+        setMaximumSize(new java.awt.Dimension(500, 32767));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
