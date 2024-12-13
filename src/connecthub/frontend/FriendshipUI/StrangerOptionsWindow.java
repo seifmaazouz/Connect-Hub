@@ -10,18 +10,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 
-public class FriendRequestOptionsWindow extends JDialog {
+public class StrangerOptionsWindow extends JDialog{
     private JPanel panel1;
     private JButton viewProfileButton;
-    private JButton rejectButton;
-    private JButton acceptButton;
+    private JButton blockButton;
+    private JButton sendRequestButton;
     private JButton cancelButton;
     private JLabel bigProfilePhotoLabel;
-    private JButton blockButton;
 
-    public FriendRequestOptionsWindow(Friendship friendship, String activeUserId, User requester) throws IOException {
+    public StrangerOptionsWindow(Friendship friendship, String activeUserId, User stranger) throws IOException {
         setContentPane(panel1);
-        setTitle("Friend Request Options");
+        setTitle("Friend Options");
         setMinimumSize(new Dimension(400, 400));
         setPreferredSize(new Dimension(400, 400));
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -29,7 +28,7 @@ public class FriendRequestOptionsWindow extends JDialog {
         pack();
         setVisible(true);
 
-        Image profileImage = new ImageIcon(requester.getProfilePhoto()).getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+        Image profileImage = new ImageIcon(stranger.getProfilePhoto()).getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
         ProfilePhoto profilePhotoPanel = new ProfilePhoto(profileImage, 150, 2);
         bigProfilePhotoLabel.setLayout(new BorderLayout());
         bigProfilePhotoLabel.add(profilePhotoPanel, BorderLayout.CENTER);
@@ -38,25 +37,18 @@ public class FriendRequestOptionsWindow extends JDialog {
 
         viewProfileButton.addActionListener(e -> {
             System.out.println("View Profile Button Clicked");
-            new FriendProfile(requester).setVisible(true);
+            new FriendProfile(stranger).setVisible(true);
         });
 
         blockButton.addActionListener(e -> {
-            friendship.block(activeUserId, requester.getUserId());
+            friendship.block(activeUserId, stranger.getUserId());
             FriendshipService friendshipService = new FriendshipService();
             friendshipService.saveFriendship(friendship);
             dispose();
         });
 
-        acceptButton.addActionListener(e -> {
-            friendship.acceptRequest(activeUserId, requester.getUserId());
-            FriendshipService friendshipService = new FriendshipService();
-            friendshipService.saveFriendship(friendship);
-            dispose();
-        });
-
-        rejectButton.addActionListener(e -> {
-            friendship.cancelRequest(activeUserId, requester.getUserId());
+        sendRequestButton.addActionListener(e -> {
+            friendship.sendRequest(activeUserId, stranger.getUserId());
             FriendshipService friendshipService = new FriendshipService();
             friendshipService.saveFriendship(friendship);
             dispose();
