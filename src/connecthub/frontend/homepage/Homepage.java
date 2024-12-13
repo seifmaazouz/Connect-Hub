@@ -206,7 +206,9 @@ public class Homepage extends javax.swing.JFrame {
         sideBarHolder.addTab("Friends", new FriendListPanel(friendship, user.getUserId()));
         sideBarHolder.revalidate();
         sideBarHolder.repaint();
-
+        sideBarHolder.addTab("Search Users", new SearchUsersPanel(friendship, user.getUserId()));
+        sideBarHolder.revalidate();
+        sideBarHolder.repaint();
         revalidate();
         repaint();
     }

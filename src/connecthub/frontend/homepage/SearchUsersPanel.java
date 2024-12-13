@@ -4,6 +4,9 @@ import connecthub.backend.loaders.UserLoader;
 import connecthub.backend.models.Friendship;
 import connecthub.backend.models.User;
 import connecthub.backend.services.UserService;
+import connecthub.frontend.FriendshipUI.FriendOptionsWindow;
+import connecthub.frontend.FriendshipUI.FriendRequestOptionsWindow;
+import connecthub.frontend.FriendshipUI.SentRequestsOptionsWindow;
 import connecthub.frontend.FriendshipUI.StrangerOptionsWindow;
 
 import javax.swing.*;
@@ -18,7 +21,7 @@ public class SearchUsersPanel extends JPanel {
     private JPanel panel1;
     HashMap<String, User> users;
 
-    public SearchUsersPanel(Friendship friendship, String activeUserId) throws IOException {
+    public SearchUsersPanel(Friendship friendship, String activeUserId) {
         resultsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         resultsList.addMouseListener(new MouseAdapter() {
@@ -32,10 +35,31 @@ public class SearchUsersPanel extends JPanel {
                     // Show a message when the item is clicked
                     System.out.println("You clicked: " + clickedItem);
                     // check what clicked user status is and call the right window
-                    try {
-                        new StrangerOptionsWindow(friendship, activeUserId, UserService.getInstance().getUserByUsername(clickedItem));
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
+                    String clickedUserId = UserService.getInstance().getUserByUsername(clickedItem).getUserId();
+                    if (friendship.isFriend(activeUserId, clickedUserId)) {
+                        try {
+                            new FriendOptionsWindow(friendship, activeUserId, UserService.getInstance().getUserByUsername(clickedItem));
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    } else if (friendship.hasSentRequest(activeUserId, clickedUserId)) {
+                        try {
+                            new SentRequestsOptionsWindow(friendship, activeUserId, UserService.getInstance().getUserByUsername(clickedItem));
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    } else if (friendship.hasReceivedRequest(activeUserId, clickedUserId)) {
+                        try {
+                            new FriendRequestOptionsWindow(friendship, activeUserId, UserService.getInstance().getUserByUsername(clickedItem));
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    } else {
+                        try {
+                            new StrangerOptionsWindow(friendship, activeUserId, UserService.getInstance().getUserByUsername(clickedItem));
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
                     }
                 }
             }
@@ -43,9 +67,16 @@ public class SearchUsersPanel extends JPanel {
 
         searchBox.addKeyListener(new KeyAdapter() {
             @Override
-            public void keyReleased(KeyEvent e) {
-                String query = searchBox.getText();
-                resultsList.setListData(searchUsers(friendship, activeUserId, query).toArray());
+            public void keyPressed(KeyEvent e) {
+                // Check if the Enter key (keyCode 10) is pressed
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    // Handle Enter key press
+                    System.out.println("Enter key was pressed!");
+                    // You can perform any action here, such as closing the window, submitting data, etc.
+                    String query = searchBox.getText();
+                    System.out.println("Searching for: " + query);
+                    resultsList.setListData(searchUsers(friendship, activeUserId, query).toArray());
+                }
             }
         });
 
@@ -56,18 +87,15 @@ public class SearchUsersPanel extends JPanel {
     private ArrayList<String> searchUsers(Friendship friendship, String activeUserId, String query) {
         HashMap<String, User> users = new UserLoader().loadUsers();
         ArrayList<String> results = new ArrayList<>();
-        for (String userId : users.keySet()) {
-            if (!userId.contains(query)) {
-                users.remove(userId);
+        for (User user : users.values()) {
+            if (user.getUsername().contains(query)) {
+                results.add(user.getUsername());
             }
         }
-        for (String userId : users.keySet()) {
-            if (friendship.hasBlocked(activeUserId, userId)) {
-                users.remove(userId);
+        for (User user : users.values()) {
+            if (friendship.hasBlocked(activeUserId, user.getUserId())) {
+                results.remove(user.getUsername());
             }
-        }
-        for (String userId : users.keySet()) {
-            results.add(users.get(userId).getUsername());
         }
         return results;
     }
