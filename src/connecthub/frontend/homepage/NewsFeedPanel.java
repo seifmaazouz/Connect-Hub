@@ -15,7 +15,7 @@ public class NewsFeedPanel extends javax.swing.JPanel {
 
     public NewsFeedPanel(List<Post> posts) {
         initComponents();
-        this.userService = new UserService();
+        this.userService = UserService.getInstance();
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding around the panel
         this.setOpaque(false);
@@ -64,7 +64,8 @@ public class NewsFeedPanel extends javax.swing.JPanel {
 
         jDisplayPosts = new javax.swing.JScrollPane();
 
-        setPreferredSize(new java.awt.Dimension(1020, 600));
+        setMinimumSize(new java.awt.Dimension(819, 627));
+        setPreferredSize(new java.awt.Dimension(819, 627));
 
         jDisplayPosts.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jDisplayPosts.setMaximumSize(new java.awt.Dimension(500, 32767));
@@ -74,16 +75,13 @@ public class NewsFeedPanel extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(251, 251, 251)
+                .addGap(155, 155, 155)
                 .addComponent(jDisplayPosts, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(269, Short.MAX_VALUE))
+                .addContainerGap(164, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jDisplayPosts, javax.swing.GroupLayout.DEFAULT_SIZE, 588, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jDisplayPosts, javax.swing.GroupLayout.DEFAULT_SIZE, 627, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 

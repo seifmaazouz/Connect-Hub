@@ -3,7 +3,7 @@ package connecthub.backend.database;
 import connecthub.backend.loaders.StoryLoader;
 import connecthub.backend.models.Story;
 
-// apply singleton design pattern
+// apply Singleton Design Pattern
 public class StoryDatabase extends ExpirableContentDatabase<Story> {
     private static StoryDatabase instance;
 

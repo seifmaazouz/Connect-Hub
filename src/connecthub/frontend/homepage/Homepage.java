@@ -1,8 +1,8 @@
 package connecthub.frontend.homepage;
 
-import static connecthub.backend.constants.FilePath.FRIENDS_FILE_PATH;
 import connecthub.backend.models.Friendship;
 import connecthub.backend.models.Post;
+import connecthub.backend.models.Story;
 import connecthub.backend.models.User;
 import connecthub.backend.services.FriendshipService;
 import connecthub.backend.services.PostService;
@@ -10,8 +10,11 @@ import connecthub.backend.services.StoryService;
 import connecthub.backend.services.UserService;
 import connecthub.backend.utils.factories.ServiceFactory;
 import connecthub.frontend.ContentCreator;
+import connecthub.frontend.FriendshipUI.FriendListPanel;
+import connecthub.frontend.FriendshipUI.FriendshipManagementMainWindow;
 import connecthub.frontend.Login;
 import connecthub.frontend.Profile;
+import connecthub.frontend.ViewStories;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -31,18 +34,21 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
 public class Homepage extends javax.swing.JFrame {
     private  NewsFeedPanel newsFeedPanel;
     private  FriendsPanel friendsPanel;
-    private  ProfilePanel profilePanel;
+    private  ProfilePostsPanel profilePostsPanel;
     private final User user;
     private final UserService userService;
     private final PostService postService;
     private final StoryService storyService;
     private final FriendshipService friendshipService;
     private Friendship friendship;
+    private List<String> friends;
     private boolean profileMode = false, exitMode = true;
 
 
@@ -51,8 +57,8 @@ public class Homepage extends javax.swing.JFrame {
         this.user = user;
 
         // create all services
-        friendshipService = new FriendshipService(FRIENDS_FILE_PATH);
-        userService = new UserService();
+        friendshipService = new FriendshipService();
+        userService = UserService.getInstance();
         postService = ServiceFactory.createPostService();
         storyService = ServiceFactory.createStoryService();
 
@@ -74,13 +80,25 @@ public class Homepage extends javax.swing.JFrame {
         lblUsername.setText(userName);
 
         // get friends posts
-        List<String> friends = friendship.getUserFriends(user.getUserId());
+        friends = friendship.getUserFriends(user.getUserId());
         List<Post> posts = new ArrayList<>();
         for(String friend : friends) {
             posts.addAll(postService.getListOfUserContents(friend));
         }
 
         customizeTabbedPane(posts);
+        
+        // initialize friends list
+        try {
+            friendship = friendshipService.loadFriendship();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        JPanel friendsPanel = new FriendListPanel(friendship, user.getUserId());
+        friendsPanel.setVisible(true);
+        sideBarHolder.addTab("Friends", friendsPanel);
+        friendsPanel.revalidate();
+        friendsPanel.repaint();
     }
 
     private void customizeTabbedPane(List<Post> posts) {
@@ -91,13 +109,13 @@ public class Homepage extends javax.swing.JFrame {
 
         // add all tabs
         newsFeedPanel = new NewsFeedPanel(posts);
-        friendsPanel = new FriendsPanel();
-        profilePanel = new ProfilePanel();
+        friendsPanel = new FriendsPanel(user.getUserId());
+        profilePostsPanel = new ProfilePostsPanel(user.getUserId());
 
         // label all tabs
         tabbedPane.addTab("NewsFeed", newsFeedPanel);
         tabbedPane.addTab("Friends", friendsPanel);
-        tabbedPane.addTab("Profile", profilePanel);
+        tabbedPane.addTab("My Posts", profilePostsPanel);
 
         // set starting default at newsfeed
         tabbedPane.setSelectedIndex(0);
@@ -155,6 +173,8 @@ public class Homepage extends javax.swing.JFrame {
         postService.refreshContents();
         userService.refreshContents();
         storyService.refreshContents();
+        storyService.deleteExpiredStories();
+        profilePostsPanel.refresh();
         try {
             friendship = friendshipService.loadFriendship();
             friendshipService.saveFriendship(friendship);
@@ -169,6 +189,18 @@ public class Homepage extends javax.swing.JFrame {
             posts.addAll(postService.getListOfUserContents(friend));
         }
         newsFeedPanel.refresh(posts);
+
+        // refresh friends list
+        try {
+            friendship = friendshipService.loadFriendship();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        sideBarHolder.removeAll();
+        sideBarHolder.addTab("Friends", new FriendListPanel(friendship, user.getUserId()));
+        sideBarHolder.revalidate();
+        sideBarHolder.repaint();
+
         revalidate();
         repaint();
     }
@@ -178,6 +210,7 @@ public class Homepage extends javax.swing.JFrame {
     private void initComponents() {
 
         background = new javax.swing.JPanel();
+        btnFriendsManager = new javax.swing.JButton();
         tabbedPane = new javax.swing.JTabbedPane();
         btnCreateContent = new javax.swing.JButton();
         profilePhotoLabel = new javax.swing.JLabel();
@@ -185,6 +218,7 @@ public class Homepage extends javax.swing.JFrame {
         btnViewStories = new javax.swing.JButton();
         btnLogout = new javax.swing.JButton();
         btnRefresh = new javax.swing.JButton();
+        sideBarHolder = new javax.swing.JTabbedPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Connect Hub Homepage");
@@ -196,6 +230,16 @@ public class Homepage extends javax.swing.JFrame {
 
         background.setBackground(new java.awt.Color(255, 255, 255));
         background.setPreferredSize(new java.awt.Dimension(1007, 569));
+
+        btnFriendsManager.setBackground(new java.awt.Color(0, 0, 0));
+        btnFriendsManager.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnFriendsManager.setForeground(new java.awt.Color(255, 255, 255));
+        btnFriendsManager.setText("Friends Manager");
+        btnFriendsManager.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFriendsManagerActionPerformed(evt);
+            }
+        });
 
         tabbedPane.setTabPlacement(javax.swing.JTabbedPane.RIGHT);
 
@@ -253,27 +297,27 @@ public class Homepage extends javax.swing.JFrame {
         backgroundLayout.setHorizontalGroup(
             backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, backgroundLayout.createSequentialGroup()
-                .addContainerGap(60, Short.MAX_VALUE)
-                .addGroup(backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, backgroundLayout.createSequentialGroup()
-                        .addComponent(tabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 1020, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, backgroundLayout.createSequentialGroup()
-                        .addComponent(btnLogout)
-                        .addGap(58, 58, 58))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, backgroundLayout.createSequentialGroup()
+                .addGap(42, 42, 42)
+                .addComponent(btnFriendsManager)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnLogout)
+                .addGap(58, 58, 58))
+            .addGroup(backgroundLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(sideBarHolder, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(tabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 840, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(backgroundLayout.createSequentialGroup()
                 .addGroup(backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(backgroundLayout.createSequentialGroup()
-                        .addGroup(backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(backgroundLayout.createSequentialGroup()
-                                .addGap(182, 182, 182)
-                                .addComponent(btnCreateContent, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(169, 169, 169)
-                                .addComponent(btnViewStories))
-                            .addGroup(backgroundLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(btnRefresh)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap()
+                        .addComponent(btnRefresh)
+                        .addGap(86, 86, 86)
+                        .addComponent(btnCreateContent, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 291, Short.MAX_VALUE)
+                        .addComponent(btnViewStories)
+                        .addGap(144, 144, 144)
                         .addComponent(profilePhotoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(backgroundLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -285,20 +329,22 @@ public class Homepage extends javax.swing.JFrame {
             .addGroup(backgroundLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(backgroundLayout.createSequentialGroup()
-                        .addComponent(btnRefresh)
-                        .addGap(11, 11, 11)
-                        .addGroup(backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnCreateContent, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnViewStories, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(profilePhotoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnRefresh)
+                    .addComponent(profilePhotoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnCreateContent, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnViewStories, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblUsername)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnLogout)
-                .addGap(18, 18, 18)
-                .addComponent(tabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 615, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 3, Short.MAX_VALUE))
+                .addGroup(backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnLogout)
+                    .addComponent(btnFriendsManager, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 627, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(sideBarHolder, javax.swing.GroupLayout.PREFERRED_SIZE, 609, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -318,32 +364,17 @@ public class Homepage extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnCreateContentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateContentActionPerformed
-        ContentCreator contentCreator = new ContentCreator(this, true, user);
-        contentCreator.setVisible(true);
-    }//GEN-LAST:event_btnCreateContentActionPerformed
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        if(!profileMode) {
+            userService.logout(user.getUserId());
+            if(exitMode)
+                System.exit(0);
+        }
+    }//GEN-LAST:event_formWindowClosed
 
-    private void profilePhotoLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profilePhotoLabelMouseClicked
-        profileMode = true;
-        exitMode = false;
-        this.dispose();
-        new Profile(user).setVisible(true);
-    }//GEN-LAST:event_profilePhotoLabelMouseClicked
-
-    private void btnViewStoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewStoriesActionPerformed
-        //        if(friends == null) {
-            //            JOptionPane.showMessageDialog(null, "No friend Stories!", "Error", JOptionPane.ERROR_MESSAGE);
-            //            return;
-            //        }
-        //        List<Story> stories = new ArrayList<>();
-        //        for(User friend : friends) {
-            //            stories.addAll(storyService.getListOfUserContents(friend.getUserId()));
-            //        }
-        //        if(!stories.isEmpty()) {
-            //            ViewStories viewStories = new ViewStories(this, true, stories);
-            //            viewStories.setVisible(true);
-            //        }
-    }//GEN-LAST:event_btnViewStoriesActionPerformed
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        refresh();
+    }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         exitMode = false;
@@ -352,17 +383,45 @@ public class Homepage extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnLogoutActionPerformed
 
-    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-        refresh();
-    }//GEN-LAST:event_btnRefreshActionPerformed
-
-    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        if(!profileMode) {
-            userService.logout(user.getUserId());
-            if(exitMode)
-                System.exit(0);
+    private void btnViewStoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewStoriesActionPerformed
+        storyService.refreshContents();
+        storyService.deleteExpiredStories();
+        if(friends == null) {
+            JOptionPane.showMessageDialog(null, "You have no friends!", "Stories Expired", JOptionPane.ERROR_MESSAGE);
+            return;
         }
-    }//GEN-LAST:event_formWindowClosed
+        List<Story> stories = new ArrayList<>();
+        for(String friend : friends) {
+            stories.addAll(storyService.getListOfUserContents(friend));
+        }
+        if(!stories.isEmpty()) {
+            ViewStories viewStories = new ViewStories(this, true, stories);
+            viewStories.setVisible(true);
+        }
+        else
+        JOptionPane.showMessageDialog(null, "There are currently no active friend stories!", "Stories Expired", JOptionPane.ERROR_MESSAGE);
+    }//GEN-LAST:event_btnViewStoriesActionPerformed
+
+    private void profilePhotoLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profilePhotoLabelMouseClicked
+        profileMode = true;
+        exitMode = false;
+        this.dispose();
+        new Profile(user).setVisible(true);
+    }//GEN-LAST:event_profilePhotoLabelMouseClicked
+
+    private void btnCreateContentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateContentActionPerformed
+        ContentCreator contentCreator = new ContentCreator(this, true, user);
+        contentCreator.setVisible(true);
+    }//GEN-LAST:event_btnCreateContentActionPerformed
+
+    private void btnFriendsManagerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFriendsManagerActionPerformed
+        try {
+            Friendship friendship = (new FriendshipService()).loadFriendship();
+            new FriendshipManagementMainWindow(friendship, user.getUserId());
+        } catch (IOException ex) {
+            Logger.getLogger(FriendsPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnFriendsManagerActionPerformed
 
     
     public static void main(String args[]) {
@@ -392,7 +451,7 @@ public class Homepage extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                UserService u = new UserService();
+                UserService u = UserService.getInstance();
                 try {
                     new Homepage(u.getUser("seif@gmail.com", "seif123")).setVisible(true);
                 } catch (InvalidKeySpecException ex) {
@@ -407,11 +466,13 @@ public class Homepage extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel background;
     private javax.swing.JButton btnCreateContent;
+    private javax.swing.JButton btnFriendsManager;
     private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnViewStories;
     private javax.swing.JLabel lblUsername;
     private javax.swing.JLabel profilePhotoLabel;
+    private javax.swing.JTabbedPane sideBarHolder;
     private javax.swing.JTabbedPane tabbedPane;
     // End of variables declaration//GEN-END:variables
 }

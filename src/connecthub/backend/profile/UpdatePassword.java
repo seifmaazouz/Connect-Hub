@@ -21,7 +21,7 @@ public class UpdatePassword {
     public UpdatePassword(User user) {
         this.user = user;
         this.validationBehaviour = new PBKDF2Validation();
-        this.userService = new UserService();
+        this.userService = UserService.getInstance();
     }
 
     public void update() {

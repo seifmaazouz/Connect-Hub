@@ -11,6 +11,7 @@ import static connecthub.backend.constants.Constants.ITERATIONS_FOR_PBKDF2;
 import static connecthub.backend.constants.Constants.KEY_LENGTH_FOR_PBKDF2;
 
 public class PBKDF2Validation implements ValidationBehaviour {
+
     @Override
     public boolean validatePassword(String password, String storedHash, String storedSalt) throws InvalidKeySpecException, NoSuchAlgorithmException {
         // Decode the stored salt

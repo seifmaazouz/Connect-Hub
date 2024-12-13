@@ -1,10 +1,9 @@
 package connecthub.frontend;
 
-import connecthub.frontend.homepage.NewsFeed;
+import connecthub.frontend.homepage.Homepage;
 import connecthub.backend.database.UserDatabase;
 import connecthub.backend.models.Post;
 import connecthub.backend.models.User;
-import connecthub.backend.profile.FetchFriends;
 import connecthub.backend.profile.FetchPosts;
 import connecthub.backend.profile.UpdateBio;
 import connecthub.backend.profile.UpdateCoverPhoto;
@@ -86,7 +85,7 @@ public class Profile extends javax.swing.JFrame {
         });
 
         bio.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        bio.setText("Enter bio.");
+        bio.setText("Enter bio");
         bio.setToolTipText("Click to change bio.");
         bio.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         bio.addMouseListener(new java.awt.event.MouseAdapter() {
