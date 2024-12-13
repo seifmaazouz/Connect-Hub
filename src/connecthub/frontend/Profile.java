@@ -1,6 +1,6 @@
 package connecthub.frontend;
 
-import connecthub.frontend.newsfeed.NewsFeed;
+import connecthub.frontend.homepage.Homepage;
 import connecthub.backend.database.UserDatabase;
 import connecthub.backend.models.Post;
 import connecthub.backend.models.User;
@@ -225,7 +225,7 @@ public class Profile extends javax.swing.JFrame {
     }//GEN-LAST:event_viewFriendsActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        new NewsFeed(user).setVisible(true);
+        new Homepage(user).setVisible(true);
     }//GEN-LAST:event_formWindowClosed
 
     public static void main(String args[]) {
