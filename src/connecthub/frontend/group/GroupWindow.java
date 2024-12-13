@@ -1,7 +1,11 @@
 package connecthub.frontend.group;
 
+import connecthub.backend.models.ContentData;
+import connecthub.backend.models.Post;
 import connecthub.backend.models.User;
 import connecthub.backend.models.group.Group;
+import connecthub.backend.services.UserService;
+import connecthub.backend.utils.factories.ContentFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,20 +13,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 public class GroupWindow extends JFrame {
-    private JList<String> postsList;
-    private DefaultListModel<String> listModel;
+    private JPanel postsPanel;
     private JTextField newPostTextField;
+    private User user;
+    private Group group;
 
-    public GroupWindow(String groupName, List<String> initialPosts, User user, Group group) {
-        listModel = new DefaultListModel<>();
-        postsList = new JList<>(listModel);
-        updatePostsList(initialPosts);
+    public GroupWindow(String groupName, List<Post> initialPosts, User user, Group group) {
+        this.user = user;
+        this.group = group;
 
         // Frame settings
         setTitle(groupName);
@@ -45,7 +47,9 @@ public class GroupWindow extends JFrame {
         add(headerPanel, BorderLayout.NORTH);
 
         // Posts section
-        JScrollPane scrollPane = new JScrollPane(postsList);
+        postsPanel = new JPanel();
+        postsPanel.setLayout(new BoxLayout(postsPanel, BoxLayout.Y_AXIS));
+        JScrollPane scrollPane = new JScrollPane(postsPanel);
         add(scrollPane, BorderLayout.CENTER);
 
         // Add post section
@@ -73,6 +77,11 @@ public class GroupWindow extends JFrame {
                 addPost();
             }
         });
+
+        // Initialize the post list with the given posts
+        if (initialPosts != null) {
+            updatePostsListWithPanel(initialPosts);
+        }
     }
 
     private void leaveGroup() {
@@ -84,35 +93,70 @@ public class GroupWindow extends JFrame {
     private void addPost() {
         String newPostContent = newPostTextField.getText();
         if (!newPostContent.trim().isEmpty()) {
-            listModel.addElement(newPostContent);
             newPostTextField.setText("");
+            CreatePost createPost = new CreatePost(this, true, group.getId(), user, newPostContent);
+            createPost.setVisible(true);
         }
     }
 
-    private void updatePostsList(List<String> posts) {
-        listModel.clear();
-        for (String post : posts) {
-            listModel.addElement(post);
+    private void updatePostsListWithPanel(List<Post> posts) {
+        postsPanel.removeAll(); // Clear the existing posts
+        for (Post post : posts) {
+            JPanel postPanel = createPostPanel(post);
+            postsPanel.add(postPanel);
         }
+        postsPanel.revalidate(); // Revalidate to apply layout changes
+        postsPanel.repaint(); // Repaint the panel to display the new posts
     }
+
+    private JPanel createPostPanel(Post post) {
+        JPanel postPanel = new JPanel();
+        postPanel.setLayout(new BoxLayout(postPanel, BoxLayout.Y_AXIS));
+        ContentData contentData = post.getContentData();
+
+        // Add text content to the panel
+        if (contentData.getText() != null && !contentData.getText().isEmpty()) {
+            JLabel textLabel = new JLabel(contentData.getText());
+            postPanel.add(textLabel);
+        }
+
+        // If there is an image, display it
+        if (contentData.getImagePath() != null && !contentData.getImagePath().isEmpty()) {
+            ImageIcon originalIcon = new ImageIcon(contentData.getImagePath());
+
+            // Scale the image to 200x200 pixels
+            Image img = originalIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+            ImageIcon scaledIcon = new ImageIcon(img);
+
+            JLabel imageLabel = new JLabel(scaledIcon);
+            postPanel.add(imageLabel);
+        }
+
+        return postPanel;
+    }
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             // Example usage with initial posts
-            List<String> examplePosts = List.of("First Post", "Second Post", "Third Post");
-            String id = UUID.randomUUID().toString();
-            GroupWindow window;
-            User user;
+            User user = null;
             try {
-                user = new User(id, "es@gmail.com", "ahmedn", new Date(2024, 12, 25, 15, 30), "online", "sss", "sss");
-            } catch (NoSuchAlgorithmException e) {
-                throw new RuntimeException(e);
-            } catch (InvalidKeySpecException e) {
-                throw new RuntimeException(e);
+                user = UserService.getInstance().getUser("seif@gmail.com", "seif123");
+            } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+                e.printStackTrace();
             }
 
-            window = new GroupWindow("Group Name", examplePosts, user, new Group());
+            // Assuming the group and posts are fetched or created properly
+            Group group = new Group(); // You need to fetch or initialize a valid group here
+            group.setId(UUID.randomUUID().toString());
 
+            List<Post> examplePosts = List.of(
+                    ContentFactory.createPost(user.getUserId() ,"First Post", "D:\\Github\\Connect-Hub\\src\\connecthub\\backend\\database\\images\\1022_2024-12-12_21-32-23.jpg"),
+                    ContentFactory.createPost(user.getUserId() ,"Second Post", null),
+                    ContentFactory.createPost(user.getUserId() ,"Third Post", null) // no image
+            );
+
+            GroupWindow window = new GroupWindow("Group Name", examplePosts, user, group);
             window.setVisible(true);
         });
     }

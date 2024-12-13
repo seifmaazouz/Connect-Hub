@@ -59,6 +59,6 @@ public abstract class ContentService<T extends Content> {
         if(contents == null || contents.isEmpty())
             return 0;
         else
-            return Long.parseLong(contents.get(-1).getContentId());
+            return Long.parseLong(contents.getLast().getContentId());
     }
 }
