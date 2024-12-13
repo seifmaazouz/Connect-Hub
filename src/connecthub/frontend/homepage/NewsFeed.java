@@ -47,7 +47,7 @@ public class NewsFeed extends javax.swing.JFrame {
         } catch (IOException e) {
             System.out.println("No Friends.");
         }
-        userService = new UserService();
+        userService = UserService.getInstance();
         postService = ServiceFactory.createPostService();
         storyService = ServiceFactory.createStoryService();
         
@@ -329,7 +329,7 @@ public class NewsFeed extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    UserService u = new UserService();
+                    UserService u = UserService.getInstance();
                     new NewsFeed(u.getUser("seif@gmail.com", "seif123")).setVisible(true);
                 } catch (NoSuchAlgorithmException ex) {
                     Logger.getLogger(NewsFeed.class.getName()).log(Level.SEVERE, null, ex);

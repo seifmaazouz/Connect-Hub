@@ -15,7 +15,7 @@ public class NewsFeedPanel extends javax.swing.JPanel {
 
     public NewsFeedPanel(List<Post> posts) {
         initComponents();
-        this.userService = new UserService();
+        this.userService = UserService.getInstance();
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding around the panel
         this.setOpaque(false);

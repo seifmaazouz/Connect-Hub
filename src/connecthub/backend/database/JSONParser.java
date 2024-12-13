@@ -18,15 +18,6 @@ public class JSONParser {
         objectMapper.registerModule(new JavaTimeModule());
     }
 
-    /**
-     * Reads a JSON file and converts it into a Java object.
-     *
-     * @param filePath      Path to the JSON file.
-     * @param typeReference TypeReference for the target Java object type.
-     * @param <T>           The type of the Java object to parse into.
-     * @return The parsed Java object.
-     * @throws IOException If reading or parsing fails.
-     */
     public <T> T readJSON(String filePath, TypeReference<T> typeReference) throws IOException {
         File file = new File(filePath);
         if (!file.exists() || file.length() == 0) {
@@ -38,25 +29,11 @@ public class JSONParser {
             return objectMapper.readValue(new File(filePath), typeReference);
     }
 
-    /**
-     * Writes a Java object into a JSON file.
-     *
-     * @param filePath Path to the output JSON file.
-     * @param data     The Java object to write.
-     * @throws IOException If writing fails.
-     */
+
     public void writeJSON(String filePath, Object data) throws IOException {
         objectMapper.writerWithDefaultPrettyPrinter().writeValue(new File(filePath), data);
     }
 
-    /**
-     * Updates a JSON file by overwriting it with modified data.
-     *
-     * @param filePath Path to the JSON file.
-     * @param updater  Functional interface to modify the data before saving.
-     * @param <T>      The type of the Java object to update.
-     * @throws IOException If reading, updating, or writing fails.
-     */
     public <T> void updateJSON(String filePath, TypeReference<T> typeReference, Updater<T> updater) throws IOException {
         // Read existing data
         T data = readJSON(filePath, typeReference);

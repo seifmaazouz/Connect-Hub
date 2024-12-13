@@ -1,6 +1,7 @@
 package connecthub.frontend.homepage;
 
 import connecthub.backend.models.Post;
+import connecthub.backend.models.User;
 import connecthub.backend.services.PostService;
 import connecthub.backend.services.UserService;
 import connecthub.backend.utils.factories.ServiceFactory;
@@ -17,7 +18,7 @@ public class ProfilePostsPanel extends javax.swing.JPanel {
    
     public ProfilePostsPanel(String userId) {
         this.userId = userId;
-        userService = new UserService();
+        userService = UserService.getInstance();
         postService = ServiceFactory.createPostService();
         initComponents();
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

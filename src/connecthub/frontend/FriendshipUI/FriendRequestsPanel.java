@@ -42,7 +42,7 @@ public class FriendRequestsPanel extends JPanel {
 
     private ArrayList<String> getListContents() {
         ArrayList<String> userIds = this.friendship.getUserFriendRequests(activeUserId);
-        UserService userService = new UserService();
+        UserService userService = UserService.getInstance();
 
         ArrayList<String> requests = new ArrayList<>();
 

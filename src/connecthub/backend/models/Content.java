@@ -19,6 +19,13 @@ public abstract class Content {
         timestamp = LocalDateTime.now();
     }
 
+    public Content(String contentId, String authorId, ContentData contentData, LocalDateTime timestamp) {
+        this.contentId = contentId;
+        this.authorId = authorId;
+        this.contentData = contentData;
+        this.timestamp = timestamp;
+    }
+
     public String getContentId() {
         return contentId;
     }
