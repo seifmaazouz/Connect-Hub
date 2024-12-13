@@ -11,6 +11,7 @@ import connecthub.backend.services.UserService;
 import connecthub.backend.utils.factories.ServiceFactory;
 import connecthub.frontend.ContentCreator;
 import connecthub.frontend.FriendshipUI.FriendListPanel;
+import connecthub.frontend.FriendshipUI.FriendshipManagementMainWindow;
 import connecthub.frontend.Login;
 import connecthub.frontend.Profile;
 import connecthub.frontend.ViewStories;
@@ -34,6 +35,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
 public class Homepage extends javax.swing.JFrame {
@@ -87,8 +89,16 @@ public class Homepage extends javax.swing.JFrame {
         customizeTabbedPane(posts);
         
         // initialize friends list
-        FriendListPanel friendListPanel = new FriendListPanel(friendship, user.getUserId());
-        friendsLiatPanelHolder.add(friendListPanel);
+        try {
+            friendship = friendshipService.loadFriendship();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        JPanel friendsPanel = new FriendListPanel(friendship, user.getUserId());
+        friendsPanel.setVisible(true);
+        sideBarHolder.addTab("Friends", friendsPanel);
+        friendsPanel.revalidate();
+        friendsPanel.repaint();
     }
 
     private void customizeTabbedPane(List<Post> posts) {
@@ -99,7 +109,7 @@ public class Homepage extends javax.swing.JFrame {
 
         // add all tabs
         newsFeedPanel = new NewsFeedPanel(posts);
-        friendsPanel = new FriendsPanel();
+        friendsPanel = new FriendsPanel(user.getUserId());
         profilePostsPanel = new ProfilePostsPanel(user.getUserId());
 
         // label all tabs
@@ -179,6 +189,18 @@ public class Homepage extends javax.swing.JFrame {
             posts.addAll(postService.getListOfUserContents(friend));
         }
         newsFeedPanel.refresh(posts);
+
+        // refresh friends list
+        try {
+            friendship = friendshipService.loadFriendship();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        sideBarHolder.removeAll();
+        sideBarHolder.addTab("Friends", new FriendListPanel(friendship, user.getUserId()));
+        sideBarHolder.revalidate();
+        sideBarHolder.repaint();
+
         revalidate();
         repaint();
     }
@@ -188,6 +210,7 @@ public class Homepage extends javax.swing.JFrame {
     private void initComponents() {
 
         background = new javax.swing.JPanel();
+        btnFriendsManager = new javax.swing.JButton();
         tabbedPane = new javax.swing.JTabbedPane();
         btnCreateContent = new javax.swing.JButton();
         profilePhotoLabel = new javax.swing.JLabel();
@@ -195,7 +218,7 @@ public class Homepage extends javax.swing.JFrame {
         btnViewStories = new javax.swing.JButton();
         btnLogout = new javax.swing.JButton();
         btnRefresh = new javax.swing.JButton();
-        friendsLiatPanelHolder = new javax.swing.JPanel();
+        sideBarHolder = new javax.swing.JTabbedPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Connect Hub Homepage");
@@ -207,6 +230,16 @@ public class Homepage extends javax.swing.JFrame {
 
         background.setBackground(new java.awt.Color(255, 255, 255));
         background.setPreferredSize(new java.awt.Dimension(1007, 569));
+
+        btnFriendsManager.setBackground(new java.awt.Color(0, 0, 0));
+        btnFriendsManager.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnFriendsManager.setForeground(new java.awt.Color(255, 255, 255));
+        btnFriendsManager.setText("Friends Manager");
+        btnFriendsManager.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFriendsManagerActionPerformed(evt);
+            }
+        });
 
         tabbedPane.setTabPlacement(javax.swing.JTabbedPane.RIGHT);
 
@@ -259,31 +292,22 @@ public class Homepage extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout friendsLiatPanelHolderLayout = new javax.swing.GroupLayout(friendsLiatPanelHolder);
-        friendsLiatPanelHolder.setLayout(friendsLiatPanelHolderLayout);
-        friendsLiatPanelHolderLayout.setHorizontalGroup(
-            friendsLiatPanelHolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 198, Short.MAX_VALUE)
-        );
-        friendsLiatPanelHolderLayout.setVerticalGroup(
-            friendsLiatPanelHolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
         javax.swing.GroupLayout backgroundLayout = new javax.swing.GroupLayout(background);
         background.setLayout(backgroundLayout);
         backgroundLayout.setHorizontalGroup(
             backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, backgroundLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(42, 42, 42)
+                .addComponent(btnFriendsManager)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnLogout)
                 .addGap(58, 58, 58))
             .addGroup(backgroundLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(friendsLiatPanelHolder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 872, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 10, Short.MAX_VALUE))
+                .addComponent(sideBarHolder, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(tabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 840, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(backgroundLayout.createSequentialGroup()
                 .addGroup(backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(backgroundLayout.createSequentialGroup()
@@ -291,7 +315,7 @@ public class Homepage extends javax.swing.JFrame {
                         .addComponent(btnRefresh)
                         .addGap(86, 86, 86)
                         .addComponent(btnCreateContent, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 291, Short.MAX_VALUE)
                         .addComponent(btnViewStories)
                         .addGap(144, 144, 144)
                         .addComponent(profilePhotoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -313,11 +337,13 @@ public class Homepage extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblUsername)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnLogout)
+                .addGroup(backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnLogout)
+                    .addComponent(btnFriendsManager, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(friendsLiatPanelHolder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 627, Short.MAX_VALUE))
+                .addGroup(backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 627, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(sideBarHolder, javax.swing.GroupLayout.PREFERRED_SIZE, 609, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -388,6 +414,15 @@ public class Homepage extends javax.swing.JFrame {
         contentCreator.setVisible(true);
     }//GEN-LAST:event_btnCreateContentActionPerformed
 
+    private void btnFriendsManagerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFriendsManagerActionPerformed
+        try {
+            Friendship friendship = (new FriendshipService()).loadFriendship();
+            new FriendshipManagementMainWindow(friendship, user.getUserId());
+        } catch (IOException ex) {
+            Logger.getLogger(FriendsPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnFriendsManagerActionPerformed
+
     
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -431,12 +466,13 @@ public class Homepage extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel background;
     private javax.swing.JButton btnCreateContent;
+    private javax.swing.JButton btnFriendsManager;
     private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnViewStories;
-    private javax.swing.JPanel friendsLiatPanelHolder;
     private javax.swing.JLabel lblUsername;
     private javax.swing.JLabel profilePhotoLabel;
+    private javax.swing.JTabbedPane sideBarHolder;
     private javax.swing.JTabbedPane tabbedPane;
     // End of variables declaration//GEN-END:variables
 }
