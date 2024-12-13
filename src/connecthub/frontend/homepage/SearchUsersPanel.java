@@ -97,6 +97,7 @@ public class SearchUsersPanel extends JPanel {
                 results.remove(user.getUsername());
             }
         }
+        results.remove(UserService.getInstance().getUserById(activeUserId).getUsername());
         return results;
     }
 }
