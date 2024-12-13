@@ -101,7 +101,7 @@ public class FriendProfile extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        new Homepage(user).setVisible(true);
+        dispose();
     }//GEN-LAST:event_formWindowClosed
 
     public static void main(String args[]) {

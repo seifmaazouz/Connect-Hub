@@ -3,6 +3,7 @@ package connecthub.frontend.FriendshipUI;
 import connecthub.backend.models.Friendship;
 import connecthub.backend.models.User;
 import connecthub.backend.services.FriendshipService;
+import connecthub.frontend.FriendProfile;
 import connecthub.frontend.homepage.ProfilePhoto;
 
 import javax.swing.*;
@@ -36,6 +37,7 @@ public class SentRequestsOptionsWindow extends JDialog {
 
         viewProfileButton.addActionListener(e -> {
             System.out.println("View Profile Button Clicked");
+            new FriendProfile(receiver).setVisible(true);
         });
 
         blockButton.addActionListener(e -> {
