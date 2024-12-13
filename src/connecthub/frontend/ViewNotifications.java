@@ -1,6 +1,5 @@
 package connecthub.frontend;
 
-import static connecthub.backend.constants.FilePath.FRIENDS_FILE_PATH;
 import connecthub.backend.models.Friendship;
 import connecthub.backend.models.Notification;
 import static connecthub.backend.models.Notification.Type.FRIEND_REQUEST;

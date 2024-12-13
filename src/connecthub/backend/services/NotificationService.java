@@ -12,8 +12,8 @@ public class NotificationService {
         notifications = new ArrayList<>();
     }
 
-    public void addNotification(String message, Notification.Type type, String senderId) {
-        notifications.add(new Notification(message, type, senderId));
+    public void addNotification(String receiverId, String message, Notification.Type type, String senderId) {
+        notifications.add(new Notification(receiverId, message, type, senderId));
     }
     
     public void removeNotification(Notification notification) {
