@@ -1,6 +1,5 @@
 package connecthub.frontend.group;
 
-import connecthub.backend.models.ContentData;
 import connecthub.backend.models.User;
 import connecthub.backend.services.GroupService;
 import java.io.File;

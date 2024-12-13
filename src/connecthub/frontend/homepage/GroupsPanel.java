@@ -1,70 +1,105 @@
 package connecthub.frontend.homepage;
 
 import connecthub.backend.database.GroupDatabase;
+import connecthub.backend.models.User;
 import connecthub.backend.models.group.Group;
 import connecthub.backend.models.group.GroupMember;
-import java.awt.Component;
+import connecthub.frontend.group.GroupWindow;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.DefaultListModel;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 
 public class GroupsPanel extends javax.swing.JPanel {
-    private String userId;
-    
-    public GroupsPanel(String userId) {
+    private User user;
+    private List<Group> userGroups;
+    private DefaultListModel<Group> listModel;
+    private JList<Group> jGroupList;
+
+    public GroupsPanel(User user) {
+        this.user = user;
+        this.userGroups = new ArrayList<>();
+        initComponents();
+        loadUserGroups();
+        setupGroupList();
+    }
+
+    // Method to load the groups that the user is a member of
+    private void loadUserGroups() {
         try {
-            initComponents();
-            this.userId = userId;
-            this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-            this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding around the panel
-            
-            // get list of groups user is in
-            GroupDatabase groupDatabse = GroupDatabase.getInstance();
-            List<Group> groups = groupDatabse.loadGroups();
-            List<Group> userGroups = new ArrayList<>();
-            for(Group group : groups) {
-                List<GroupMember> groupMembers = group.getMembers();
-                for(GroupMember groupMember : groupMembers) {
-                    if(groupMember.getUserId().equals(userId)) {
+            GroupDatabase groupDatabase = GroupDatabase.getInstance();
+            List<Group> groups = groupDatabase.loadGroups();
+            userGroups.clear();
+
+            for (Group group : groups) {
+                for (GroupMember groupMember : group.getMembers()) {
+                    if (groupMember.getUserId().equals(user.getUserId())) {
                         userGroups.add(group);
                         break;
                     }
                 }
             }
-            if(!userGroups.isEmpty()) {
-                // Create DefaultListModel and add groups
-                DefaultListModel<Group> listModel = new DefaultListModel<>();
-                for (Group group : userGroups) {
-                    listModel.addElement(group);
-                }
-                
-                // Create the JList and set the model
-                JList<Group> jGroupList = new JList<>(listModel);
-
-                // Add the JList to the panel
-                JScrollPane scrollPane = new JScrollPane(jGroupList);
-                this.add(scrollPane);
-            } else {
-                JLabel noGroupsLabel = new JLabel("No groups found.");
-                this.add(noGroupsLabel);
-            }
         } catch (IOException ex) {
             Logger.getLogger(GroupsPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void refresh() {
-        
+
+    // Method to set up the JList
+    private void setupGroupList() {
+        if (!userGroups.isEmpty()) {
+            // Create the DefaultListModel and add groups
+            listModel = new DefaultListModel<>();
+            for (Group group : userGroups) {
+                listModel.addElement(group);
+            }
+
+            // Create the JList and set the model
+            jGroupList = new JList<>(listModel);
+            jGroupList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+            // Add the JList to a scroll pane and then to the panel
+            JScrollPane scrollPane = new JScrollPane(jGroupList);
+            this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+            this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding
+            this.add(scrollPane);
+
+            // Add ListSelectionListener to open selected group in a new window
+            jGroupList.addListSelectionListener(e -> {
+                if (!e.getValueIsAdjusting()) {
+                    Group selectedGroup = jGroupList.getSelectedValue();
+                    if (selectedGroup != null) {
+                        new GroupWindow(selectedGroup.getName(), selectedGroup.getPosts(), user, selectedGroup).setVisible(true);
+                        System.out.println("Selected Group from list: " + selectedGroup.getName());
+                    }
+                }
+            });
+        } else {
+            JLabel noGroupsLabel = new JLabel("No groups found.");
+            this.add(noGroupsLabel);
+        }
     }
+
+    // Refresh the list of groups and update the JList
+    public void refresh() throws IOException {
+        loadUserGroups(); // Refresh the list of user groups
+        if (listModel == null) {
+            listModel = new DefaultListModel<>();
+        } else {
+            listModel.clear(); // Clear the current list model
+        }
+
+        for (Group group : userGroups) {
+            listModel.addElement(group); // Re-add the refreshed groups
+        }
+
+        // Ensure the JList is updated if needed
+        if (jGroupList != null) {
+            jGroupList.setModel(listModel);
+        }
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.

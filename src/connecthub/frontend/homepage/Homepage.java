@@ -113,7 +113,7 @@ public class Homepage extends javax.swing.JFrame {
 
         // add all tabs
         newsFeedPanel = new NewsFeedPanel(posts);
-        groupsPanel = new GroupsPanel(user.getUserId());
+        groupsPanel = new GroupsPanel(user);
         profilePostsPanel = new ProfilePostsPanel(user.getUserId());
 
         // label all tabs
@@ -207,8 +207,12 @@ public class Homepage extends javax.swing.JFrame {
         sideBarHolder.revalidate();
         sideBarHolder.repaint();
         
-        // refresh groups panel
-        groupsPanel.refresh();
+        try {
+            // refresh groups panel
+            groupsPanel.refresh();
+        } catch (IOException ex) {
+            Logger.getLogger(Homepage.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         revalidate();
         repaint();
