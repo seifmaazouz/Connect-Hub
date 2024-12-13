@@ -6,7 +6,7 @@ import connecthub.backend.models.User;
 import connecthub.backend.services.FriendshipService;
 import connecthub.backend.services.UserService;
 import connecthub.frontend.Profile;
-import connecthub.frontend.newsfeed.ProfilePhoto;
+import connecthub.frontend.homepage.ProfilePhoto;
 import connecthub.frontend.utils.ImageManager;
 
 import javax.swing.*;

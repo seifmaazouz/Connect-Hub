@@ -41,7 +41,7 @@ public class NewsFeed extends javax.swing.JFrame {
         initComponents();
         
         this.user = user;
-        friendshipService = new FriendshipService(FRIENDS_FILE_PATH);
+        friendshipService = new FriendshipService();
         try {
             friendship = friendshipService.loadFriendship();
         } catch (IOException e) {
