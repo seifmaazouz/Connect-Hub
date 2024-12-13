@@ -9,6 +9,11 @@ import java.time.LocalDateTime;
 
 public class AdminRoleDecorator extends BaseMember {
     GroupService groupService = GroupService.getInstance();
+
+    public AdminRoleDecorator() {
+        super();
+    }
+
     public AdminRoleDecorator(User user, Group group, String joinDate) {
         super(user, group, joinDate);
     }

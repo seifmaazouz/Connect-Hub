@@ -16,6 +16,8 @@ public class BaseMember extends User implements GroupMember {
         return user;
     }
 
+    public BaseMember() {
+    }
 
     public BaseMember(User user, Group group, String joinDate) {
         this.user = user;

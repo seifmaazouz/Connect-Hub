@@ -24,14 +24,13 @@ public class GroupTest {
 
 
 
-             // Create a group
-             Image photo = ImageIO.read(new File("/home/ahmednader/Desktop/University/Year 3/semester_05/programming_2/assignments/Connect-Hub/src/connecthub/backend/database/images/0_2024-12-06_15-14-14.jpg"));
-             Group techGroup = groupManager.createGroup("Tech Enthusiasts", "A group for tech lovers", photo, "1019");
+             // Create a group (working)
+             String photoUrl = "/home/ahmednader/Desktop/University/Year 3/semester_05/programming_2/assignments/Connect-Hub/src/connecthub/backend/database/images/0_2024-12-06_15-14-14.jpg";
+             Group techGroup = groupManager.createGroup("Tech Enthusiasts", "A group for tech lovers", photoUrl, "1019");
              System.out.println("Group created: " + techGroup.getName());
 
              GroupMember user1 = new BaseMember(userManager.getUserById("1019"), techGroup, LocalDateTime.now().toString());
-             // Join group
-             groupManager.findGroupById(techGroup.getId());
+             // Join group (working)
              System.out.println("Group members: " + techGroup.getMembers().size());
 
              GroupMember user2 = new BaseMember(userManager.getUserById("1018"), techGroup, LocalDateTime.now().toString());

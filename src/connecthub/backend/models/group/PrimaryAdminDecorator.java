@@ -9,6 +9,10 @@ import java.time.LocalDateTime;
 public class PrimaryAdminDecorator extends AdminRoleDecorator {
     GroupService groupService;
 
+    public PrimaryAdminDecorator() {
+        super();
+    }
+
     public PrimaryAdminDecorator(User user, Group group, String joinDate) {
         super(user, group, joinDate);
         this.groupService = GroupService.getInstance();

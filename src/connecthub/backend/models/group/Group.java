@@ -1,6 +1,9 @@
 package connecthub.backend.models.group;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import connecthub.backend.models.Post;
 import connecthub.backend.models.User;
 
@@ -19,22 +22,26 @@ public class Group {
     private String description;
 
     @JsonProperty("photoUrl")
-    private Image groupPhoto;
+    private String photoUrl;
 
-    @JsonProperty("primaryAdminId")
-    private String primaryAdminId;
 
+    @JsonSerialize(contentUsing = GroupMemberSerializer.class)
+    @JsonDeserialize(contentUsing = GroupMemberDeserializer.class)
     @JsonProperty("members")
     private List<GroupMember> members;
 
     @JsonProperty("posts")
     private List<Post> posts;
 
-    public Group(String id, String name, String description, Image groupPhoto) {
+    public Group() {
+
+    }
+
+    public Group(String id, String name, String description, String photoUrl) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.groupPhoto = groupPhoto;
+        this.photoUrl = photoUrl;
         this.members = new ArrayList<>();
         this.posts = new ArrayList<>();
     }
@@ -59,14 +66,7 @@ public class Group {
         this.description = description;
     }
 
-    public Image getGroupPhoto() {
-        return groupPhoto;
-    }
-
-    public void setGroupPhoto(Image groupPhoto) {
-        this.groupPhoto = groupPhoto;
-    }
-
+    @JsonGetter("members")
     public ArrayList<GroupMember> getMembers() {
         return new ArrayList<>(members);
     }
@@ -79,6 +79,7 @@ public class Group {
         members.remove(member);
     }
 
+    @JsonGetter("posts")
     public ArrayList<Post> getPosts() {
         return new ArrayList<>(posts);
     }
@@ -91,9 +92,6 @@ public class Group {
         this.id = id;
     }
 
-    public void setPrimaryAdminId(String primaryAdminId) {
-        this.primaryAdminId = primaryAdminId;
-    }
 
     public void setMembers(List<GroupMember> members) {
         this.members = members;
@@ -107,4 +105,11 @@ public class Group {
         posts.remove(post);
     }
 
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
 }

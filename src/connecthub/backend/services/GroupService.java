@@ -30,9 +30,9 @@ public class GroupService {
         return instance;
     }
 
-    public Group createGroup(String name, String description, Image photo, String creatorId) throws IOException {
+    public Group createGroup(String name, String description, String photoUrl, String creatorId) throws IOException {
         String groupId = UUID.randomUUID().toString();
-        Group newGroup = new Group(groupId, name, description, photo);
+        Group newGroup = new Group(groupId, name, description, photoUrl);
 
         UserService userService = UserService.getInstance();
         User creator = userService.getUserById(creatorId);
