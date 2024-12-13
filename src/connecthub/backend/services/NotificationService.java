@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import static connecthub.backend.constants.FilePath.NOTIFICATIONS_FILE_PATH;
-import static javafx.scene.input.KeyCode.T;
 
 public class NotificationService {
     private HashMap<String, ArrayList<Notification>> notifications;

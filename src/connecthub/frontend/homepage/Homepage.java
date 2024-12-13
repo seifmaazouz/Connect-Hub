@@ -6,6 +6,7 @@ import connecthub.backend.models.Story;
 import connecthub.backend.models.User;
 import connecthub.backend.services.FriendshipService;
 import connecthub.backend.services.GroupService;
+import connecthub.backend.services.NotificationService;
 import connecthub.backend.services.PostService;
 import connecthub.backend.services.StoryService;
 import connecthub.backend.services.UserService;
@@ -15,6 +16,7 @@ import connecthub.frontend.FriendshipUI.FriendListPanel;
 import connecthub.frontend.FriendshipUI.FriendshipManagementMainWindow;
 import connecthub.frontend.Login;
 import connecthub.frontend.Profile;
+import connecthub.frontend.ViewNotifications;
 import connecthub.frontend.ViewStories;
 import connecthub.frontend.group.CreateGroup;
 import java.awt.BorderLayout;
@@ -475,7 +477,20 @@ public class Homepage extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCreateGroupActionPerformed
 
     private void btnNotificationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNotificationsActionPerformed
-        // TODO add your handling code here:
+        NotificationService notificationService = new NotificationService();
+        try {
+            if(notificationService.getNotifications().isEmpty())
+                System.out.println("No notifications");
+            else {
+            try {
+                new ViewNotifications(this, true, user, new NotificationService()).setVisible(true);
+            } catch (IOException ex) {
+                Logger.getLogger(Homepage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }//GEN-LAST:event_btnNotificationsActionPerformed
 
     
