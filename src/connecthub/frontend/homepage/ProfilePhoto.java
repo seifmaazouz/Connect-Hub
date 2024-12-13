@@ -1,4 +1,4 @@
-package connecthub.frontend.newsfeed;
+package connecthub.frontend.homepage;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
