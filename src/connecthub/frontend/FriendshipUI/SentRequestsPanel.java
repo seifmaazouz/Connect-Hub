@@ -7,6 +7,7 @@ import connecthub.backend.services.UserService;
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class SentRequestsPanel extends JPanel {
@@ -28,6 +29,11 @@ public class SentRequestsPanel extends JPanel {
                     String clickedItem = (String) sentRequestsList.getModel().getElementAt(index);
                     // Show a message when the item is clicked
                     System.out.println("You clicked: " + clickedItem);
+                    try {
+                        new SentRequestsOptionsWindow(friendship, activeUserId, UserService.getInstance().getUserByUsername(clickedItem));
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
             }
         });

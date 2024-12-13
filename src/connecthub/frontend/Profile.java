@@ -4,7 +4,6 @@ import connecthub.frontend.homepage.Homepage;
 import connecthub.backend.database.UserDatabase;
 import connecthub.backend.models.Post;
 import connecthub.backend.models.User;
-import connecthub.backend.profile.FetchFriends;
 import connecthub.backend.profile.FetchPosts;
 import connecthub.backend.profile.UpdateBio;
 import connecthub.backend.profile.UpdateCoverPhoto;

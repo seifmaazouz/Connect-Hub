@@ -23,10 +23,6 @@ public class FriendshipMainTest {
         Friendship friendship = friendshipService.loadFriendship();
         System.out.println(friendship.toString());
 
-        friendship.makeFriends("1", "1023");
-        friendship.makeFriends("1", "1022");
-        friendship.makeFriends("1023", "1022");
-
         friendshipService.saveFriendship(friendship);
     }
 }

@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -29,6 +30,11 @@ public class FriendRequestsPanel extends JPanel {
                     String clickedItem = (String) friendRequestsList.getModel().getElementAt(index);
                     // Show a message when the item is clicked
                     System.out.println("You clicked: " + clickedItem);
+                    try {
+                        new FriendRequestOptionsWindow(friendship, activeUserId, UserService.getInstance().getUserByUsername(clickedItem));
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
             }
         });
