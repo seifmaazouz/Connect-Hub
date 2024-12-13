@@ -1,4 +1,4 @@
-package connecthub.frontend;
+package connecthub.frontend.FriendshipUI;
 
 import connecthub.backend.models.Friendship;
 import connecthub.backend.services.UserService;
@@ -12,9 +12,9 @@ import java.util.HashMap;
 public class FriendListPanel extends JPanel {
     private JList friendsList;
     private JPanel panel1;
-    Friendship friendship;
-    String activeUserId;
-    HashMap<String, String> onlineStatus;
+    private Friendship friendship;
+    private String activeUserId;
+    private HashMap<String, String> onlineStatus;
 
     
     public FriendListPanel() {
@@ -59,6 +59,11 @@ public class FriendListPanel extends JPanel {
                     String clickedItem = (String) friendsList.getModel().getElementAt(index);
                     // Show a message when the item is clicked
                     System.out.println("You clicked: " + clickedItem);
+                    try {
+                        new FriendOptionsWindow(friendship, activeUserId, new UserService().getUserByUsername(clickedItem));
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
                 }
             }
         });
