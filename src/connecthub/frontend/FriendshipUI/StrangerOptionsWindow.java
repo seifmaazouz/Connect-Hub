@@ -1,8 +1,11 @@
 package connecthub.frontend.FriendshipUI;
 
 import connecthub.backend.models.Friendship;
+import connecthub.backend.models.Notification;
 import connecthub.backend.models.User;
 import connecthub.backend.services.FriendshipService;
+import connecthub.backend.services.NotificationService;
+import connecthub.backend.services.UserService;
 import connecthub.frontend.FriendProfile;
 import connecthub.frontend.homepage.ProfilePhoto;
 
@@ -49,6 +52,17 @@ public class StrangerOptionsWindow extends JDialog{
 
         sendRequestButton.addActionListener(e -> {
             friendship.sendRequest(activeUserId, stranger.getUserId());
+            NotificationService notificationService = new NotificationService();
+            notificationService.addNotification(
+                    stranger.getUserId(),
+                    UserService.getInstance().getUserById(activeUserId).getUsername() + " has sent you a friend request.",
+                    Notification.Type.FRIEND_REQUEST,
+                    activeUserId);
+            try {
+                notificationService.saveNotifications();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
             FriendshipService friendshipService = new FriendshipService();
             friendshipService.saveFriendship(friendship);
             dispose();
