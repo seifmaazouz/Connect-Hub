@@ -1,6 +1,5 @@
 package connecthub.frontend;
 
-import static connecthub.backend.constants.FilePath.FRIENDS_FILE_PATH;
 import connecthub.backend.models.Friendship;
 import connecthub.backend.models.Notification;
 import static connecthub.backend.models.Notification.Type.FRIEND_REQUEST;
@@ -10,6 +9,8 @@ import connecthub.backend.models.User;
 import connecthub.backend.services.FriendshipService;
 import connecthub.backend.services.NotificationService;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,12 +23,12 @@ public class ViewNotifications extends javax.swing.JDialog {
     private List<Notification> notifications;
     private int size;
 
-    public ViewNotifications(java.awt.Frame parent, boolean modal, User user, NotificationService notificationService) {
+    public ViewNotifications(java.awt.Frame parent, boolean modal, User user, NotificationService notificationService) throws IOException {
         super(parent, modal);
         initComponents();
         this.user = user;
         this.notificationService = notificationService;
-        List<Notification> notifications = notificationService.getNotifications();
+        HashMap<String, ArrayList<Notification>> notifications = notificationService.getNotifications();
         size = notifications.size();
         notificationIndex = 1;
         notificationNumber.setText(Integer.toString(notificationIndex));
@@ -255,7 +256,7 @@ public class ViewNotifications extends javax.swing.JDialog {
     }//GEN-LAST:event_noActionPerformed
 
     private void clearNotificationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearNotificationsActionPerformed
-        notificationService.clearNotifications();
+        notificationService.clearNotifications(user.getUserId());
     }//GEN-LAST:event_clearNotificationsActionPerformed
 
 //    public static void main(String args[]) {

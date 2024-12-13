@@ -1,0 +1,8 @@
+{
+  "1023" : [ {
+    "message" : "Jeff21erson has sent you a friend request.",
+    "timestamp" : [ 2024, 12, 13, 23, 34, 7, 122122700 ],
+    "type" : "FRIEND_REQUEST",
+    "senderId" : "1022"
+  } ]
+}
