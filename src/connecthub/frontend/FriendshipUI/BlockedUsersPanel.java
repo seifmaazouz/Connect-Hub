@@ -1,10 +1,10 @@
-
 package connecthub.frontend.FriendshipUI;
 
 import connecthub.backend.models.Friendship;
 import connecthub.backend.services.UserService;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -31,6 +31,21 @@ public class BlockedUsersPanel extends JPanel {
                     System.out.println("You clicked: " + clickedItem);
                     new BlockedOptionsWindow(friendship, activeUserId, new UserService().getUserByUsername(clickedItem));
                 }
+            }
+        });
+
+        blockedUsersList.setCellRenderer(new ListCellRenderer<String>() {
+            @Override
+            public Component getListCellRendererComponent(JList<? extends String> list, String value, int index, boolean isSelected, boolean cellHasFocus) {
+                DefaultListCellRenderer renderer = new DefaultListCellRenderer();
+
+                // Set the default renderer properties
+                Component component = renderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+                component.setForeground(Color.decode("#A02020"));
+
+                // Return the customized component
+                return component;
             }
         });
 
