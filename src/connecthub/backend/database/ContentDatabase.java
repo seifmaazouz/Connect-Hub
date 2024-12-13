@@ -34,10 +34,7 @@ public abstract class ContentDatabase<T extends Content> {
     }
     
     public List<T> getListOfContents() {
-        if(contents.isEmpty())
-            return null;
-        else
-            return new LinkedList<>(contents.values());
+        return new LinkedList<>(contents.values());
     }
 
     // save content to file if changes made
@@ -47,7 +44,7 @@ public abstract class ContentDatabase<T extends Content> {
 
     // uses a separate class to manage loading content from json file to satisfy Single Responsibility Principle
     public void loadAllContents() {
-        // contents.clear();
+        // contents.clear
         for(T content : contentLoader.loadContentsFromFile()) {
             contents.put(content.getContentId(), content);
         }

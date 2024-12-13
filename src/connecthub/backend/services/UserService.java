@@ -114,6 +114,17 @@ public class UserService {
         return (userMap != null) ? userMap.get(userId) : null;
     }
 
+    public User getUserByUsername(String username) {
+        if (userMap != null) {
+            for (User user : userMap.values()) {
+                if (user.getUsername().equals(username)) {
+                    return user;
+                }
+            }
+        }
+        return null;
+    }
+
 
     /**
      * Update an existing user's information.

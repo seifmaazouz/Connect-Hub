@@ -1,36 +1,4 @@
 {
-
-  "9090" : {
-    "userId" : "9090",
-    "email" : "ahmednader@gmail.com",
-    "username" : "ahmed",
-    "password" : "badboy123",
-    "dateOfBirth" : 976572000000,
-    "status" : "offline",
-    "hashedPassword" : "oQJqdJcXUpTwwdUS1wHnwEYBhs9sXuhbsxKVLTHx0bY=",
-    "salt" : "F/JmhJutYbzr3vyb46Aclw=="
-  },
-  "1" : {
-    "userId" : "1",
-    "email" : "nadanader@gmail.com",
-    "username" : "nada",
-    "password" : "J9@e05540",
-    "dateOfBirth" : 946677600000,
-    "status" : "offline",
-    "hashedPassword" : "QgSo2E7JF3IM0OhlyFtBzkxsAAFX92smqqx+BG/83wI=",
-    "salt" : "pvtQOvDWvIGuwoXXOVJ3OQ=="
-  },
-  "89798" : {
-    "userId" : "89798",
-    "email" : "ahmednooda123@gmail.com",
-    "username" : "ahmedn19",
-    "password" : "J9@e05540",
-    "dateOfBirth" : 944949600000,
-    "status" : "online",
-    "hashedPassword" : "0pqyUAD6zvADTmMzK+5ywiXQezcj6ys4/S+bxRBBd0M=",
-    "salt" : "mNoqLtIesdYTa59WaIMM/A=="
-  },
-
   "1019" : {
     "userId" : "1019",
     "email" : "ahmednooda123@gmail.co",
@@ -41,21 +9,19 @@
     "salt" : "UY/kmPa00IGX+fumIViakQ==",
     "profilePhoto" : null,
     "coverPhoto" : null,
-    "bio" : null,
-    "friendship" : null
+    "bio" : null
   },
-  "1022" : {
-    "userId" : "1022",
-    "email" : "seif@gmail.com",
-    "username" : "Jeff21erson",
-    "dateOfBirth" : 1117832400000,
+  "1" : {
+    "userId" : "1",
+    "email" : "nadanader@gmail.com",
+    "username" : "nada",
+    "dateOfBirth" : 946677600000,
     "status" : "offline",
     "hashedPassword" : "Nb6x0yXmUwKkkVTec1MIM5lYAWVUVNnhOPHOg0bYOIo=",
     "salt" : "V1y+7aH1p3EbtNZHyTliYA==",
     "profilePhoto" : "src\\connecthub\\backend\\database\\images\\1022_2024-12-12_17-37-00.jpg",
     "coverPhoto" : "src/connecthub/backend/database/images\\defaultCoverPhoto.jpg",
-    "bio" : null,
-    "friendship" : null
+    "bio" : null
   },
   "1018" : {
     "userId" : "1018",
@@ -67,21 +33,19 @@
     "salt" : "3gHbxOBz2U5jkklDzAnzHg==",
     "profilePhoto" : null,
     "coverPhoto" : null,
-    "bio" : null,
-    "friendship" : null
+    "bio" : null
   },
-  "1020" : {
-    "userId" : "1020",
-    "email" : "ahmed@gmail.com",
+  "9090" : {
+    "userId" : "9090",
+    "email" : "ahmednader@gmail.com",
     "username" : "ahmed",
-    "dateOfBirth" : 944949600000,
+    "dateOfBirth" : 976572000000,
     "status" : "offline",
     "hashedPassword" : "8/wCZMxNVVs54ENWoB+3s9gis89sZEDijPdh1e3UJ0k=",
     "salt" : "vCqyNI4rblairlawWxUrHg==",
     "profilePhoto" : "src/connecthub/backend/database/images\\defaultProfilePhoto.jpg",
     "coverPhoto" : "src/connecthub/backend/database/images\\defaultCoverPhoto.jpg",
-    "bio" : null,
-    "friendship" : null
+    "bio" : null
   },
   "1024" : {
     "userId" : "1024",
@@ -93,8 +57,7 @@
     "salt" : "mbPgMAWAg0GTyWgJnsVLpQ==",
     "profilePhoto" : "src/connecthub/backend/database/images\\defaultProfilePhoto.jpg",
     "coverPhoto" : "src/connecthub/backend/database/images\\defaultCoverPhoto.jpg",
-    "bio" : null,
-    "friendship" : null
+    "bio" : null
   },
   "1023" : {
     "userId" : "1023",
@@ -106,7 +69,42 @@
     "salt" : "E0d3ZiqVXwICvN+c2jnZ5Q==",
     "profilePhoto" : "src\\connecthub\\backend\\database\\images\\1023_2024-12-12_15-30-13.jpg",
     "coverPhoto" : "src/connecthub/backend/database/images\\defaultCoverPhoto.jpg",
-    "bio" : null,
-    "friendship" : null
+    "bio" : null
+  },
+  "1022" : {
+    "userId" : "1022",
+    "email" : "seif@gmail.com",
+    "username" : "Jeff21erson",
+    "dateOfBirth" : 1117832400000,
+    "status" : "offline",
+    "hashedPassword" : "Nb6x0yXmUwKkkVTec1MIM5lYAWVUVNnhOPHOg0bYOIo=",
+    "salt" : "V1y+7aH1p3EbtNZHyTliYA==",
+    "profilePhoto" : "src\\connecthub\\backend\\database\\images\\1022_2024-12-12_21-32-23.jpg",
+    "coverPhoto" : "src\\connecthub\\backend\\database\\images\\1022_2024-12-13_00-59-34.jpg",
+    "bio" : "Life is a game."
+  },
+  "89798" : {
+    "userId" : "89798",
+    "email" : "ahmednooda123@gmail.com",
+    "username" : "ahmedn19",
+    "dateOfBirth" : 944949600000,
+    "status" : "online",
+    "hashedPassword" : "0pqyUAD6zvADTmMzK+5ywiXQezcj6ys4/S+bxRBBd0M=",
+    "salt" : "mNoqLtIesdYTa59WaIMM/A==",
+    "profilePhoto" : null,
+    "coverPhoto" : null,
+    "bio" : null
+  },
+  "1020" : {
+    "userId" : "1020",
+    "email" : "ahmed@gmail.com",
+    "username" : "ahmed",
+    "dateOfBirth" : 944949600000,
+    "status" : "offline",
+    "hashedPassword" : "8/wCZMxNVVs54ENWoB+3s9gis89sZEDijPdh1e3UJ0k=",
+    "salt" : "vCqyNI4rblairlawWxUrHg==",
+    "profilePhoto" : "src/connecthub/backend/database/images\\defaultProfilePhoto.jpg",
+    "coverPhoto" : "src/connecthub/backend/database/images\\defaultCoverPhoto.jpg",
+    "bio" : null
   }
 }

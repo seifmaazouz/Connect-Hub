@@ -1,6 +1,6 @@
 package connecthub.frontend;
 
-import connecthub.frontend.newsfeed.NewsFeed;
+import connecthub.frontend.homepage.Homepage;
 import connecthub.backend.models.User;
 import java.awt.Image;
 import java.security.NoSuchAlgorithmException;
@@ -101,7 +101,7 @@ public class FriendProfile extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        new NewsFeed(user).setVisible(true);
+        new Homepage(user).setVisible(true);
     }//GEN-LAST:event_formWindowClosed
 
     public static void main(String args[]) {

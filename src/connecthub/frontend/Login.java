@@ -1,11 +1,12 @@
 package connecthub.frontend;
 
-import connecthub.frontend.newsfeed.NewsFeed;
+import connecthub.frontend.homepage.NewsFeed;
 import connecthub.backend.models.User;
 import connecthub.backend.services.UserService;
 import connecthub.backend.utils.errors.Alert;
 import connecthub.backend.utils.hashing.HashingBehaviour;
 import connecthub.backend.utils.hashing.PBKDF2Hashing;
+import connecthub.frontend.homepage.Homepage;
 
 import javax.swing.*;
 import java.awt.*;
@@ -77,7 +78,7 @@ public class Login {
                             "Success",
                             JOptionPane.INFORMATION_MESSAGE);
                     frame.dispose();
-                    new NewsFeed(user).setVisible(true);
+                    new Homepage(user).setVisible(true);
                 } else {
                     JOptionPane.showMessageDialog(frame,
                             "Login failed: Invalid email or password.",
@@ -247,9 +248,7 @@ public class Login {
                 JOptionPane.showMessageDialog(signUpDialog, "Invalid Date of Birth format. Please use yyyy-MM-dd.", "Error", JOptionPane.ERROR_MESSAGE);
             } catch (NoSuchAlgorithmException | InvalidKeySpecException ex) {
                 throw new RuntimeException(ex);
-            } /*catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }*/
+            }
         });
 
         cancelButton.addActionListener(e -> signUpDialog.dispose());

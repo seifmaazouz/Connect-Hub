@@ -13,7 +13,7 @@ public class ViewFriends extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.friends = friends;
-        friendName.setText(friends.getLast().getUsername());
+        friendName.setText(friends.get(-1).getUsername());
         friendIndex = 1;
         friendNumber.setText(Integer.toString(friendIndex));
         totalFriendsNumber.setText(Integer.toString(friends.size()));
