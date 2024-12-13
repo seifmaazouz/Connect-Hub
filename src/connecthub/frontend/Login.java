@@ -247,9 +247,9 @@ public class Login {
                 JOptionPane.showMessageDialog(signUpDialog, "Invalid Date of Birth format. Please use yyyy-MM-dd.", "Error", JOptionPane.ERROR_MESSAGE);
             } catch (NoSuchAlgorithmException | InvalidKeySpecException ex) {
                 throw new RuntimeException(ex);
-            } catch (IOException ex) {
+            } /*catch (IOException ex) {
                 throw new RuntimeException(ex);
-            }
+            }*/
         });
 
         cancelButton.addActionListener(e -> signUpDialog.dispose());

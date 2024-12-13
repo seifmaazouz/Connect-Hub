@@ -38,22 +38,10 @@
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
-          <Group type="102" attributes="0">
-              <EmptySpace min="-2" pref="236" max="-2" attributes="0"/>
-              <Component id="changePassword" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="75" max="-2" attributes="0"/>
-              <Component id="viewPosts" min="-2" pref="115" max="-2" attributes="0"/>
-              <EmptySpace pref="220" max="32767" attributes="0"/>
-              <Component id="viewFriends" min="-2" pref="115" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="75" max="-2" attributes="0"/>
-          </Group>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="225" max="-2" attributes="0"/>
               <Component id="profilePhotoLabel" min="-2" pref="150" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace pref="225" max="32767" attributes="0"/>
           </Group>
           <Component id="coverPhotoLabel" alignment="0" max="32767" attributes="0"/>
       </Group>
@@ -68,14 +56,7 @@
               <Component id="bioTitle" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="bio" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="changePassword" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="viewPosts" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="viewFriends" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="112" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -85,22 +66,16 @@
       <Properties>
         <Property name="toolTipText" type="java.lang.String" value="Click to change cover photo."/>
       </Properties>
-      <Events>
-        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="coverPhotoLabelMouseClicked"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="profilePhotoLabel">
       <Properties>
         <Property name="toolTipText" type="java.lang.String" value="Click to change profile photo."/>
       </Properties>
-      <Events>
-        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="profilePhotoLabelMouseClicked"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="bio">
       <Properties>
         <Property name="horizontalAlignment" type="int" value="0"/>
-        <Property name="text" type="java.lang.String" value="Enter bio"/>
+        <Property name="text" type="java.lang.String" value="Bio"/>
         <Property name="toolTipText" type="java.lang.String" value="Click to change bio."/>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
@@ -108,38 +83,11 @@
           </Border>
         </Property>
       </Properties>
-      <Events>
-        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="bioMouseClicked"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="bioTitle">
       <Properties>
         <Property name="text" type="java.lang.String" value="Bio"/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JToggleButton" name="changePassword">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Change Password"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="changePasswordActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JToggleButton" name="viewPosts">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="View Posts"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="viewPostsActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JToggleButton" name="viewFriends">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="View Friends"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="viewFriendsActionPerformed"/>
-      </Events>
     </Component>
   </SubComponents>
 </Form>
