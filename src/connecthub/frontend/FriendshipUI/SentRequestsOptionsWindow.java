@@ -3,7 +3,7 @@ package connecthub.frontend.FriendshipUI;
 import connecthub.backend.models.Friendship;
 import connecthub.backend.models.User;
 import connecthub.backend.services.FriendshipService;
-import connecthub.frontend.newsfeed.ProfilePhoto;
+import connecthub.frontend.homepage.ProfilePhoto;
 
 import javax.swing.*;
 import java.awt.*;
