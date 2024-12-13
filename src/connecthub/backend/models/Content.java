@@ -1,7 +1,6 @@
 package connecthub.backend.models;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 // Prototype Design Pattern
 public abstract class Content {
@@ -13,8 +12,8 @@ public abstract class Content {
     // Default constructor (required for Jackson deserialization)
     public Content() {}
 
-    public Content(String authorId, ContentData content) {
-        contentId = UUID.randomUUID().toString(); // TODO: change this to handle unique numbers even after closing and re-opening program
+    public Content(String contentId, String authorId, ContentData content) {
+        this.contentId = contentId;
         this.authorId = authorId;
         this.contentData = content;
         timestamp = LocalDateTime.now();
@@ -37,6 +36,10 @@ public abstract class Content {
 
     public ContentData getContentData() {
         return contentData;
+    }
+    
+    public void setContentData(ContentData contentData) {
+        this.contentData = contentData;
     }
 
     public LocalDateTime getTimestamp() {

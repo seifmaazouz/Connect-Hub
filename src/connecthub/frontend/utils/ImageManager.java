@@ -13,7 +13,10 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import static connecthub.backend.constants.FilePath.IMAGE_SAVE_DIRECTORY;
 import static connecthub.backend.constants.FilePath.UPLOAD_IMAGE_DIRECTORY;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
 public class ImageManager {
@@ -75,13 +78,10 @@ public class ImageManager {
         fileChooser.setFileFilter(new FileNameExtensionFilter("Image Files", "jpg", "png", "jpeg")); // Show only image files
         fileChooser.setAcceptAllFileFilterUsed(false);
         fileChooser.setDialogTitle("Upload Image");
-        // Create the folder if it doesn't exist in documents
+        // Xheck if directory doesn't exist in documents
         if (!UPLOAD_IMAGE_DIRECTORY.exists()) {
-            boolean isCreated = UPLOAD_IMAGE_DIRECTORY.mkdirs();
-            if (!isCreated) {
-                System.out.println("Failed to create the directory.");
+                System.out.println("Failed to load the directory.");
                 return null;
-            }
         }
         fileChooser.setCurrentDirectory(UPLOAD_IMAGE_DIRECTORY);
         return fileChooser;
@@ -94,5 +94,16 @@ public class ImageManager {
         Image image = ImageIO.read(file);
         image = image.getScaledInstance(x, y, Image.SCALE_SMOOTH);
         return image;
+    }
+    
+    public static Image getScaledImage(Image srcImg, int w, int h) {
+        BufferedImage resizedImg = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = resizedImg.createGraphics();
+        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.drawImage(srcImg, 0, 0, w, h, null);
+        g2.dispose();
+        return resizedImg;
     }
 }

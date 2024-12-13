@@ -14,8 +14,8 @@ public class ViewPosts extends javax.swing.JDialog {
     public ViewPosts(java.awt.Frame parent, boolean modal, List<Post> posts, String userName) {
         super(parent, modal);
         initComponents();
-        authorName.setText(userName);
         this.posts = posts;
+        authorName.setText(userName);
         postIndex = 1;
         postNumber.setText(Integer.toString(postIndex));
         totalPostsNumber.setText(Integer.toString(posts.size()));
@@ -132,6 +132,8 @@ public class ViewPosts extends javax.swing.JDialog {
             ImageIcon icon = new ImageIcon(image);
             postImage.setIcon(icon);
         }
+        else
+            postImage.setIcon(null);
     }
     
     private void previousPostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_previousPostActionPerformed
@@ -144,7 +146,6 @@ public class ViewPosts extends javax.swing.JDialog {
     }//GEN-LAST:event_previousPostActionPerformed
 
     private void nextPostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextPostActionPerformed
-        //get next post in list
         int i = Integer.parseInt(postNumber.getText());
         int n = Integer.parseInt(totalPostsNumber.getText());
         if (i < n) {

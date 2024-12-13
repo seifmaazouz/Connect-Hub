@@ -1,0 +1,9 @@
+[ {
+  "contentId" : "1",
+  "authorId" : "1023",
+  "contentData" : {
+    "text" : "Test",
+    "imagePath" : "src\\connecthub\\backend\\database\\images\\1023_2024-12-13_15-14-04.jpg"
+  },
+  "timestamp" : [ 2024, 12, 13, 15, 14, 4, 712964400 ]
+} ]

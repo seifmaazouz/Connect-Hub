@@ -1,6 +1,6 @@
-package connecthub.backend.profile;
-
-public interface Fetchable {
-
-    void fetch();
-}
+//package connecthub.backend.profile;
+//
+//public interface Fetchable {
+//
+//    void fetch();
+//}

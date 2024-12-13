@@ -3,8 +3,8 @@ package connecthub.backend.database;
 import connecthub.backend.models.Content;
 import connecthub.backend.loaders.ContentLoader;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,8 +29,12 @@ public abstract class ContentDatabase<T extends Content> {
         saveChangesToFile(); // manually update file after change
     }
 
+    public T getContent(String contentId) {
+        return contents.get(contentId);
+    }
+    
     public List<T> getListOfContents() {
-        return new ArrayList<>(contents.values());
+        return new LinkedList<>(contents.values());
     }
 
     // save content to file if changes made
@@ -40,7 +44,7 @@ public abstract class ContentDatabase<T extends Content> {
 
     // uses a separate class to manage loading content from json file to satisfy Single Responsibility Principle
     public void loadAllContents() {
-        // contents.clear();
+        // contents.clear
         for(T content : contentLoader.loadContentsFromFile()) {
             contents.put(content.getContentId(), content);
         }

@@ -47,6 +47,17 @@ public class UserService {
         return (userMap != null) ? userMap.get(userId) : null;
     }
 
+    public User getUserByUsername(String username) {
+        if (userMap != null) {
+            for (User user : userMap.values()) {
+                if (user.getUsername().equals(username)) {
+                    return user;
+                }
+            }
+        }
+        return null;
+    }
+
 
     public boolean updateUser(String userId, User updatedUser) {
         if (userExists(userId)) {
@@ -78,7 +89,9 @@ public class UserService {
             }
             if (!userMap.containsKey(newUser.getUserId()) && !UserMetadataValidator.emailExists(newUser.getEmail(), userMap)) {
                 databaseManager.saveUser(newUser);
-                return Alert.PROCESS_SUCCEEDED;
+                // update database
+                userMap = databaseManager.getUsers();
+                return Alert.alerts.PROCESS_SUCCEEDED;
             }
         }
 
@@ -121,7 +134,7 @@ public class UserService {
         return false; // User not found, logout failed
     }
 
-    // Helper method to check if a user exists in the database
+    // Helper method to check if a user exists in the bdatabase
     public boolean userExists(String userId) {
         return userMap != null && userMap.containsKey(userId);
     }
@@ -139,5 +152,10 @@ public class UserService {
 
             databaseManager.saveUser(user);
         }
+    }
+
+    public void refreshContents() {
+        databaseManager.loadAllContents();
+        userMap = databaseManager.getUsers();
     }
 }

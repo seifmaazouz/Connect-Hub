@@ -9,8 +9,8 @@ public class Story extends Content implements Expirable {
     // Default constructor (required for Jackson deserialization)
     public Story() {}
 
-    public Story(String authorId, ContentData contentData) {
-        super(authorId, contentData);
+    public Story(String contentId, String authorId, ContentData contentData) {
+        super(contentId, authorId, contentData);
     }
 
     @Override

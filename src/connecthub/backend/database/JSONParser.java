@@ -6,6 +6,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 
 public class JSONParser {
 
@@ -18,7 +19,14 @@ public class JSONParser {
     }
 
     public <T> T readJSON(String filePath, TypeReference<T> typeReference) throws IOException {
-        return objectMapper.readValue(new File(filePath), typeReference);
+        File file = new File(filePath);
+        if (!file.exists() || file.length() == 0) {
+            // Return a default instance for empty or missing files
+            System.out.println("File is empty or does not exist. Returning an empty object.");
+            return objectMapper.convertValue(Collections.emptyList(), typeReference);
+        }
+        else
+            return objectMapper.readValue(new File(filePath), typeReference);
     }
 
 

@@ -1,13 +1,16 @@
-package connecthub.frontend.users;
+package connecthub.frontend;
 
+import connecthub.frontend.homepage.NewsFeed;
 import connecthub.backend.models.User;
 import connecthub.backend.services.UserService;
 import connecthub.backend.utils.errors.Alert;
 import connecthub.backend.utils.hashing.HashingBehaviour;
 import connecthub.backend.utils.hashing.PBKDF2Hashing;
+import connecthub.frontend.homepage.Homepage;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.text.ParseException;
@@ -27,7 +30,7 @@ public class Login {
         SwingUtilities.invokeLater(() -> new Login().createAndShowGUI());
     }
 
-    private void createAndShowGUI() {
+    public void createAndShowGUI() {
         JFrame frame = new JFrame("Login");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(350, 200);
@@ -74,13 +77,14 @@ public class Login {
                             "Login successful!",
                             "Success",
                             JOptionPane.INFORMATION_MESSAGE);
+                    frame.dispose();
+                    new Homepage(user).setVisible(true);
                 } else {
                     JOptionPane.showMessageDialog(frame,
                             "Login failed: Invalid email or password.",
                             "Error",
                             JOptionPane.ERROR_MESSAGE);
                 }
-                // TODO: Open the newsfeed window here
 
             } catch (InvalidKeySpecException ex) {
                 // Handle InvalidKeySpecException specifically

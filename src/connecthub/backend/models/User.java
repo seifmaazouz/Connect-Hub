@@ -1,12 +1,22 @@
 package connecthub.backend.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import connecthub.backend.services.UserService;
+import connecthub.backend.utils.hashing.HashingBehaviour;
+import connecthub.backend.utils.hashing.PBKDF2Hashing;
 
+import java.io.IOException;
+import java.io.File;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
 
+import static connecthub.backend.constants.FilePath.IMAGE_SAVE_DIRECTORY;
+import static connecthub.backend.constants.FilePath.DEFAULT_PROFILE_PHOTO;
+import static connecthub.backend.constants.FilePath.DEFAULT_COVER_PHOTO;
+
 public class User {
+
     private String userId;
     private String email;
     private String username;
@@ -14,13 +24,15 @@ public class User {
     private String status;
     private String hashedPassword;
     private String salt;
-
-    @JsonIgnoreProperties
-    private Friendship friendship;
+    private transient HashingBehaviour hashingBehaviour;
+    private String profilePhoto;
+    private String coverPhoto;
+    private String bio;
 
     public User() {
 
     }
+
 
     public User(String userId, String email, String username, Date dateOfBirth, String status, String hashedPassword, String salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
         this.userId = userId;
@@ -30,6 +42,9 @@ public class User {
         this.status = status;
         this.hashedPassword = hashedPassword;
         this.salt = salt;
+        this.profilePhoto = DEFAULT_PROFILE_PHOTO;
+        this.coverPhoto = DEFAULT_COVER_PHOTO;
+        this.bio = null;
     }
 
 
@@ -82,15 +97,35 @@ public class User {
         this.status = status;
     }
 
-    public Friendship getFriendShip() {
-        return friendship;
-    }
-
     public void setHashedPassword(String hashedPassword) {
         this.hashedPassword = hashedPassword;
     }
 
     public void setSalt(String salt) {
         this.salt = salt;
+    }
+
+    public String getProfilePhoto() {
+        return profilePhoto;
+    }
+
+    public String getCoverPhoto() {
+        return coverPhoto;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setProfilePhoto(String profilePhoto) {
+        this.profilePhoto = profilePhoto;
+    }
+
+    public void setCoverPhoto(String coverPhoto) {
+        this.coverPhoto = coverPhoto;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
     }
 }
