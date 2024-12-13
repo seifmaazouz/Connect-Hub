@@ -136,7 +136,7 @@ public class GroupDatabase {
                         (String) postData.get("id"),
                         (String) postData.get("authorId"),
                         new ContentData((String) postData.get("content")),
-                        dateParser((String) postData.get("createdAt"))
+                        dateParser(String.valueOf(LocalDateTime.parse(postData.get("createdAt"))))
                 );
                 posts.add(post);
             }

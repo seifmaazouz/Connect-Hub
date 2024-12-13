@@ -47,4 +47,10 @@ public class BaseMember extends User implements GroupMember {
     public String getUsername() {
         return user.getUsername();
     }
+
+
+    @Override
+    public String getUserId() {
+        return user.getUserId();
+    }
 }

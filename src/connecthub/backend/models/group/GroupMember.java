@@ -18,4 +18,6 @@ public interface GroupMember {
     String getJoinDate();
 
     User getUser();
+
+    String getUserId();
 }
