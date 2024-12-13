@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class GroupTest {
@@ -28,26 +29,30 @@ public class GroupTest {
              Group techGroup = groupManager.createGroup("Tech Enthusiasts", "A group for tech lovers", photo, "1019");
              System.out.println("Group created: " + techGroup.getName());
 
-             GroupMember user1 = new BaseMember(userManager.getUserById("1019"), techGroup);
+             GroupMember user1 = new BaseMember(userManager.getUserById("1019"), techGroup, LocalDateTime.now().toString());
              // Join group
              groupManager.findGroupById(techGroup.getId());
+             System.out.println("Group members: " + techGroup.getMembers().size());
 
-             GroupMember user2 = (GroupMember) userManager.getUserById("1018");
+             GroupMember user2 = new BaseMember(userManager.getUserById("1018"), techGroup, LocalDateTime.now().toString());
              groupManager.joinGroup(techGroup, (User) user1);
              groupManager.joinGroup(techGroup, (User) user2);
+             System.out.println("Group members: " + techGroup.getMembers().size());
 
              // Add posts
-             groupManager.addPost(techGroup.getId(),new ContentData("Welcome to the Tech Enthusiasts group!"), "user_123");
-             groupManager.addPost(techGroup.getId(),new ContentData( "Hello everyone, excited to be here!"), "user_456");
+             groupManager.addPost(techGroup.getId(),new ContentData("Welcome to the Tech Enthusiasts group!"), "1019");
+             groupManager.addPost(techGroup.getId(),new ContentData( "Hello everyone, excited to be here!"), "1018");
+             System.out.println("Group posts: " + techGroup.getPosts().size());
 
              // Promote user to admin
              groupManager.promoteToAdmin(techGroup, user2, user1);
-
+             System.out.println("User promoted to admin");
              // Search for groups
              List<Group> searchResults = groupManager.searchGroups("Tech");
              for (Group group : searchResults) {
                  System.out.println("Found group: " + group.getName());
              }
+
 
              // Get updated group data
              Group updatedGroup = groupManager.findGroupById(techGroup.getId());
@@ -56,7 +61,7 @@ public class GroupTest {
 
              // Remove a post
              String postIdToRemove = updatedGroup.getPosts().get(0).getContentId();
-             groupManager.removePost(techGroup.getId(), postIdToRemove, "user_456");
+             groupManager.removePost(techGroup.getId(), postIdToRemove, "1019");
 
              // Leave group
              groupManager.leaveGroup(techGroup, user2);

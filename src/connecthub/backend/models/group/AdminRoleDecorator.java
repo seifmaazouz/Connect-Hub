@@ -2,15 +2,19 @@ package connecthub.backend.models.group;
 
 import connecthub.backend.models.Post;
 import connecthub.backend.models.User;
+import connecthub.backend.services.GroupService;
 
-public class AdminRoleDecorator extends GroupMemberDecorator {
+import java.io.IOException;
+import java.time.LocalDateTime;
 
-    public AdminRoleDecorator(GroupMember member) {
-        super(member);
+public class AdminRoleDecorator extends BaseMember {
+    GroupService groupService = GroupService.getInstance();
+    public AdminRoleDecorator(User user, Group group, String joinDate) {
+        super(user, group, joinDate);
     }
 
     public void editPost(Post post, Post newPost) {
-        //post.editPost(newPost);
+        post.setContentData(newPost.getContentData());
     }
 
 
@@ -18,25 +22,24 @@ public class AdminRoleDecorator extends GroupMemberDecorator {
         group.deletePost(post);
     }
 
-    public void removeMember(Group group, GroupMember member) {
-        if (member instanceof GroupMemberDecorator) {
+    public boolean removeMember(Group group, GroupMember member) {
+        if (member instanceof BaseMember) {
             group.removeMember(member);
-        } else {
-            System.out.println("Can't remove an admin from the group");
+            return true;
         }
-        group.removeMember(member);
+        return false;
     }
 
-    public void approveMembershipRequest(String userName) {
-//        System.out.println(member.getUsername() + " approved membership request for: " + userName);
+    public void approveMembershipRequest(GroupMember member, Group group) throws IOException {
+        groupService.joinGroup(group, (User) member);
     }
 
-    public void declineMembershipRequest(String userName) {
-//        System.out.println(member.getUsername() + " declined membership request for: " + userName);
+    public void declineMembershipRequest(GroupMember member, Group group) {
+
     }
 
     @Override
-    public Roles getRole() {
-        return Roles.ADMIN;
+    public String getRole() {
+        return "ADMIN";
     }
 }

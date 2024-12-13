@@ -4,12 +4,13 @@ import connecthub.backend.models.User;
 import connecthub.backend.services.GroupService;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 public class PrimaryAdminDecorator extends AdminRoleDecorator {
     GroupService groupService;
 
-    public PrimaryAdminDecorator(GroupMember member) {
-        super(member);
+    public PrimaryAdminDecorator(User user, Group group, String joinDate) {
+        super(user, group, joinDate);
         this.groupService = GroupService.getInstance();
     }
 
@@ -30,7 +31,7 @@ public class PrimaryAdminDecorator extends AdminRoleDecorator {
     }
 
     @Override
-    public Roles getRole() {
-        return Roles.PRIMARY_ADMIN;
+    public String getRole() {
+        return "PRIMARY_ADMIN";
     }
 }

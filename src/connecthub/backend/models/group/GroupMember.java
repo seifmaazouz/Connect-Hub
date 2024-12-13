@@ -1,6 +1,9 @@
 package connecthub.backend.models.group;
 
 import connecthub.backend.models.Post;
+import connecthub.backend.models.User;
+
+import java.time.LocalDateTime;
 
 
 public interface GroupMember {
@@ -10,5 +13,9 @@ public interface GroupMember {
 
     void leaveGroup(Group group);
 
-    Roles getRole();
+    String getRole();
+
+    String getJoinDate();
+
+    User getUser();
 }

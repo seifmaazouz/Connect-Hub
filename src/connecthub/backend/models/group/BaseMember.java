@@ -3,13 +3,24 @@ package connecthub.backend.models.group;
 import connecthub.backend.models.Post;
 import connecthub.backend.models.User;
 
+import java.time.LocalDateTime;
+
 public class BaseMember extends User implements GroupMember {
     protected Group group;
     protected User user;
+    protected String joinDate;
 
-    public BaseMember(User user, Group group) {
+
+    @Override
+    public User getUser() {
+        return user;
+    }
+
+
+    public BaseMember(User user, Group group, String joinDate) {
         this.user = user;
         this.group = group;
+        this.joinDate = joinDate;
     }
 
     @Override
@@ -23,8 +34,13 @@ public class BaseMember extends User implements GroupMember {
     }
 
     @Override
-    public Roles getRole() {
-        return Roles.MEMBER;
+    public String getRole() {
+        return "MEMBER";
+    }
+
+    @Override
+    public String getJoinDate() {
+        return joinDate;
     }
 
     @Override

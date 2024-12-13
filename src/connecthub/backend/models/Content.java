@@ -20,6 +20,13 @@ public abstract class Content {
         timestamp = LocalDateTime.now();
     }
 
+    public Content(String contentId, String authorId, ContentData contentData, LocalDateTime timestamp) {
+        this.contentId = contentId;
+        this.authorId = authorId;
+        this.contentData = contentData;
+        this.timestamp = timestamp;
+    }
+
     public String getContentId() {
         return contentId;
     }
@@ -47,5 +54,9 @@ public abstract class Content {
         else
             System.out.println("Image: null"); // Handles null or empty imagePaths
         System.out.println();
+    }
+
+    public void setContentData(ContentData contentData) {
+        this.contentData = contentData;
     }
 }
