@@ -29,7 +29,7 @@ public class BlockedUsersPanel extends JPanel {
                     String clickedItem = (String) blockedUsersList.getModel().getElementAt(index);
                     // Show a message when the item is clicked
                     System.out.println("You clicked: " + clickedItem);
-                    new BlockedOptionsWindow(friendship, activeUserId, new UserService().getUserByUsername(clickedItem));
+                    new BlockedOptionsWindow(friendship, activeUserId, UserService.getInstance().getUserByUsername(clickedItem));
                 }
             }
         });
@@ -43,7 +43,7 @@ public class BlockedUsersPanel extends JPanel {
 
     private ArrayList<String> getListContents() {
         ArrayList<String> userIds = this.friendship.getUserBlocked(activeUserId);
-        UserService userService = new UserService();
+        UserService userService = UserService.getInstance();
 
         ArrayList<String> blocks = new ArrayList<>();
 

@@ -58,8 +58,4 @@ public abstract class Content {
             System.out.println("Image: null"); // Handles null or empty imagePaths
         System.out.println();
     }
-
-    public void setContentData(ContentData contentData) {
-        this.contentData = contentData;
-    }
 }

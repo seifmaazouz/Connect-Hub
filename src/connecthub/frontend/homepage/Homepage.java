@@ -58,7 +58,7 @@ public class Homepage extends javax.swing.JFrame {
 
         // create all services
         friendshipService = new FriendshipService();
-        userService = new UserService();
+        userService = UserService.getInstance();
         postService = ServiceFactory.createPostService();
         storyService = ServiceFactory.createStoryService();
 
@@ -451,7 +451,7 @@ public class Homepage extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                UserService u = new UserService();
+                UserService u = UserService.getInstance();
                 try {
                     new Homepage(u.getUser("seif@gmail.com", "seif123")).setVisible(true);
                 } catch (InvalidKeySpecException ex) {

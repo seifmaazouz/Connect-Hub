@@ -53,7 +53,7 @@ public class FriendListPanel extends JPanel {
                     // Show a message when the item is clicked
                     System.out.println("You clicked: " + clickedItem);
                     try {
-                        new FriendOptionsWindow(friendship, activeUserId, new UserService().getUserByUsername(clickedItem));
+                        new FriendOptionsWindow(friendship, activeUserId, UserService.getInstance().getUserByUsername(clickedItem));
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
@@ -70,7 +70,7 @@ public class FriendListPanel extends JPanel {
 
     private ArrayList<String> getListContents() {
         ArrayList<String> userIds = this.friendship.getUserFriends(activeUserId);
-        UserService userService = new UserService();
+        UserService userService = UserService.getInstance();
 
         for (String userId : userIds) {
             onlineStatus.put(userService.getUserById(userId).getUsername(), userService.getUserById(userId).getStatus());

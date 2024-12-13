@@ -27,7 +27,7 @@ public class UserService {
     private HashMap<String, User> userMap;
 
     private UserService() {
-        this.databaseManager = new UserDatabase();
+        this.databaseManager = UserDatabase.getInstance();
         this.userMap = databaseManager.getUsers();
         this.hashingBehaviour = new PBKDF2Hashing();
         this.validationBehaviour = new PBKDF2Validation();
@@ -91,7 +91,7 @@ public class UserService {
                 databaseManager.saveUser(newUser);
                 // update database
                 userMap = databaseManager.getUsers();
-                return Alert.alerts.PROCESS_SUCCEEDED;
+                return Alert.PROCESS_SUCCEEDED;
             }
         }
 

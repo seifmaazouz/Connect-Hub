@@ -5,6 +5,7 @@ import connecthub.backend.models.ContentData;
 import connecthub.backend.models.Post;
 import connecthub.backend.models.User;
 import connecthub.backend.models.group.*;
+import connecthub.backend.utils.factories.ContentFactory;
 
 import java.awt.*;
 import java.io.IOException;
@@ -104,7 +105,7 @@ public class GroupService {
     public void addPost(String groupId, ContentData content, String authorId) throws IOException {
         Group group = findGroupById(groupId);
         if (group != null) {
-            Post newPost = new Post(authorId, content);
+            Post newPost = ContentFactory.createPost(authorId, content.getText(), content.getImagePath());
             group.addPost(newPost);
             groupDatabase.updateGroup(group);
         }

@@ -41,7 +41,7 @@ public class SentRequestsPanel extends JPanel {
 
     private ArrayList<String> getListContents() {
         ArrayList<String> userIds = this.friendship.getUserSentRequests(activeUserId);
-        UserService userService = new UserService();
+        UserService userService = UserService.getInstance();
 
         ArrayList<String> sentRequests = new ArrayList<>();
 
