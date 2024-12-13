@@ -1,6 +1,7 @@
 package connecthub.backend.models.group;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -111,5 +112,11 @@ public class Group {
 
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
+    }
+    
+    @Override
+    @JsonIgnore
+    public String toString() {
+        return name; // For displaying name in list
     }
 }

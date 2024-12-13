@@ -2,14 +2,12 @@ package connecthub.frontend.group;
 
 import connecthub.backend.models.User;
 import connecthub.backend.models.group.Group;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -18,11 +16,15 @@ public class GroupWindow extends JFrame {
     private JList<String> postsList;
     private DefaultListModel<String> listModel;
     private JTextField newPostTextField;
+    private User user;
+    private Group group;
 
     public GroupWindow(String groupName, List<String> initialPosts, User user, Group group) {
         listModel = new DefaultListModel<>();
         postsList = new JList<>(listModel);
         updatePostsList(initialPosts);
+        this.user = user;
+        this.group = group;
 
         // Frame settings
         setTitle(groupName);
@@ -84,8 +86,11 @@ public class GroupWindow extends JFrame {
     private void addPost() {
         String newPostContent = newPostTextField.getText();
         if (!newPostContent.trim().isEmpty()) {
-            listModel.addElement(newPostContent);
+            //listModel.addElement(newPostContent);
             newPostTextField.setText("");
+            CreatePost createPost = new CreatePost(this, true, group.getId(), user, newPostContent);
+            createPost.setVisible(true);
+            System.out.println("Done");
         }
     }
 
