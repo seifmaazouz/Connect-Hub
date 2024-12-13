@@ -32,7 +32,6 @@ public class Profile extends javax.swing.JFrame {
 
     public Profile(User user) {
         initComponents();
-        //get profile photo, cover photo, bio from database
         try {
             this.user = user;
             userDatabase = UserDatabase.getInstance();

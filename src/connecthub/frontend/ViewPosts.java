@@ -37,7 +37,7 @@ public class ViewPosts extends javax.swing.JDialog {
         totalPostsNumber = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("View Posts");
+        setTitle("Posts");
         setResizable(false);
 
         previousPost.setText("Previous Post");

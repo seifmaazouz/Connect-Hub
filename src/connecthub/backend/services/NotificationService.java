@@ -15,7 +15,11 @@ public class NotificationService {
     public void addNotification(String message, Notification.Type type) {
         notifications.add(new Notification(message, type));
     }
-
+    
+    public void removeNotification(Notification notification) {
+        notifications.remove(notification);
+    }
+    
     public List<Notification> getNotifications() {
         return notifications;
     }
