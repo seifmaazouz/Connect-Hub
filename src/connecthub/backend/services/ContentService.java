@@ -2,6 +2,7 @@ package connecthub.backend.services;
 
 import connecthub.backend.database.ContentDatabase;
 import connecthub.backend.models.Content;
+import connecthub.backend.models.ContentData;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,20 @@ public abstract class ContentService<T extends Content> {
     public void createContent(T content) {
         contentDatabase.saveContent(content);
     }
-
+    
+    public void deleteContent(String contentId) {
+        contentDatabase.deleteContent(contentId);
+    }
+    
+    public void editContent(T content, ContentData contentData) {
+        content.setContentData(contentData);
+        contentDatabase.saveContent(content);
+    }
+    
+    public T getContentFromId(String contentId) {
+        return contentDatabase.getContent(contentId);
+    }
+    
     // use this method for when pressing refresh button
     public void refreshContents() {
         contentDatabase.loadAllContents();

@@ -29,6 +29,10 @@ public abstract class ContentDatabase<T extends Content> {
         saveChangesToFile(); // manually update file after change
     }
 
+    public T getContent(String contentId) {
+        return contents.get(contentId);
+    }
+    
     public List<T> getListOfContents() {
         return new LinkedList<>(contents.values());
     }
