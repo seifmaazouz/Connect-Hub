@@ -65,7 +65,11 @@ public class Profile extends javax.swing.JFrame {
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
-                formWindowClosed(evt);
+                try {
+                    formWindowClosed(evt);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
@@ -223,7 +227,7 @@ public class Profile extends javax.swing.JFrame {
 //            new ViewFriends(this, true, friends).setVisible(true);
     }//GEN-LAST:event_viewFriendsActionPerformed
 
-    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+    private void formWindowClosed(java.awt.event.WindowEvent evt) throws IOException {//GEN-FIRST:event_formWindowClosed
         new Homepage(user).setVisible(true);
     }//GEN-LAST:event_formWindowClosed
 

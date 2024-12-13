@@ -52,7 +52,7 @@ public class Homepage extends javax.swing.JFrame {
     private boolean profileMode = false, exitMode = true;
 
 
-    public Homepage(User user) {
+    public Homepage(User user) throws IOException {
         initComponents();
         this.user = user;
 
@@ -99,6 +99,12 @@ public class Homepage extends javax.swing.JFrame {
         sideBarHolder.addTab("Friends", friendsPanel);
         friendsPanel.revalidate();
         friendsPanel.repaint();
+
+        JPanel searchUsersPanel = new SearchUsersPanel(friendship, user.getUserId());
+        searchUsersPanel.setVisible(true);
+        sideBarHolder.addTab("Search Users", searchUsersPanel);
+        searchUsersPanel.revalidate();
+        searchUsersPanel.repaint();
     }
 
     private void customizeTabbedPane(List<Post> posts) {
@@ -200,7 +206,9 @@ public class Homepage extends javax.swing.JFrame {
         sideBarHolder.addTab("Friends", new FriendListPanel(friendship, user.getUserId()));
         sideBarHolder.revalidate();
         sideBarHolder.repaint();
-
+        sideBarHolder.addTab("Search Users", new SearchUsersPanel(friendship, user.getUserId()));
+        sideBarHolder.revalidate();
+        sideBarHolder.repaint();
         revalidate();
         repaint();
     }
@@ -458,6 +466,8 @@ public class Homepage extends javax.swing.JFrame {
                     Logger.getLogger(Homepage.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (NoSuchAlgorithmException ex) {
                     Logger.getLogger(Homepage.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
             }
         });
