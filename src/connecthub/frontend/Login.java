@@ -1,13 +1,16 @@
 package connecthub.frontend;
 
+import connecthub.frontend.homepage.NewsFeed;
 import connecthub.backend.models.User;
 import connecthub.backend.services.UserService;
 import connecthub.backend.utils.errors.Alert;
 import connecthub.backend.utils.hashing.HashingBehaviour;
 import connecthub.backend.utils.hashing.PBKDF2Hashing;
+import connecthub.frontend.homepage.Homepage;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.text.ParseException;
@@ -75,7 +78,7 @@ public class Login {
                             "Success",
                             JOptionPane.INFORMATION_MESSAGE);
                     frame.dispose();
-                    new NewsFeed(user).setVisible(true);
+                    new Homepage(user).setVisible(true);
                 } else {
                     JOptionPane.showMessageDialog(frame,
                             "Login failed: Invalid email or password.",

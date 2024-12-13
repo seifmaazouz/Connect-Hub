@@ -1,93 +1,209 @@
 package connecthub.backend.models;
 
-import java.util.ArrayList;
+import connecthub.backend.loaders.UserLoader;
+
+import java.util.*;
 
 public class Friendship {
-    private final ArrayList<User> friends;
-    private final ArrayList<User> blocked;
-    private final ArrayList<User> blockedBy;
-    private final ArrayList<User> friendRequests;
-    private final ArrayList<User> sentRequests;
-    private final User user;
 
-    public Friendship(User user) {
-        this.user = user;
-        friends = new ArrayList<>();
-        blocked = new ArrayList<>();
-        blockedBy = new ArrayList<>();
-        friendRequests = new ArrayList<>();
-        sentRequests = new ArrayList<>();
+    private HashMap<String, ArrayList<String>> friends;
+    private HashMap<String, ArrayList<String>> blocked;
+    private HashMap<String, ArrayList<String>> blockedBy;
+    private HashMap<String, ArrayList<String>> friendRequests;
+    private HashMap<String, ArrayList<String>> sentRequests;
+
+
+    public Friendship() {
+        friends = new HashMap<>();
+        blocked = new HashMap<>();
+        blockedBy = new HashMap<>();
+        friendRequests = new HashMap<>();
+        sentRequests = new HashMap<>();
+
+        revise();
     }
 
-    public User getUser() { return this.user;}
 
-    public void addSentFriendRequest(User receiver) {
-        sentRequests.add(receiver);
+//actions:
+    public void makeFriends(String userId, String otherUserId) {
+        if (!isFriend(userId, otherUserId)) {
+            friends.get(userId).add(otherUserId);
+            friends.get(otherUserId).add(userId);
+        }
     }
 
-    public void addReceivedFriendRequest(User sender) {
-        friendRequests.add(sender);
+    public void unFriend(String userId, String otherUserId) {
+        if (isFriend(userId, otherUserId)) {
+            friends.get(userId).remove(otherUserId);
+            friends.get(otherUserId).remove(userId);
+        }
     }
 
-    public void addUserToFriends(User user) {
-        friends.add(user);
+    public void block(String userId, String otherUserId) {
+        if (isFriend(userId, otherUserId)) {
+            unFriend(userId, otherUserId);
+        } else if (hasSentRequest(userId, otherUserId) || hasReceivedRequest(userId, otherUserId)) {
+            cancelRequest(userId, otherUserId);
+        }
+        if (!hasBlocked(userId, otherUserId)) {
+            blocked.get(userId).add(otherUserId);
+            blockedBy.get(otherUserId).add(userId);
+        }
     }
 
-    public void addUserToBlocked(User user) {
-        blocked.add(user);
+    public void unBlock(String userId, String otherUserId) {
+        if (isBlockedBy(userId, otherUserId)) {
+            blockedBy.get(userId).remove(otherUserId);
+            blocked.get(otherUserId).remove(userId);
+        }
     }
 
-    public void removeSentFriendRequest(User receiver) {
-        sentRequests.remove(receiver);
+    public void sendRequest(String userId, String otherUserId) {
+        if (hasReceivedRequest(userId, otherUserId)) {
+            acceptRequest(userId, otherUserId);
+        } else {
+            sentRequests.get(userId).add(otherUserId);
+            friendRequests.get(otherUserId).add(userId);
+        }
     }
 
-    public void removeReceivedFriendRequest(User sender) {
-        friendRequests.remove(sender);
+    public void cancelRequest(String userId, String otherUserId) {
+        if (hasSentRequest(userId, otherUserId)) {
+            sentRequests.get(userId).remove(otherUserId);
+            friendRequests.get(otherUserId).remove(userId);
+        }
     }
 
-    public void removeUserFromFriends(User user) {
-        friends.remove(user);
+    public void acceptRequest(String userId, String otherUserId) {
+        if (hasReceivedRequest(userId, otherUserId)) {
+            cancelRequest(otherUserId, userId);
+            makeFriends(userId, otherUserId);
+        }
     }
 
-    public void removeUserFromBlocked(User user) {
-        blocked.remove(user);
+//checkers:
+    public boolean isBlockedBy(String userId, String otherUserId) {
+        return blockedBy.containsKey(userId) && blockedBy.get(userId).contains(otherUserId);
     }
 
-    public void getBlockedHAHA(User user) {
-        blockedBy.add(user);
+    public boolean hasBlocked(String userId, String otherUserId) {
+        return blocked.containsKey(userId) && blocked.get(userId).contains(otherUserId);
     }
 
-    public void removeUserFromBlockedBy(User user) {
-        blockedBy.remove(user);
+        public boolean isFriend(String userId, String otherUserId) {
+            return friends.get(userId).contains(otherUserId);
+        }
+
+    public boolean hasSentRequest(String userId, String otherUserId) {
+        return sentRequests.containsKey(userId) && sentRequests.get(userId).contains(otherUserId);
     }
 
-    public ArrayList<User> getFriends() {
-        if(friends.isEmpty())
-            return null;
-        else
-            return friends;
+    public boolean hasReceivedRequest(String userId, String otherUserId) {
+        boolean result = friendRequests.containsKey(userId) && friendRequests.get(userId).contains(otherUserId);
+        if (result) {
+            System.out.println("User " + userId + " has received a request from user " + otherUserId);
+        } else {
+            System.out.println("User " + userId + " has not received a request from user " + otherUserId);
+        }
+        return result;
     }
 
-    public ArrayList<User> getBlockedUsers() {
+//getters:
+    public ArrayList<String> getUserFriends(String userId) {
+        return this.friends.get(userId);
+    }
+
+    public ArrayList<String> getUserBlocked(String userId) {
+        return this.blocked.get(userId);
+    }
+
+    public ArrayList<String> getUserBlockedBy(String userId) {
+        return this.blockedBy.get(userId);
+    }
+
+    public ArrayList<String> getUserFriendRequests(String userId) {
+        return this.friendRequests.get(userId);
+    }
+
+    public ArrayList<String> getUserSentRequests(String userId) {
+        return this.sentRequests.get(userId);
+    }
+
+    public HashMap<String, ArrayList<String>> getFriends() {
+        return friends;
+    }
+
+    public HashMap<String, ArrayList<String>> getBlocked() {
         return blocked;
     }
 
-    public ArrayList<User> getBlockedByUsers() {
+    public HashMap<String, ArrayList<String>> getBlockedBy() {
         return blockedBy;
     }
 
-    public ArrayList<User> getSentRequests() {
-        return sentRequests;
-    }
-
-    public ArrayList<User> getFriendRequests() {
+    public HashMap<String, ArrayList<String>> getFriendRequests() {
         return friendRequests;
     }
 
+    public HashMap<String, ArrayList<String>> getSentRequests() {
+        return sentRequests;
+    }
 
+//setters:
+    public void setFriends(String userId, ArrayList<String> friends) {
+        this.friends.put(userId, friends);
+    }
 
-    public boolean isFriend(User other) {
-        //todo
-        return false;
+    public void setBlocked(String userId, ArrayList<String> blocked) {
+        this.blocked.put(userId, blocked);
+    }
+
+    public void setBlockedBy(String userId, ArrayList<String> blockedBy) {
+        this.blockedBy.put(userId, blockedBy);
+    }
+
+    public void setReceivedRequests(String userId, ArrayList<String> friendRequests) {
+        this.friendRequests.put(userId, friendRequests);
+    }
+
+    public void setSentRequests(String userId, ArrayList<String> sentRequests) {
+        this.sentRequests.put(userId, sentRequests);
+    }
+
+    @Override
+    public String toString() {
+        return "Friendship{" +
+                "friends=" + friends +
+                ", blocked=" + blocked +
+                ", blockedBy=" + blockedBy +
+                ", friendRequests=" + friendRequests +
+                ", sentRequests=" + sentRequests +
+                '}';
+    }
+
+    private void reviseUserFriendship(String userId) {
+        if (!friends.containsKey(userId)) {
+            friends.put(userId, new ArrayList<>());
+        }
+        if (!blocked.containsKey(userId)) {
+            blocked.put(userId, new ArrayList<>());
+        }
+        if (!blockedBy.containsKey(userId)) {
+            blockedBy.put(userId, new ArrayList<>());
+        }
+        if (!friendRequests.containsKey(userId)) {
+            friendRequests.put(userId, new ArrayList<>());
+        }
+        if (!sentRequests.containsKey(userId)) {
+            sentRequests.put(userId, new ArrayList<>());
+        }
+    }
+
+    private void revise() {
+//        Map<String, User> allUsers = (new UserLoader().loadUsers());
+        Set<String> userIds = (new UserLoader().loadUsers().keySet());
+        for (String userId : userIds) { //allUsers.keySet()
+            reviseUserFriendship(userId);
+        }
     }
 }

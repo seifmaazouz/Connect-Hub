@@ -222,7 +222,7 @@ public class UserService {
         return false; // User not found, logout failed
     }
 
-    // Helper method to check if a user exists in the database
+    // Helper method to check if a user exists in the bdatabase
     public boolean userExists(String userId) {
         return userMap != null && userMap.containsKey(userId);
     }

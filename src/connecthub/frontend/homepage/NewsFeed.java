@@ -1,116 +1,105 @@
-package connecthub.frontend;
+package connecthub.frontend.homepage;
 
 import connecthub.backend.models.Friendship;
 import connecthub.backend.models.Post;
 import connecthub.backend.models.Story;
 import connecthub.backend.models.User;
+import connecthub.backend.services.FriendshipService;
 import connecthub.backend.services.StoryService;
 import connecthub.backend.services.PostService;
-import java.awt.Image;
+
+import java.awt.*;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
+import javax.swing.*;
+
 import connecthub.backend.services.UserService;
 import connecthub.backend.utils.factories.ServiceFactory;
+import connecthub.frontend.ContentCreator;
+import connecthub.frontend.Login;
+import connecthub.frontend.Profile;
+import connecthub.frontend.ViewStories;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+
+import static connecthub.backend.constants.FilePath.FRIENDS_FILE_PATH;
 
 public class NewsFeed extends javax.swing.JFrame {
     private final User user;
-    private ImageIcon profilePhoto;
-    private final List<User> friends = null;
-    private UserService userService;
-    private PostService postService;
-    private StoryService storyService;
+    private final UserService userService;
+    private final PostService postService;
+    private final StoryService storyService;
+    private final FriendshipService friendshipService;
+    private Friendship friendship;
+    private boolean profileMode = false, exitMode = true;
 
-    
+
     public NewsFeed(User user) {
         initComponents();
+        
         this.user = user;
+        friendshipService = new FriendshipService(FRIENDS_FILE_PATH);
+        try {
+            friendship = friendshipService.loadFriendship();
+        } catch (IOException e) {
+            System.out.println("No Friends.");
+        }
         userService = new UserService();
         postService = ServiceFactory.createPostService();
-        //Friendship friendship = user.getFriendship();
-//        if(friendship == null)
-//            friends = null;
-//        else
-//            friends = friendship.getFriends();
-        profilePhoto = new ImageIcon(user.getProfilePhoto());
-        Image image = profilePhoto.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH); // Width and height in pixels
-        profilePhoto = new ImageIcon(image);
-        profilePhotoLabel.setIcon(profilePhoto);
+        storyService = ServiceFactory.createStoryService();
+        
+        // set profile photo
+        Image profileImage = new ImageIcon(user.getProfilePhoto()).getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+        ProfilePhoto profilePhotoPanel = new ProfilePhoto(profileImage, 100, 2);
+        profilePhotoLabel.setLayout(new BorderLayout());
+        profilePhotoLabel.add(profilePhotoPanel, BorderLayout.CENTER);
+
+        // set username
         String userName = user.getUsername();
         lblUsername.setText(userName);
-//        viewPostsPanel.setUserName(userName);
-//        PostService postService = ServiceFactory.createPostService();
-//        List<Post> posts = new ArrayList<>();
-//        if(friends == null)
-//            return;
-//        for(User friend : friends) {
-//            posts.addAll(postService.getListOfUserContents(friend.getUserId()));
-//        }
-//        if(!posts.isEmpty())
-//            viewPostsPanel.setPosts(posts);
-
-        List<Post> posts;
-        posts = postService.getListOfContents();
+        
+        // display posts
+        List<String> friends = friendship.getUserFriends(user.getUserId());
+        List<Post> posts = new ArrayList<>();
+        for(String friend : friends) {
+            posts.addAll(postService.getListOfUserContents(friend));
+        }
         displayPosts(posts);
     }
 
-    private void displayPosts(List<Post> posts) {
-        JPanel postsPanel = new JPanel();
-        postsPanel.setLayout(new BoxLayout(postsPanel, BoxLayout.Y_AXIS));
-        postsPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding around the panel
-
-        for (int i = posts.size() - 1; i >= 0; i--) {
-            Post post = posts.get(i);
-            JPanel postPanel = new JPanel();
-            postPanel.setLayout(new BoxLayout(postPanel, BoxLayout.Y_AXIS));
-            postPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding around each post
-            postPanel.setBackground(new java.awt.Color(255, 255, 255)); // Set background color to white
-            postPanel.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT); // Center align the post panel
-
-            User user = userService.getUserById(post.getAuthorId());
-            JLabel authorLabel = new JLabel(user.getUsername());
-            authorLabel.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 14)); // Set font for author label
-            postPanel.add(authorLabel);
-
-            JLabel timeStampLabel = new JLabel(post.getTimestamp().toString());
-            timeStampLabel.setFont(new java.awt.Font("Arial", java.awt.Font.ITALIC, 12)); // Set font for timestamp label
-            postPanel.add(timeStampLabel);
-
-            JLabel postTextLabel = new JLabel("<html>" + post.getContentData().getText() + "</html>");
-            postTextLabel.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 14)); // Set font for post text label
-            postPanel.add(postTextLabel);
-
-            String imagePath = post.getContentData().getImagePath();
-            if (imagePath != null) {
-                Image image = new ImageIcon(imagePath).getImage();
-                image = image.getScaledInstance(400, 400, Image.SCALE_SMOOTH);
-                ImageIcon icon = new ImageIcon(image);
-                JLabel postImageLabel = new JLabel(icon);
-                postPanel.add(postImageLabel);
-            }
-
-            postPanel.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-                    javax.swing.BorderFactory.createLineBorder(new java.awt.Color(200, 200, 200)), // Add border around each post
-                    javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10) // Add padding inside the border
-            ));
-
-            postsPanel.add(postPanel);
-            postsPanel.add(javax.swing.Box.createVerticalStrut(10)); // Add space between posts
+    private void refresh() {
+        postService.refreshContents();
+        userService.refreshContents();
+        storyService.refreshContents();
+        try {
+            friendship = friendshipService.loadFriendship();
+            friendshipService.saveFriendship(friendship);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-
-        jDisplayPosts.setViewportView(postsPanel);
-        postsPanel.revalidate();
-        postsPanel.repaint();
+        displayPosts(postService.getListOfContents());
+        jDisplayPosts.getVerticalScrollBar().setValue(0); // reset to top
+        revalidate();
+        repaint();
     }
     
+    private void displayPosts(List<Post> posts) {
+        PostsPanel postsPanel = new PostsPanel(posts, userService);
+        jDisplayPosts.setViewportView(postsPanel);
+        jDisplayPosts.getVerticalScrollBar().setUnitIncrement(8); // Make scroll bar smoother
+        postsPanel.revalidate();
+        postsPanel.repaint();
+        jDisplayPosts.revalidate();
+        jDisplayPosts.repaint();
+        // reset vertical scroll to top
+        SwingUtilities.invokeLater(() -> {
+            jDisplayPosts.getVerticalScrollBar().setValue(0);
+        });
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -147,8 +136,8 @@ public class NewsFeed extends javax.swing.JFrame {
             }
         });
 
+        profilePhotoLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         profilePhotoLabel.setToolTipText("Click to view Profile");
-        profilePhotoLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         profilePhotoLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 profilePhotoLabelMouseClicked(evt);
@@ -181,7 +170,6 @@ public class NewsFeed extends javax.swing.JFrame {
         });
 
         jDisplayPosts.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        jDisplayPosts.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         btnRefresh.setText("Refresh");
         btnRefresh.addActionListener(new java.awt.event.ActionListener() {
@@ -236,9 +224,9 @@ public class NewsFeed extends javax.swing.JFrame {
                 .addComponent(lblUsername)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnLogout)
-                .addGap(43, 43, 43)
-                .addComponent(jDisplayPosts, javax.swing.GroupLayout.PREFERRED_SIZE, 548, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 54, Short.MAX_VALUE))
+                .addGap(28, 28, 28)
+                .addComponent(jDisplayPosts, javax.swing.GroupLayout.PREFERRED_SIZE, 590, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 27, Short.MAX_VALUE))
             .addGroup(backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(backgroundLayout.createSequentialGroup()
                     .addContainerGap()
@@ -250,15 +238,17 @@ public class NewsFeed extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(background, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(background, javax.swing.GroupLayout.PREFERRED_SIZE, 801, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -266,39 +256,40 @@ public class NewsFeed extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        UserService userService = new UserService();
-        userService.logout(user.getUserId());
-        this.dispose();
-        new Login();
+        if(!profileMode) {
+            userService.logout(user.getUserId());
+            if(exitMode)
+                System.exit(0);
+        }
     }//GEN-LAST:event_formWindowClosed
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
-        UserService userService = new UserService();
-        userService.logout(user.getUserId());
-        this.dispose();
+        exitMode = false;
+        profileMode = false;
         new Login().createAndShowGUI();
+        this.dispose();
     }//GEN-LAST:event_btnLogoutActionPerformed
 
     private void btnViewStoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewStoriesActionPerformed
-        StoryService storyService = ServiceFactory.createStoryService();
-        if(friends == null) {
-            JOptionPane.showMessageDialog(null, "No friend Stories!", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        List<Story> stories = new ArrayList<>();
-        for(User friend : friends) {
-            stories.addAll(storyService.getListOfUserContents(friend.getUserId()));
-        }
-        if(!stories.isEmpty()) {
-            ViewStories viewStories = new ViewStories(this, true, stories);
-            viewStories.setVisible(true);
-        }
+//        if(friends == null) {
+//            JOptionPane.showMessageDialog(null, "No friend Stories!", "Error", JOptionPane.ERROR_MESSAGE);
+//            return;
+//        }
+//        List<Story> stories = new ArrayList<>();
+//        for(User friend : friends) {
+//            stories.addAll(storyService.getListOfUserContents(friend.getUserId()));
+//        }
+//        if(!stories.isEmpty()) {
+//            ViewStories viewStories = new ViewStories(this, true, stories);
+//            viewStories.setVisible(true);
+//        }
     }//GEN-LAST:event_btnViewStoriesActionPerformed
 
     private void profilePhotoLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profilePhotoLabelMouseClicked
+        profileMode = true;
+        exitMode = false;
         this.dispose();
-        Profile profile = new Profile(user);
-        profile.setVisible(true);
+        new Profile(user).setVisible(true);
     }//GEN-LAST:event_profilePhotoLabelMouseClicked
 
     private void btnCreateContentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateContentActionPerformed
@@ -307,12 +298,7 @@ public class NewsFeed extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCreateContentActionPerformed
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-        postService.refreshContents();
-        userService.refreshContents();
-        storyService.refreshContents();
-        displayPosts(postService.getListOfContents());
-        revalidate();
-        repaint();
+        refresh();
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     public static void main(String args[]) {
@@ -344,7 +330,7 @@ public class NewsFeed extends javax.swing.JFrame {
             public void run() {
                 try {
                     UserService u = new UserService();
-                    new NewsFeed(u.getUser("seif@gmail.com", "noura123")).setVisible(true);
+                    new NewsFeed(u.getUser("seif@gmail.com", "seif123")).setVisible(true);
                 } catch (NoSuchAlgorithmException ex) {
                     Logger.getLogger(NewsFeed.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (InvalidKeySpecException ex) {

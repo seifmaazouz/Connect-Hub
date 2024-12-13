@@ -1,5 +1,6 @@
 package connecthub.frontend;
 
+import connecthub.frontend.homepage.NewsFeed;
 import connecthub.backend.database.UserDatabase;
 import connecthub.backend.models.Post;
 import connecthub.backend.models.User;
@@ -9,6 +10,7 @@ import connecthub.backend.profile.UpdateBio;
 import connecthub.backend.profile.UpdateCoverPhoto;
 import connecthub.backend.profile.UpdatePassword;
 import connecthub.backend.profile.UpdateProfilePhoto;
+import connecthub.frontend.homepage.Homepage;
 import java.awt.Image;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -218,14 +220,14 @@ public class Profile extends javax.swing.JFrame {
     }//GEN-LAST:event_viewPostsActionPerformed
 
     private void viewFriendsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewFriendsActionPerformed
-        FetchFriends fetch = new FetchFriends(user);
-        List<User> friends = fetch.fetch();
-        if(friends != null && !friends.isEmpty())
-            new ViewFriends(this, true, friends).setVisible(true);
+//        FetchFriends fetch = new FetchFriends(user);
+//        List<User> friends = fetch.fetch();
+//        if(friends != null && !friends.isEmpty())
+//            new ViewFriends(this, true, friends).setVisible(true);
     }//GEN-LAST:event_viewFriendsActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        new NewsFeed(user).setVisible(true);
+        new Homepage(user).setVisible(true);
     }//GEN-LAST:event_formWindowClosed
 
     public static void main(String args[]) {

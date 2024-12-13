@@ -3,13 +3,14 @@ package connecthub;
 import connecthub.frontend.ContentCreator;
 import connecthub.frontend.Login;
 
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
 import javax.swing.*;
 
 public class GUIMain {
-    public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
         setLook();
         new Login().createAndShowGUI();
     }
