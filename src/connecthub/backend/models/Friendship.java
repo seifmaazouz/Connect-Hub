@@ -30,6 +30,12 @@ public class Friendship {
             friends.get(userId).add(otherUserId);
             friends.get(otherUserId).add(userId);
         }
+        if (hasSentRequest(userId, otherUserId)) {
+            cancelRequest(userId, otherUserId);
+        }
+        if (hasReceivedRequest(userId, otherUserId)) {
+            cancelRequest(otherUserId, userId);
+        }
     }
 
     public void unFriend(String userId, String otherUserId) {
@@ -52,10 +58,10 @@ public class Friendship {
     }
 
     public void unBlock(String userId, String otherUserId) {
-        if (isBlockedBy(userId, otherUserId)) {
-            blockedBy.get(userId).remove(otherUserId);
-            blocked.get(otherUserId).remove(userId);
-        }
+        blockedBy.get(userId).remove(otherUserId);
+        blockedBy.get(otherUserId).remove(userId);
+        blocked.get(otherUserId).remove(userId);
+        blocked.get(userId).remove(otherUserId);
     }
 
     public void sendRequest(String userId, String otherUserId) {
@@ -99,13 +105,7 @@ public class Friendship {
     }
 
     public boolean hasReceivedRequest(String userId, String otherUserId) {
-        boolean result = friendRequests.containsKey(userId) && friendRequests.get(userId).contains(otherUserId);
-        if (result) {
-            System.out.println("User " + userId + " has received a request from user " + otherUserId);
-        } else {
-            System.out.println("User " + userId + " has not received a request from user " + otherUserId);
-        }
-        return result;
+        return friendRequests.containsKey(userId) && friendRequests.get(userId).contains(otherUserId);
     }
 
 //getters:

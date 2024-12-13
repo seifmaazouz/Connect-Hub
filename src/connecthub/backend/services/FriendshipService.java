@@ -7,13 +7,14 @@ import connecthub.backend.models.Friendship;
 import java.io.IOException;
 import java.util.*;
 
-public class FriendshipService {
-    private String path;
-    private HashMap<String, HashMap<String, ArrayList<String>>> friendshipData;
+import static connecthub.backend.constants.FilePath.FRIENDS_FILE_PATH;
 
-    public FriendshipService(String path) {
+public class FriendshipService {
+    private HashMap<String, HashMap<String, ArrayList<String>>> friendshipData;
+    private final String path = FRIENDS_FILE_PATH;
+
+    public FriendshipService() {
         friendshipData = new HashMap<>();
-        this.path = path;
     }
 
     public Friendship loadFriendship() throws IOException {
