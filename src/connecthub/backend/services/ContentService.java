@@ -42,7 +42,7 @@ public abstract class ContentService<T extends Content> {
     
     public long getLastId() {
         List<T> contents = contentDatabase.getListOfContents();
-        if(contents == null)
+        if(contents == null || contents.isEmpty())
             return 0;
         else
             return Long.parseLong(contents.getLast().getContentId());
