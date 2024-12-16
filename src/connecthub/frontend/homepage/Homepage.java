@@ -1,6 +1,7 @@
 package connecthub.frontend.homepage;
 
 import connecthub.backend.models.Friendship;
+import connecthub.backend.models.Notification;
 import connecthub.backend.models.Post;
 import connecthub.backend.models.Story;
 import connecthub.backend.models.User;
@@ -477,19 +478,11 @@ public class Homepage extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCreateGroupActionPerformed
 
     private void btnNotificationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNotificationsActionPerformed
-        NotificationService notificationService = new NotificationService();
-        try {
-            if(notificationService.getNotifications().isEmpty())
-                System.out.println("No notifications");
-            else {
-            try {
-                new ViewNotifications(this, true, user, new NotificationService()).setVisible(true);
-            } catch (IOException ex) {
-                Logger.getLogger(Homepage.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        List<Notification> notifications = user.getNotifications();
+        if (notifications == null)
+            System.out.println("No notifications");
+        else {
+            new ViewNotifications(this, true, user).setVisible(true);
         }
     }//GEN-LAST:event_btnNotificationsActionPerformed
 
