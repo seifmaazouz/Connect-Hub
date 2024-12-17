@@ -233,9 +233,11 @@ public class ViewNotifications extends javax.swing.JDialog {
                 break;
             case GROUP_ACTIVITY:
                 //view group
+                //wait for nader
                 break;
             case NEW_POST:
                 //view post
+                //new homepage
                 break;
         }
         user.deleteNotification(notification);
@@ -254,10 +256,8 @@ public class ViewNotifications extends javax.swing.JDialog {
                     System.out.println("Friend request declined");
                 break;
             case GROUP_ACTIVITY:
-                //ignore
                 break;
             case NEW_POST:
-                //ignore
                 break;
         }
         user.deleteNotification(notification);

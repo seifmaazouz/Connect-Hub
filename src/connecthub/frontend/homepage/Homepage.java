@@ -111,6 +111,13 @@ public class Homepage extends javax.swing.JFrame {
         sideBarHolder.addTab("Search Users", searchUsersPanel);
         searchUsersPanel.revalidate();
         searchUsersPanel.repaint();
+        
+        if (!user.getNotifications().isEmpty()) {
+            notifcationCount.setText("" + user.getNotifications().size());
+        }
+        else {
+            notifcationCount.setText("");
+        }
     }
 
     private void customizeTabbedPane(List<Post> posts) {
@@ -225,6 +232,12 @@ public class Homepage extends javax.swing.JFrame {
         sideBarHolder.repaint();
         revalidate();
         repaint();
+        if (!user.getNotifications().isEmpty()) {
+            notifcationCount.setText("" + user.getNotifications().size());
+        }
+        else {
+            notifcationCount.setText("");
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -243,6 +256,7 @@ public class Homepage extends javax.swing.JFrame {
         sideBarHolder = new javax.swing.JTabbedPane();
         btnCreateGroup = new javax.swing.JButton();
         btnNotifications = new javax.swing.JButton();
+        notifcationCount = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Connect Hub Homepage");
@@ -333,6 +347,8 @@ public class Homepage extends javax.swing.JFrame {
             }
         });
 
+        notifcationCount.setForeground(new java.awt.Color(255, 0, 0));
+
         javax.swing.GroupLayout backgroundLayout = new javax.swing.GroupLayout(background);
         background.setLayout(backgroundLayout);
         backgroundLayout.setHorizontalGroup(
@@ -355,8 +371,11 @@ public class Homepage extends javax.swing.JFrame {
                         .addContainerGap()
                         .addGroup(backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnRefresh)
-                            .addComponent(btnNotifications))
-                        .addGap(86, 86, 86)
+                            .addGroup(backgroundLayout.createSequentialGroup()
+                                .addComponent(btnNotifications)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(notifcationCount)))
+                        .addGap(56, 56, 56)
                         .addComponent(btnCreateContent, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(50, 50, 50)
                         .addComponent(btnCreateGroup, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -377,7 +396,9 @@ public class Homepage extends javax.swing.JFrame {
                     .addGroup(backgroundLayout.createSequentialGroup()
                         .addComponent(btnRefresh)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnNotifications))
+                        .addGroup(backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnNotifications)
+                            .addComponent(notifcationCount)))
                     .addComponent(profilePhotoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnCreateContent, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -539,6 +560,7 @@ public class Homepage extends javax.swing.JFrame {
     private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnViewStories;
     private javax.swing.JLabel lblUsername;
+    private javax.swing.JLabel notifcationCount;
     private javax.swing.JLabel profilePhotoLabel;
     private javax.swing.JTabbedPane sideBarHolder;
     private javax.swing.JTabbedPane tabbedPane;
