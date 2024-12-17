@@ -110,7 +110,11 @@ public class ViewNotifications extends javax.swing.JDialog {
         yes.setText("Yes");
         yes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                yesActionPerformed(evt);
+                try {
+                    yesActionPerformed(evt);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
@@ -214,18 +218,19 @@ public class ViewNotifications extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_nextNotificationActionPerformed
 
-    private void yesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_yesActionPerformed
+    private void yesActionPerformed(java.awt.event.ActionEvent evt) throws IOException {//GEN-FIRST:event_yesActionPerformed
         // TODO add your handling code here:
         Notification notification = notifications.get(size - notificationIndex);
         Notification.Type type = notification.getType();
         switch (type) {
             case FRIEND_REQUEST:
-                try {
-                    Friendship friendship = new FriendshipService().loadFriendship();
-                    friendship.acceptRequest(user.getUserId(), notification.getSenderId());
-                } catch (IOException ex) {
-                    Logger.getLogger(ViewNotifications.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                FriendshipService friendshipService = new FriendshipService();
+                Friendship friendship = friendshipService.loadFriendship();
+                friendship.acceptRequest(this.user.getUserId(), notification.getSenderId());
+                friendshipService.saveFriendship(friendship);
+
+                System.out.println("Friend request accepted");
+
                 break;
             case GROUP_ACTIVITY:
                 //view group
@@ -244,8 +249,12 @@ public class ViewNotifications extends javax.swing.JDialog {
         switch (type) {
             case FRIEND_REQUEST:
                 try {
-                    Friendship friendship = new FriendshipService().loadFriendship();
+                    FriendshipService friendshipService = new FriendshipService();
+                    Friendship friendship = friendshipService.loadFriendship();
                     friendship.cancelRequest(user.getUserId(), notification.getSenderId());
+                    friendshipService.saveFriendship(friendship);
+
+                    System.out.println("Friend request declined");
                 } catch (IOException ex) {
                     Logger.getLogger(ViewNotifications.class.getName()).log(Level.SEVERE, null, ex);
                 }
