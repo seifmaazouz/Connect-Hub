@@ -480,7 +480,7 @@ public class Homepage extends javax.swing.JFrame {
 //        Notification notification = new Notification("Asser sent you a friend request.", Notification.Type.FRIEND_REQUEST,"1023");
 //        user.sendNotification(notification);
         List<Notification> notifications = user.getNotifications();
-        if (notifications == null)
+        if (notifications.isEmpty())
             System.out.println("No notifications");
         else {
             new ViewNotifications(this, true, user).setVisible(true);

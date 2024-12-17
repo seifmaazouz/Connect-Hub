@@ -85,8 +85,8 @@
     "status" : "offline",
     "hashedPassword" : "Nb6x0yXmUwKkkVTec1MIM5lYAWVUVNnhOPHOg0bYOIo=",
     "salt" : "V1y+7aH1p3EbtNZHyTliYA==",
-    "profilePhoto" : "src/connecthub/backend/database/images\\defaultProfilePhoto.jpg",
-    "coverPhoto" : "src/connecthub/backend/database/images\\defaultCoverPhoto.jpg",
+    "profilePhoto" : "src\\connecthub\\backend\\database\\images\\1022_2024-12-12_21-32-23.jpg",
+    "coverPhoto" : "src\\connecthub\\backend\\database\\images\\1022_2024-12-13_00-59-34.jpg",
     "bio" : "Life is a game.",
     "notifications" : [ ]
   },

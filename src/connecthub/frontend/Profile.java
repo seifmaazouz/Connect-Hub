@@ -6,16 +6,19 @@ import connecthub.frontend.homepage.Homepage;
 import connecthub.backend.database.UserDatabase;
 import connecthub.backend.models.Post;
 import connecthub.backend.models.User;
+import connecthub.backend.profile.FetchFriends;
 import connecthub.backend.profile.FetchPosts;
 import connecthub.backend.profile.UpdateBio;
 import connecthub.backend.profile.UpdateCoverPhoto;
 import connecthub.backend.profile.UpdatePassword;
 import connecthub.backend.profile.UpdateProfilePhoto;
+import connecthub.backend.services.UserService;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -243,10 +246,21 @@ public class Profile extends javax.swing.JFrame {
     }//GEN-LAST:event_viewPostsActionPerformed
 
     private void viewFriendsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewFriendsActionPerformed
-//        FetchFriends fetch = new FetchFriends(user);
-//        List<User> friends = fetch.fetch();
-//        if(friends != null && !friends.isEmpty())
-//            new ViewFriends(this, true, friends).setVisible(true);
+        try {
+            FetchFriends fetch = new FetchFriends(user);
+            List<String> friendsIds = fetch.fetch();
+            if (friendsIds != null && !friendsIds.isEmpty()) {
+                List<User> friends = new ArrayList<>();
+                UserService userService = UserService.getInstance();
+                for (String friendId : friendsIds) {
+                    User friend = userService.getUserById(friendId);
+                    friends.add(friend);
+                }
+                new ViewFriends(this, true, friends).setVisible(true);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Profile.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_viewFriendsActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
