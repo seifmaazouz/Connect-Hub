@@ -23,7 +23,7 @@ public class FriendshipMainTest {
         Friendship friendship = friendshipService.loadFriendship();
         System.out.println(friendship.toString());
 
-        friendship.makeFriends("1", "1022");
+        friendship.sendRequest("1023", "1022");
 
         friendshipService.saveFriendship(friendship);
     }

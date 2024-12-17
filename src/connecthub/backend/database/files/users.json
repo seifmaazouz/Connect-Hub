@@ -9,7 +9,8 @@
     "salt" : "UY/kmPa00IGX+fumIViakQ==",
     "profilePhoto" : null,
     "coverPhoto" : null,
-    "bio" : null
+    "bio" : null,
+    "notifications" : [ ]
   },
   "1" : {
     "userId" : "1",
@@ -21,7 +22,8 @@
     "salt" : "V1y+7aH1p3EbtNZHyTliYA==",
     "profilePhoto" : "src\\connecthub\\backend\\database\\images\\1022_2024-12-12_17-37-00.jpg",
     "coverPhoto" : "src/connecthub/backend/database/images\\defaultCoverPhoto.jpg",
-    "bio" : null
+    "bio" : null,
+    "notifications" : [ ]
   },
   "1018" : {
     "userId" : "1018",
@@ -33,7 +35,8 @@
     "salt" : "3gHbxOBz2U5jkklDzAnzHg==",
     "profilePhoto" : null,
     "coverPhoto" : null,
-    "bio" : null
+    "bio" : null,
+    "notifications" : [ ]
   },
   "9090" : {
     "userId" : "9090",
@@ -45,7 +48,8 @@
     "salt" : "vCqyNI4rblairlawWxUrHg==",
     "profilePhoto" : "src/connecthub/backend/database/images\\defaultProfilePhoto.jpg",
     "coverPhoto" : "src/connecthub/backend/database/images\\defaultCoverPhoto.jpg",
-    "bio" : null
+    "bio" : null,
+    "notifications" : [ ]
   },
   "1024" : {
     "userId" : "1024",
@@ -57,7 +61,8 @@
     "salt" : "mbPgMAWAg0GTyWgJnsVLpQ==",
     "profilePhoto" : "src/connecthub/backend/database/images\\defaultProfilePhoto.jpg",
     "coverPhoto" : "src/connecthub/backend/database/images\\defaultCoverPhoto.jpg",
-    "bio" : null
+    "bio" : null,
+    "notifications" : [ ]
   },
   "1023" : {
     "userId" : "1023",
@@ -69,7 +74,8 @@
     "salt" : "E0d3ZiqVXwICvN+c2jnZ5Q==",
     "profilePhoto" : "src\\connecthub\\backend\\database\\images\\1023_2024-12-12_15-30-13.jpg",
     "coverPhoto" : "src/connecthub/backend/database/images\\defaultCoverPhoto.jpg",
-    "bio" : null
+    "bio" : null,
+    "notifications" : [ ]
   },
   "1022" : {
     "userId" : "1022",
@@ -81,7 +87,8 @@
     "salt" : "V1y+7aH1p3EbtNZHyTliYA==",
     "profilePhoto" : "src\\connecthub\\backend\\database\\images\\1022_2024-12-12_21-32-23.jpg",
     "coverPhoto" : "src\\connecthub\\backend\\database\\images\\1022_2024-12-13_00-59-34.jpg",
-    "bio" : "Life is a game."
+    "bio" : "Life is a game.",
+    "notifications" : [ ]
   },
   "89798" : {
     "userId" : "89798",
@@ -93,7 +100,8 @@
     "salt" : "mNoqLtIesdYTa59WaIMM/A==",
     "profilePhoto" : null,
     "coverPhoto" : null,
-    "bio" : null
+    "bio" : null,
+    "notifications" : [ ]
   },
   "1020" : {
     "userId" : "1020",
@@ -105,6 +113,7 @@
     "salt" : "vCqyNI4rblairlawWxUrHg==",
     "profilePhoto" : "src/connecthub/backend/database/images\\defaultProfilePhoto.jpg",
     "coverPhoto" : "src/connecthub/backend/database/images\\defaultCoverPhoto.jpg",
-    "bio" : null
+    "bio" : null,
+    "notifications" : [ ]
   }
 }

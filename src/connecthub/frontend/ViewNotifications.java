@@ -235,6 +235,7 @@ public class ViewNotifications extends javax.swing.JDialog {
                 break;
         }
         user.deleteNotification(notification);
+        this.dispose();
     }//GEN-LAST:event_yesActionPerformed
 
     private void noActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noActionPerformed
@@ -257,10 +258,12 @@ public class ViewNotifications extends javax.swing.JDialog {
                 break;
         }
         user.deleteNotification(notification);
+        this.dispose();
     }//GEN-LAST:event_noActionPerformed
 
     private void clearNotificationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearNotificationsActionPerformed
         user.clearNotifications();
+        this.dispose();
     }//GEN-LAST:event_clearNotificationsActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed

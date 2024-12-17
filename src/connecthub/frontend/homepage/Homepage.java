@@ -7,7 +7,6 @@ import connecthub.backend.models.Story;
 import connecthub.backend.models.User;
 import connecthub.backend.services.FriendshipService;
 import connecthub.backend.services.GroupService;
-import connecthub.backend.services.NotificationService;
 import connecthub.backend.services.PostService;
 import connecthub.backend.services.StoryService;
 import connecthub.backend.services.UserService;
@@ -478,6 +477,8 @@ public class Homepage extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCreateGroupActionPerformed
 
     private void btnNotificationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNotificationsActionPerformed
+//        Notification notification = new Notification("Asser sent you a freind request.", Notification.Type.FRIEND_REQUEST,"1023");
+//        user.sendNotification(notification);
         List<Notification> notifications = user.getNotifications();
         if (notifications == null)
             System.out.println("No notifications");
