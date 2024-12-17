@@ -7,11 +7,8 @@ import static connecthub.backend.models.Notification.Type.GROUP_ACTIVITY;
 import static connecthub.backend.models.Notification.Type.NEW_POST;
 import connecthub.backend.models.User;
 import connecthub.backend.services.FriendshipService;
-import connecthub.frontend.homepage.Homepage;
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ViewNotifications extends javax.swing.JDialog {
 
@@ -121,7 +118,11 @@ public class ViewNotifications extends javax.swing.JDialog {
         no.setText("No");
         no.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                noActionPerformed(evt);
+                try {
+                    noActionPerformed(evt);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
@@ -228,9 +229,7 @@ public class ViewNotifications extends javax.swing.JDialog {
                 Friendship friendship = friendshipService.loadFriendship();
                 friendship.acceptRequest(this.user.getUserId(), notification.getSenderId());
                 friendshipService.saveFriendship(friendship);
-
                 System.out.println("Friend request accepted");
-
                 break;
             case GROUP_ACTIVITY:
                 //view group
@@ -243,21 +242,16 @@ public class ViewNotifications extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_yesActionPerformed
 
-    private void noActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noActionPerformed
+    private void noActionPerformed(java.awt.event.ActionEvent evt) throws IOException {//GEN-FIRST:event_noActionPerformed
         Notification notification = notifications.get(size - notificationIndex);
         Notification.Type type = notification.getType();
         switch (type) {
             case FRIEND_REQUEST:
-                try {
                     FriendshipService friendshipService = new FriendshipService();
                     Friendship friendship = friendshipService.loadFriendship();
                     friendship.cancelRequest(user.getUserId(), notification.getSenderId());
                     friendshipService.saveFriendship(friendship);
-
                     System.out.println("Friend request declined");
-                } catch (IOException ex) {
-                    Logger.getLogger(ViewNotifications.class.getName()).log(Level.SEVERE, null, ex);
-                }
                 break;
             case GROUP_ACTIVITY:
                 //ignore

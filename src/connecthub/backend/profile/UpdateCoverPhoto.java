@@ -20,16 +20,14 @@ public class UpdateCoverPhoto {
     }
 
     public ImageIcon update() throws IOException {
-        // delete old cover photo path first
-        String oldImagePath = user.getCoverPhoto();
-        File oldImageFile = new File(oldImagePath);
-        if(oldImageFile.exists() && !oldImagePath.equals(DEFAULT_COVER_PHOTO)) {
-            oldImageFile.delete();
-        }
-            
         File file = ImageManager.uploadImage();
-        Image image = ImageManager.getImageFromFile(file, 600, 300);
+        Image image = ImageManager.getImageFromFile(file, 600, 200);
         if (image != null) {
+            String oldImagePath = user.getCoverPhoto();
+            File oldImageFile = new File(oldImagePath);
+            if (oldImageFile.exists() && !oldImagePath.equals(DEFAULT_COVER_PHOTO)) {
+                oldImageFile.delete();
+            }
             ImageIcon coverPhoto = new ImageIcon(image);
             String path = ImageManager.copyImageToProgramFiles(user, file);
             user.setCoverPhoto(path);
