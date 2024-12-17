@@ -37,7 +37,7 @@ public class ProfilePostsPanel extends javax.swing.JPanel {
     }
     
     private void displayPosts(List<Post> posts) {
-        PostsPanel postsPanel = new PostsPanel(posts, userService);
+        PostsPanel postsPanel = new PostsPanel(posts, userId);
         jDisplayPosts.setViewportView(postsPanel);
         jDisplayPosts.getVerticalScrollBar().setUnitIncrement(8); // Make scroll bar smoother
         postsPanel.revalidate();

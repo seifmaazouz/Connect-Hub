@@ -120,7 +120,7 @@ public class Homepage extends javax.swing.JFrame {
         tabbedPane.setForeground(Color.DARK_GRAY);
 
         // add all tabs
-        newsFeedPanel = new NewsFeedPanel(posts);
+        newsFeedPanel = new NewsFeedPanel(posts, user);
         groupsPanel = new GroupsPanel(user);
         profilePostsPanel = new ProfilePostsPanel(user.getUserId());
 

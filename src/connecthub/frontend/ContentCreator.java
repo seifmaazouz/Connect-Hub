@@ -354,7 +354,7 @@ public class ContentCreator extends javax.swing.JDialog {
             // create post
             Post newPost = ContentFactory.createPost(user.getUserId(), userText, imagePath);
             // add post
-            postService.createContent(newPost);
+            postService.addContent(newPost);
             imageFile = null;
             this.dispose();
         } catch (IOException ex) {
@@ -392,7 +392,7 @@ public class ContentCreator extends javax.swing.JDialog {
             // create story
             Story newStory = ContentFactory.createStory(user.getUserId(), userText, imagePath);
             // add story
-            storyService.createContent(newStory);
+            storyService.addContent(newStory);
             imageFile = null;
             this.dispose();
             System.out.println("Here");

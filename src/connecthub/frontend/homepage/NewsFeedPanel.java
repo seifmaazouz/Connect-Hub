@@ -1,7 +1,11 @@
 package connecthub.frontend.homepage;
 
 import connecthub.backend.models.Post;
+import connecthub.backend.models.User;
+import connecthub.backend.services.PostService;
 import connecthub.backend.services.UserService;
+import connecthub.backend.utils.factories.ServiceFactory;
+
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -12,29 +16,38 @@ import javax.swing.SwingUtilities;
 
 public class NewsFeedPanel extends javax.swing.JPanel {
     private final UserService userService;
+    private final PostService postService;
+    private final User user;
+    private PostsPanel postsPanel;
 
-    public NewsFeedPanel(List<Post> posts) {
+    public NewsFeedPanel(List<Post> posts, User user) {
         initComponents();
-        this.userService = UserService.getInstance();
+        userService = UserService.getInstance();
+        postService = ServiceFactory.createPostService();
+        this.user = user;
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding around the panel
         this.setOpaque(false);
         displayPosts(posts);
     }
     
+
     private void displayPosts(List<Post> posts) {
-        PostsPanel postsPanel = new PostsPanel(posts, userService);
-        jDisplayPosts.setViewportView(postsPanel);
-        jDisplayPosts.getVerticalScrollBar().setUnitIncrement(8); // Make scroll bar smoother
+        if (postsPanel == null) {
+            postsPanel = new PostsPanel(posts, user.getUserId());
+            jDisplayPosts.setViewportView(postsPanel);
+        } else {
+            postsPanel.updatePosts(posts);
+        }
         postsPanel.revalidate();
         postsPanel.repaint();
         jDisplayPosts.revalidate();
         jDisplayPosts.repaint();
-        // reset vertical scroll to top
         SwingUtilities.invokeLater(() -> {
+            jDisplayPosts.getVerticalScrollBar().setUnitIncrement(8);
             jDisplayPosts.getVerticalScrollBar().setValue(0);
         });
-    }
+}
 
     public void refresh(List<Post> posts) {
         displayPosts(posts);
