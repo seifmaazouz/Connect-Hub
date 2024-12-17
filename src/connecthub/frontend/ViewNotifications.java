@@ -51,6 +51,16 @@ public class ViewNotifications extends javax.swing.JDialog {
                 yes.setText("View");
                 no.setText("Ignore");
                 break;
+            case MESSAGE:
+                notificationLabel.setText("Message");
+                yes.setText("View");
+                no.setText("Ignore");
+                break;
+            case COMMENT:
+                notificationLabel.setText("Comment");
+                yes.setText("View");
+                no.setText("Ignore");
+                break;
         }
     }
 
@@ -239,6 +249,12 @@ public class ViewNotifications extends javax.swing.JDialog {
                 //view post
                 //new homepage
                 break;
+            case MESSAGE:
+                //view chat
+                break;
+            case COMMENT:
+                //view my post
+                break;
         }
         user.deleteNotification(notification);
         this.dispose();
@@ -249,15 +265,13 @@ public class ViewNotifications extends javax.swing.JDialog {
         Notification.Type type = notification.getType();
         switch (type) {
             case FRIEND_REQUEST:
-                    FriendshipService friendshipService = new FriendshipService();
-                    Friendship friendship = friendshipService.loadFriendship();
-                    friendship.cancelRequest(user.getUserId(), notification.getSenderId());
-                    friendshipService.saveFriendship(friendship);
-                    System.out.println("Friend request declined");
+                FriendshipService friendshipService = new FriendshipService();
+                Friendship friendship = friendshipService.loadFriendship();
+                friendship.cancelRequest(user.getUserId(), notification.getSenderId());
+                friendshipService.saveFriendship(friendship);
+                System.out.println("Friend request declined");
                 break;
-            case GROUP_ACTIVITY:
-                break;
-            case NEW_POST:
+            default:
                 break;
         }
         user.deleteNotification(notification);
