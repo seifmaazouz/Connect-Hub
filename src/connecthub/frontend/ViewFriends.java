@@ -13,7 +13,7 @@ public class ViewFriends extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.friends = friends;
-        friendName.setText(friends.get(-1).getUsername());
+        friendName.setText(friends.getLast().getUsername());
         friendIndex = 1;
         friendNumber.setText(Integer.toString(friendIndex));
         totalFriendsNumber.setText(Integer.toString(friends.size()));
@@ -34,6 +34,8 @@ public class ViewFriends extends javax.swing.JDialog {
         previousFriend = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Friends");
+        setResizable(false);
 
         nextFriend.setText("Next Friend");
         nextFriend.addActionListener(new java.awt.event.ActionListener() {
@@ -105,6 +107,7 @@ public class ViewFriends extends javax.swing.JDialog {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
     
     private void changeFriend(int i)

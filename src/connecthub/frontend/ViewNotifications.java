@@ -7,28 +7,21 @@ import static connecthub.backend.models.Notification.Type.GROUP_ACTIVITY;
 import static connecthub.backend.models.Notification.Type.NEW_POST;
 import connecthub.backend.models.User;
 import connecthub.backend.services.FriendshipService;
-import connecthub.backend.services.NotificationService;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ViewNotifications extends javax.swing.JDialog {
-    
+
     private User user;
-    private NotificationService notificationService;
-    private static int notificationIndex;
     private List<Notification> notifications;
+    private static int notificationIndex;
     private int size;
 
-    public ViewNotifications(java.awt.Frame parent, boolean modal, User user, NotificationService notificationService) throws IOException {
+    public ViewNotifications(java.awt.Frame parent, boolean modal, User user) {
         super(parent, modal);
         initComponents();
         this.user = user;
-        this.notificationService = notificationService;
-        HashMap<String, ArrayList<Notification>> notifications = notificationService.getNotifications();
+        this.notifications = this.user.getNotifications();
         size = notifications.size();
         notificationIndex = 1;
         notificationNumber.setText(Integer.toString(notificationIndex));
@@ -38,9 +31,10 @@ public class ViewNotifications extends javax.swing.JDialog {
 
     private void changeNotification(int i) {
         notificationIndex += i;
-        Notification.Type type = notifications.get(size - notificationIndex).getType();
-        notificationText.setText(notifications.get(size - notificationIndex).getMessage());
-        notificationTime.setText(notifications.get(size - notificationIndex).getTimestamp().toString());
+        Notification notification = notifications.get(size - notificationIndex);
+        Notification.Type type = notification.getType();
+        notificationText.setText(notification.getMessage());
+        notificationTime.setText(notification.getTimestamp().toString());
         switch (type) {
             case FRIEND_REQUEST:
                 notificationLabel.setText("Friend Request");
@@ -79,6 +73,11 @@ public class ViewNotifications extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Notifiactions");
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         notificationLabel.setText("Notification Label");
         notificationLabel.setToolTipText("");
@@ -108,14 +107,22 @@ public class ViewNotifications extends javax.swing.JDialog {
         yes.setText("Yes");
         yes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                yesActionPerformed(evt);
+                try {
+                    yesActionPerformed(evt);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
         no.setText("No");
         no.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                noActionPerformed(evt);
+                try {
+                    noActionPerformed(evt);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
@@ -212,17 +219,17 @@ public class ViewNotifications extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_nextNotificationActionPerformed
 
-    private void yesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_yesActionPerformed
+    private void yesActionPerformed(java.awt.event.ActionEvent evt) throws IOException {//GEN-FIRST:event_yesActionPerformed
         // TODO add your handling code here:
-        Notification.Type type = notifications.get(size - notificationIndex).getType();
+        Notification notification = notifications.get(size - notificationIndex);
+        Notification.Type type = notification.getType();
         switch (type) {
             case FRIEND_REQUEST:
-                try {
-                    Friendship friendship = new FriendshipService().loadFriendship();
-                    friendship.acceptRequest(user.getUserId(), notifications.get(size - notificationIndex).getSenderId());
-                } catch (IOException ex) {
-                    Logger.getLogger(ViewNotifications.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                FriendshipService friendshipService = new FriendshipService();
+                Friendship friendship = friendshipService.loadFriendship();
+                friendship.acceptRequest(this.user.getUserId(), notification.getSenderId());
+                friendshipService.saveFriendship(friendship);
+                System.out.println("Friend request accepted");
                 break;
             case GROUP_ACTIVITY:
                 //view group
@@ -231,19 +238,20 @@ public class ViewNotifications extends javax.swing.JDialog {
                 //view post
                 break;
         }
-        notificationService.removeNotification(notifications.get(size - notificationIndex));
+        user.deleteNotification(notification);
+        this.dispose();
     }//GEN-LAST:event_yesActionPerformed
 
-    private void noActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noActionPerformed
-        Notification.Type type = notifications.get(size - notificationIndex).getType();
+    private void noActionPerformed(java.awt.event.ActionEvent evt) throws IOException {//GEN-FIRST:event_noActionPerformed
+        Notification notification = notifications.get(size - notificationIndex);
+        Notification.Type type = notification.getType();
         switch (type) {
             case FRIEND_REQUEST:
-                try {
-                    Friendship friendship = new FriendshipService().loadFriendship();
-                    friendship.cancelRequest(user.getUserId(), notifications.get(size - notificationIndex).getSenderId());
-                } catch (IOException ex) {
-                    Logger.getLogger(ViewNotifications.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                    FriendshipService friendshipService = new FriendshipService();
+                    Friendship friendship = friendshipService.loadFriendship();
+                    friendship.cancelRequest(user.getUserId(), notification.getSenderId());
+                    friendshipService.saveFriendship(friendship);
+                    System.out.println("Friend request declined");
                 break;
             case GROUP_ACTIVITY:
                 //ignore
@@ -252,12 +260,22 @@ public class ViewNotifications extends javax.swing.JDialog {
                 //ignore
                 break;
         }
-        notificationService.removeNotification(notifications.get(size - notificationIndex));
+        user.deleteNotification(notification);
+        this.dispose();
     }//GEN-LAST:event_noActionPerformed
 
     private void clearNotificationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearNotificationsActionPerformed
-        notificationService.clearNotifications(user.getUserId());
+        user.clearNotifications();
+        this.dispose();
     }//GEN-LAST:event_clearNotificationsActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+//        try {
+//            new Homepage(user).setVisible(true);
+//        } catch (IOException ex) {
+//            Logger.getLogger(ViewNotifications.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+    }//GEN-LAST:event_formWindowClosed
 
 //    public static void main(String args[]) {
 //        java.awt.EventQueue.invokeLater(new Runnable() {

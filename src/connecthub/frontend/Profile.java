@@ -1,18 +1,24 @@
 package connecthub.frontend;
 
+import static connecthub.backend.constants.FilePath.DEFAULT_COVER_PHOTO;
+import static connecthub.backend.constants.FilePath.DEFAULT_PROFILE_PHOTO;
 import connecthub.frontend.homepage.Homepage;
 import connecthub.backend.database.UserDatabase;
 import connecthub.backend.models.Post;
 import connecthub.backend.models.User;
+import connecthub.backend.profile.FetchFriends;
 import connecthub.backend.profile.FetchPosts;
 import connecthub.backend.profile.UpdateBio;
 import connecthub.backend.profile.UpdateCoverPhoto;
 import connecthub.backend.profile.UpdatePassword;
 import connecthub.backend.profile.UpdateProfilePhoto;
+import connecthub.backend.services.UserService;
 import java.awt.Image;
+import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -60,16 +66,14 @@ public class Profile extends javax.swing.JFrame {
         changePassword = new javax.swing.JToggleButton();
         viewPosts = new javax.swing.JToggleButton();
         viewFriends = new javax.swing.JToggleButton();
+        removeCoverPhoto = new javax.swing.JToggleButton();
+        removeProfilePhoto = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
-                try {
-                    formWindowClosed(evt);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+                formWindowClosed(evt);
             }
         });
 
@@ -120,6 +124,20 @@ public class Profile extends javax.swing.JFrame {
             }
         });
 
+        removeCoverPhoto.setText("Remove Cover Photo");
+        removeCoverPhoto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeCoverPhotoActionPerformed(evt);
+            }
+        });
+
+        removeProfilePhoto.setText("Remove Profile Photo");
+        removeProfilePhoto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeProfilePhotoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -133,9 +151,13 @@ public class Profile extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(236, 236, 236)
+                .addContainerGap()
+                .addComponent(removeCoverPhoto)
+                .addGap(102, 102, 102)
                 .addComponent(changePassword)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(removeProfilePhoto)
+                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(75, 75, 75)
                 .addComponent(viewPosts, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -159,7 +181,10 @@ public class Profile extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(bio)
                 .addGap(18, 18, 18)
-                .addComponent(changePassword)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(changePassword)
+                    .addComponent(removeCoverPhoto)
+                    .addComponent(removeProfilePhoto))
                 .addGap(34, 34, 34)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(viewPosts)
@@ -216,20 +241,69 @@ public class Profile extends javax.swing.JFrame {
     private void viewPostsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewPostsActionPerformed
         FetchPosts fetch = new FetchPosts(user.getUserId());
         List<Post> posts = fetch.fetch();
-        if(posts != null && !posts.isEmpty())
+        if (posts != null && !posts.isEmpty())
             new ViewPosts(this, true, posts, user.getUsername()).setVisible(true);
     }//GEN-LAST:event_viewPostsActionPerformed
 
     private void viewFriendsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewFriendsActionPerformed
-//        FetchFriends fetch = new FetchFriends(user);
-//        List<User> friends = fetch.fetch();
-//        if(friends != null && !friends.isEmpty())
-//            new ViewFriends(this, true, friends).setVisible(true);
+        try {
+            FetchFriends fetch = new FetchFriends(user);
+            List<String> friendsIds = fetch.fetch();
+            if (friendsIds != null && !friendsIds.isEmpty()) {
+                List<User> friends = new ArrayList<>();
+                UserService userService = UserService.getInstance();
+                for (String friendId : friendsIds) {
+                    User friend = userService.getUserById(friendId);
+                    friends.add(friend);
+                }
+                new ViewFriends(this, true, friends).setVisible(true);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Profile.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_viewFriendsActionPerformed
 
-    private void formWindowClosed(java.awt.event.WindowEvent evt) throws IOException {//GEN-FIRST:event_formWindowClosed
-        new Homepage(user).setVisible(true);
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        try {
+            new Homepage(user).setVisible(true);
+        } catch (IOException ex) {
+            Logger.getLogger(Profile.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_formWindowClosed
+
+    private void removeCoverPhotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeCoverPhotoActionPerformed
+        if (!user.getCoverPhoto().equals(DEFAULT_COVER_PHOTO)) {
+            File oldImageFile = new File(user.getCoverPhoto());
+            if (oldImageFile.exists()) {
+                oldImageFile.delete();
+            }
+            coverPhoto = new ImageIcon(DEFAULT_COVER_PHOTO);
+            Image image = coverPhoto.getImage();
+            image = image.getScaledInstance(600, 200, Image.SCALE_SMOOTH); // Width and height in pixels
+            scaledCoverPhoto = new ImageIcon(image);
+            coverPhotoLabel.setIcon(scaledCoverPhoto);
+            JOptionPane.showMessageDialog(null, "Cover photo has been removed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            user.setCoverPhoto(DEFAULT_COVER_PHOTO);
+            userDatabase.saveUser(user);
+        }
+    }//GEN-LAST:event_removeCoverPhotoActionPerformed
+
+    private void removeProfilePhotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeProfilePhotoActionPerformed
+        if (!user.getProfilePhoto().equals(DEFAULT_PROFILE_PHOTO)) {
+            File oldImageFile = new File(user.getProfilePhoto());
+            if (oldImageFile.exists()) {
+                oldImageFile.delete();
+            }
+            profilePhoto = new ImageIcon(DEFAULT_PROFILE_PHOTO);
+            Image image = profilePhoto.getImage();
+            image = image.getScaledInstance(150, 150, Image.SCALE_SMOOTH); // Width and height in pixels
+            scaledProfilePhoto = new ImageIcon(image);
+            profilePhotoLabel.setIcon(scaledProfilePhoto);
+            JOptionPane.showMessageDialog(null, "Profile photo has been removed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            user.setProfilePhoto(DEFAULT_PROFILE_PHOTO);
+            userDatabase.saveUser(user);
+        }
+    }//GEN-LAST:event_removeProfilePhotoActionPerformed
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -251,6 +325,8 @@ public class Profile extends javax.swing.JFrame {
     private javax.swing.JToggleButton changePassword;
     private javax.swing.JLabel coverPhotoLabel;
     private javax.swing.JLabel profilePhotoLabel;
+    private javax.swing.JToggleButton removeCoverPhoto;
+    private javax.swing.JToggleButton removeProfilePhoto;
     private javax.swing.JToggleButton viewFriends;
     private javax.swing.JToggleButton viewPosts;
     // End of variables declaration//GEN-END:variables

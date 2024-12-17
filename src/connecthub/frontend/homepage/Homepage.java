@@ -1,12 +1,12 @@
 package connecthub.frontend.homepage;
 
 import connecthub.backend.models.Friendship;
+import connecthub.backend.models.Notification;
 import connecthub.backend.models.Post;
 import connecthub.backend.models.Story;
 import connecthub.backend.models.User;
 import connecthub.backend.services.FriendshipService;
 import connecthub.backend.services.GroupService;
-import connecthub.backend.services.NotificationService;
 import connecthub.backend.services.PostService;
 import connecthub.backend.services.StoryService;
 import connecthub.backend.services.UserService;
@@ -477,19 +477,13 @@ public class Homepage extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCreateGroupActionPerformed
 
     private void btnNotificationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNotificationsActionPerformed
-        NotificationService notificationService = new NotificationService();
-        try {
-            if(notificationService.getNotifications().isEmpty())
-                System.out.println("No notifications");
-            else {
-            try {
-                new ViewNotifications(this, true, user, new NotificationService()).setVisible(true);
-            } catch (IOException ex) {
-                Logger.getLogger(Homepage.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+//        Notification notification = new Notification("Asser sent you a friend request.", Notification.Type.FRIEND_REQUEST,"1023");
+//        user.sendNotification(notification);
+        List<Notification> notifications = user.getNotifications();
+        if (notifications.isEmpty())
+            System.out.println("No notifications");
+        else {
+            new ViewNotifications(this, true, user).setVisible(true);
         }
     }//GEN-LAST:event_btnNotificationsActionPerformed
 

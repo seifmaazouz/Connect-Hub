@@ -38,7 +38,7 @@ public class ViewStories extends javax.swing.JDialog {
         totalStoriesNumber = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("View Stories");
+        setTitle("Stories");
         setResizable(false);
 
         previousStory.setText("Previous Story");

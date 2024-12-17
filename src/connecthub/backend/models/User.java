@@ -1,19 +1,14 @@
 package connecthub.backend.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import connecthub.backend.services.UserService;
 import connecthub.backend.utils.hashing.HashingBehaviour;
-import connecthub.backend.utils.hashing.PBKDF2Hashing;
-
-import java.io.IOException;
-import java.io.File;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
 
-import static connecthub.backend.constants.FilePath.IMAGE_SAVE_DIRECTORY;
 import static connecthub.backend.constants.FilePath.DEFAULT_PROFILE_PHOTO;
 import static connecthub.backend.constants.FilePath.DEFAULT_COVER_PHOTO;
+import java.util.ArrayList;
+import java.util.List;
 
 public class User {
 
@@ -28,11 +23,11 @@ public class User {
     private String profilePhoto;
     private String coverPhoto;
     private String bio;
+    private List<Notification> notifications;
 
     public User() {
 
     }
-
 
     public User(String userId, String email, String username, Date dateOfBirth, String status, String hashedPassword, String salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
         this.userId = userId;
@@ -45,9 +40,8 @@ public class User {
         this.profilePhoto = DEFAULT_PROFILE_PHOTO;
         this.coverPhoto = DEFAULT_COVER_PHOTO;
         this.bio = null;
+        this.notifications = new ArrayList<>();
     }
-
-
 
     public String getHashedPassword() {
         return hashedPassword;
@@ -127,5 +121,21 @@ public class User {
 
     public void setBio(String bio) {
         this.bio = bio;
+    }
+
+    public List<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public void sendNotification(Notification notification) {
+        this.notifications.add(notification);
+    }
+
+    public void deleteNotification(Notification notification) {
+        this.notifications.remove(notification);
+    }
+
+    public void clearNotifications() {
+        this.notifications.clear();
     }
 }
