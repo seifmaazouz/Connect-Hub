@@ -13,6 +13,9 @@ public class Notification {
     private Type type;
     private String senderId;
 
+    public Notification() {
+    }
+    
     public Notification(String message, Type type, String senderId) {
         this.message = message;
         this.timestamp = LocalDateTime.now();

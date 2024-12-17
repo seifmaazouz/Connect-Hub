@@ -1,8 +1,1 @@
-{
-  "1022" : [ {
-    "message" : "Asser Hanafy has sent you a friend request.",
-    "timestamp" : [ 2024, 12, 13, 23, 52, 51, 920361200 ],
-    "type" : "FRIEND_REQUEST",
-    "senderId" : "1023"
-  } ]
-}
+[ ]

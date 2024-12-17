@@ -116,7 +116,7 @@ public class Homepage extends javax.swing.JFrame {
             notifcationCount.setText("" + user.getNotifications().size());
         }
         else {
-            notifcationCount.setText("");
+            notifcationCount.setText(" ");
         }
     }
 
@@ -236,7 +236,7 @@ public class Homepage extends javax.swing.JFrame {
             notifcationCount.setText("" + user.getNotifications().size());
         }
         else {
-            notifcationCount.setText("");
+            notifcationCount.setText(" ");
         }
     }
 
@@ -348,6 +348,7 @@ public class Homepage extends javax.swing.JFrame {
         });
 
         notifcationCount.setForeground(new java.awt.Color(255, 0, 0));
+        notifcationCount.setText(" ");
 
         javax.swing.GroupLayout backgroundLayout = new javax.swing.GroupLayout(background);
         background.setLayout(backgroundLayout);
@@ -500,6 +501,7 @@ public class Homepage extends javax.swing.JFrame {
     private void btnNotificationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNotificationsActionPerformed
 //        Notification notification = new Notification("Asser sent you a friend request.", Notification.Type.FRIEND_REQUEST,"1023");
 //        user.sendNotification(notification);
+        userService.updateUser(user.getUserId(), user);
         List<Notification> notifications = user.getNotifications();
         if (notifications.isEmpty())
             System.out.println("No notifications");
