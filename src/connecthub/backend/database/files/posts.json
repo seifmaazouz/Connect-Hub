@@ -5,7 +5,9 @@
     "text" : "Messi x Ansu Fati",
     "imagePath" : "src\\connecthub\\backend\\database\\images\\1022_2024-12-12_15-27-45.jpg"
   },
-  "timestamp" : [ 2024, 12, 12, 15, 27, 45, 511338300 ]
+  "timestamp" : [ 2024, 12, 12, 15, 27, 45, 511338300 ],
+  "comments" : [ ],
+  "likedBy" : [ ]
 }, {
   "contentId" : "2",
   "authorId" : "1022",
@@ -13,7 +15,9 @@
     "text" : "Think of the full mark.",
     "imagePath" : null
   },
-  "timestamp" : [ 2024, 12, 12, 15, 29, 3, 317871900 ]
+  "timestamp" : [ 2024, 12, 12, 15, 29, 3, 317871900 ],
+  "comments" : [ ],
+  "likedBy" : [ ]
 }, {
   "contentId" : "3",
   "authorId" : "1023",
@@ -21,7 +25,13 @@
     "text" : "PSG Prime",
     "imagePath" : "src\\connecthub\\backend\\database\\images\\1023_2024-12-12_15-29-40.jpg"
   },
-  "timestamp" : [ 2024, 12, 12, 15, 29, 40, 193986100 ]
+  "timestamp" : [ 2024, 12, 12, 15, 29, 40, 193986100 ],
+  "comments" : [ {
+    "username" : "Jeff21erson",
+    "text" : "messi top wel ba2y cantalope",
+    "timestamp" : [ 2024, 12, 18, 20, 15, 46, 972224800 ]
+  } ],
+  "likedBy" : [ "1022" ]
 }, {
   "contentId" : "4",
   "authorId" : "1022",
@@ -29,7 +39,9 @@
     "text" : "New Post!",
     "imagePath" : null
   },
-  "timestamp" : [ 2024, 12, 12, 17, 10, 9, 100925200 ]
+  "timestamp" : [ 2024, 12, 12, 17, 10, 9, 100925200 ],
+  "comments" : [ ],
+  "likedBy" : [ ]
 }, {
   "contentId" : "5",
   "authorId" : "1022",
@@ -37,7 +49,9 @@
     "text" : "EL KODWA",
     "imagePath" : "src\\connecthub\\backend\\database\\images\\1022_2024-12-12_17-37-34.jpg"
   },
-  "timestamp" : [ 2024, 12, 12, 17, 37, 34, 76687500 ]
+  "timestamp" : [ 2024, 12, 12, 17, 37, 34, 76687500 ],
+  "comments" : [ ],
+  "likedBy" : [ ]
 }, {
   "contentId" : "6",
   "authorId" : "1023",
@@ -45,7 +59,17 @@
     "text" : "Seif under a tree",
     "imagePath" : "src\\connecthub\\backend\\database\\images\\1023_2024-12-12_17-40-33.jpg"
   },
-  "timestamp" : [ 2024, 12, 12, 17, 40, 33, 60561200 ]
+  "timestamp" : [ 2024, 12, 12, 17, 40, 33, 60561200 ],
+  "comments" : [ {
+    "username" : "Jeff21erson",
+    "text" : "Wow! That's me under the tree.",
+    "timestamp" : [ 2024, 12, 18, 20, 7, 1, 210588600 ]
+  }, {
+    "username" : "Jeff21erson",
+    "text" : "another comment ",
+    "timestamp" : [ 2024, 12, 18, 20, 10, 40, 792193900 ]
+  } ],
+  "likedBy" : [ ]
 }, {
   "contentId" : "7",
   "authorId" : "1022",
@@ -53,5 +77,33 @@
     "text" : "asddddddddddddd",
     "imagePath" : null
   },
-  "timestamp" : [ 2024, 12, 12, 17, 49, 14, 626655600 ]
+  "timestamp" : [ 2024, 12, 12, 17, 49, 14, 626655600 ],
+  "comments" : [ ],
+  "likedBy" : [ "1022" ]
+}, {
+  "contentId" : "8",
+  "authorId" : "1022",
+  "contentData" : {
+    "text" : "test",
+    "imagePath" : null
+  },
+  "timestamp" : [ 2024, 12, 18, 20, 11, 23, 911279800 ],
+  "comments" : [ {
+    "username" : "Jeff21erson",
+    "text" : "asdasd",
+    "timestamp" : [ 2024, 12, 18, 20, 11, 35, 592326900 ]
+  }, {
+    "username" : "Jeff21erson",
+    "text" : "asdasd",
+    "timestamp" : [ 2024, 12, 18, 20, 11, 41, 920784000 ]
+  }, {
+    "username" : "Jeff21erson",
+    "text" : "asdasdaaa",
+    "timestamp" : [ 2024, 12, 18, 20, 11, 52, 305855200 ]
+  }, {
+    "username" : "Asser Hanafy",
+    "text" : "nice test",
+    "timestamp" : [ 2024, 12, 18, 20, 13, 51, 869228200 ]
+  } ],
+  "likedBy" : [ "1023" ]
 } ]

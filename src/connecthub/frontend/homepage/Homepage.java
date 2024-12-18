@@ -127,7 +127,7 @@ public class Homepage extends javax.swing.JFrame {
         tabbedPane.setForeground(Color.DARK_GRAY);
 
         // add all tabs
-        newsFeedPanel = new NewsFeedPanel(posts);
+        newsFeedPanel = new NewsFeedPanel(posts, user);
         groupsPanel = new GroupsPanel(user);
         profilePostsPanel = new ProfilePostsPanel(user.getUserId());
 
@@ -383,7 +383,7 @@ public class Homepage extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnViewStories)
                         .addGap(144, 144, 144)
-                        .addComponent(profilePhotoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(profilePhotoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(backgroundLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(lblUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))

@@ -1,8 +1,8 @@
 package connecthub.backend.models;
 
 public class ContentData {
-    String text;
-    String imagePath; // optional image paths
+    private String text;
+    private String imagePath; // optional image paths
 
     // Default constructor (required for Jackson deserialization)
     public ContentData() {}

@@ -15,7 +15,7 @@ public abstract class ContentService<T extends Content> {
         this.contentDatabase = contentDatabase;
     }
 
-    public void createContent(T content) {
+    public void addContent(T content) {
         contentDatabase.saveContent(content);
     }
     

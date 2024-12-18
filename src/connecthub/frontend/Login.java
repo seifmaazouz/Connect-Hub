@@ -1,6 +1,5 @@
 package connecthub.frontend;
 
-import connecthub.frontend.homepage.NewsFeed;
 import connecthub.backend.models.User;
 import connecthub.backend.services.UserService;
 import connecthub.backend.utils.errors.Alert;
@@ -10,7 +9,6 @@ import connecthub.frontend.homepage.Homepage;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.text.ParseException;

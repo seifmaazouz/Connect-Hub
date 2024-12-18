@@ -2,20 +2,18 @@ package connecthub.frontend.utils;
 
 import connecthub.backend.models.User;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import static connecthub.backend.constants.FilePath.IMAGE_SAVE_DIRECTORY;
 import static connecthub.backend.constants.FilePath.UPLOAD_IMAGE_DIRECTORY;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.RenderingHints;
+
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
@@ -105,5 +103,21 @@ public class ImageManager {
         g2.drawImage(srcImg, 0, 0, w, h, null);
         g2.dispose();
         return resizedImg;
+    }
+
+    public static JLabel getImageLabel(Image image) {
+        ImageIcon icon = new ImageIcon(image) {
+            @Override
+            public void paintIcon(Component c, Graphics g, int x, int y) {
+                Graphics2D g2d = (Graphics2D) g.create();
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+                super.paintIcon(c, g2d, x, y);
+                g2d.dispose();
+            }
+        };
+        JLabel imageLabel = new JLabel(icon);
+        return imageLabel;
     }
 }
