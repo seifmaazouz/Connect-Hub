@@ -1,8 +1,11 @@
 package connecthub.frontend.homepage;
 
+import connecthub.backend.models.ContentData;
 import connecthub.backend.models.Post;
 import connecthub.backend.models.User;
+import connecthub.backend.services.PostService;
 import connecthub.backend.services.UserService;
+import connecthub.backend.utils.factories.ServiceFactory;
 import connecthub.frontend.utils.ImageManager;
 
 import javax.swing.*;
@@ -11,31 +14,36 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class PostsPanel extends javax.swing.JPanel {
-    private final List<Post> posts;
+    private List<Post> posts;
     private final UserService userService;
+    private final PostService postService;
+    private final String viewingUserId;
 
-    public PostsPanel(List<Post> posts, UserService userService) {
+    public PostsPanel(List<Post> posts, String viewingUserId) {
         initComponents();
         this.posts = posts;
-        this.userService = userService;
+        this.userService = UserService.getInstance();
+        this.postService = ServiceFactory.createPostService();
+        this.viewingUserId = viewingUserId;
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding around the panel
         this.setOpaque(false);
-        initializePosts();
+        initializePosts(posts);
     }
 
-    private void initializePosts() {
+    private void initializePosts(List<Post> posts) {
         if (posts != null) {
             for (int i = posts.size() - 1; i >= 0; i--) {
                 Post post = posts.get(i);
                 JPanel postPanel = new JPanel();
+                postPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
                 postPanel.setLayout(new BoxLayout(postPanel, BoxLayout.Y_AXIS));
                 postPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding around each post
                 postPanel.setBackground(Color.WHITE); // Set background color to white
                 postPanel.setOpaque(true);
 
                 // Fetch the author
-                User user = userService.getUserById(post.getAuthorId());
+                User author = userService.getUserById(post.getAuthorId());
                 JPanel authorPanel = new JPanel();
                 authorPanel.setLayout(new BoxLayout(authorPanel, BoxLayout.Y_AXIS));
                 authorPanel.setOpaque(false);
@@ -46,12 +54,12 @@ public class PostsPanel extends javax.swing.JPanel {
                 authorDetailsPanel.setOpaque(false);
                 authorDetailsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-                ImageIcon profileIcon = new ImageIcon(user.getProfilePhoto());
+                ImageIcon profileIcon = new ImageIcon(author.getProfilePhoto());
                 Image profileImage = ImageManager.getScaledImage(profileIcon.getImage(), 35, 35);
                 ProfilePhoto profilePhoto = new ProfilePhoto(profileImage, 35, 1);
                 authorDetailsPanel.add(profilePhoto);
 
-                JLabel authorLabel = new JLabel(" " + user.getUsername());
+                JLabel authorLabel = new JLabel(" " + author.getUsername());
                 authorLabel.setFont(new Font("Arial", Font.BOLD, 14)); // Set font for author label
                 authorDetailsPanel.add(authorLabel);
 
@@ -69,29 +77,31 @@ public class PostsPanel extends javax.swing.JPanel {
                 // Add author and timestamp to the author panel
                 authorPanel.add(authorDetailsPanel);
                 authorPanel.add(timePanel);
-
                 postPanel.add(authorPanel);
-
+                
+                // get post content
+                ContentData contentData = post.getContentData();
+                
                 // Post content
-                JTextArea postTextArea = new JTextArea(post.getContentData().getText());
+                JTextArea postTextArea = new JTextArea(contentData.getText());
                 postTextArea.setFont(new Font("Arial", Font.PLAIN, 14)); // Set font for post text
                 postTextArea.setLineWrap(true); // Enable line wrapping
                 postTextArea.setWrapStyleWord(true); // Wrap at word boundaries
                 postTextArea.setEditable(false); // Make it non-editable
                 postTextArea.setOpaque(false); // Set background to transparent to blend with the panel
                 postTextArea.setAlignmentX(Component.LEFT_ALIGNMENT);
+
                 // Remove the border around the JTextArea
                 postTextArea.setBorder(BorderFactory.createEmptyBorder());
                 postTextArea.setBackground(new Color(0, 0, 0, 0)); // Transparent background
                 postPanel.add(postTextArea);
 
                 // Post image (if any)
-                String imagePath = post.getContentData().getImagePath();
+                String imagePath = contentData.getImagePath();
                 if (imagePath != null) {
                     Image image = new ImageIcon(imagePath).getImage();
                     image = ImageManager.getScaledImage(image, 400, 400);
-                    ImageIcon icon = new ImageIcon(image);
-                    JLabel postImageLabel = new JLabel(icon);
+                    JLabel postImageLabel = ImageManager.getImageLabel(image);
                     postImageLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
                     postPanel.add(postImageLabel);
                 }
@@ -102,13 +112,70 @@ public class PostsPanel extends javax.swing.JPanel {
                         BorderFactory.createEmptyBorder(10, 20, 10, 20) // Add padding inside the border
                 ));
 
-                // Add the post panel and space between posts
+                // Show comments button
+                JButton showCommentsButton = new JButton("Show Comments");
+                showCommentsButton.addActionListener(e -> {
+                    // Logic to show comments
+                    new ViewPostComments(null, true, post.getComments()).setVisible(true);
+                });
+                postPanel.add(showCommentsButton);
+
+                // Like button
+                JButton likeButton = new JButton("Like (" + post.getLikes() + ")");
+                if (post.getLikedBy().contains(viewingUserId)) {
+                    likeButton.setBackground(Color.decode("#003297"));
+                    likeButton.setForeground(Color.WHITE);
+                }
+                likeButton.addActionListener(e -> {
+                    post.like(viewingUserId);
+                    likeButton.setText("Like (" + post.getLikes() + ")");
+                    if (post.getLikedBy().contains(viewingUserId)) {
+                        likeButton.setBackground(Color.decode("#003297"));
+                        likeButton.setForeground(Color.WHITE);
+                    } else {
+                        likeButton.setBackground(null);
+                        likeButton.setForeground(null);
+                    }
+                    postService.addContent(post); // update json file
+                });
+                postPanel.add(likeButton);
+
+                // Add comment button
+                JButton addCommentButton = new JButton("Add Comment");
+                addCommentButton.addActionListener(e -> {
+                    String comment = JOptionPane.showInputDialog(this, "Enter your comment:");
+                    if (comment != null && !comment.trim().isEmpty()) {
+                        post.comment(userService.getUserById(viewingUserId).getUsername(), comment);
+                        postService.addContent(post); // update json file
+                    }
+                });
+
+                // Panel for buttons
+                JPanel buttonsPanel = new JPanel();
+                buttonsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+                buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.X_AXIS));
+                buttonsPanel.setOpaque(false);
+                buttonsPanel.add(showCommentsButton);
+                buttonsPanel.add(Box.createHorizontalStrut(10)); // Add space between buttons
+                buttonsPanel.add(likeButton);
+                buttonsPanel.add(Box.createHorizontalStrut(10)); // Add space between buttons
+                buttonsPanel.add(addCommentButton);
+
+                postPanel.add(Box.createVerticalStrut(10)); // Add space between post content and buttons
+                postPanel.add(buttonsPanel);
                 this.add(postPanel);
-                this.add(Box.createVerticalStrut(10));
+                this.add(Box.createVerticalStrut(10)); // Add space between posts
             }
         }
     }
 
+    public void updatePosts(List<Post> posts) {
+        this.posts = posts;
+        removeAll();
+        initializePosts(posts);
+        revalidate();
+        repaint();
+    }
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -142,7 +209,6 @@ public class PostsPanel extends javax.swing.JPanel {
             .addGap(0, 300, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables

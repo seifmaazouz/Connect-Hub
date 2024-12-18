@@ -19,13 +19,6 @@ public abstract class Content {
         timestamp = LocalDateTime.now();
     }
 
-    public Content(String contentId, String authorId, ContentData contentData, LocalDateTime timestamp) {
-        this.contentId = contentId;
-        this.authorId = authorId;
-        this.contentData = contentData;
-        this.timestamp = timestamp;
-    }
-
     public String getContentId() {
         return contentId;
     }
@@ -51,7 +44,7 @@ public abstract class Content {
         System.out.println("Type: " + this.getClass().getSimpleName());
         ContentData contentData = getContentData();
         System.out.println("Content: " + contentData.getText());
-        String imagePath = contentData.imagePath;
+        String imagePath = contentData.getImagePath();
         if(imagePath != null)
             System.out.println("Image: " + String.join(", ", imagePath));
         else
