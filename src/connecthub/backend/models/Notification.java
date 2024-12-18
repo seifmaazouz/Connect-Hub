@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public class Notification {
 
     public enum Type {
-        FRIEND_REQUEST, GROUP_ACTIVITY, NEW_POST
+        FRIEND_REQUEST, GROUP_ACTIVITY, NEW_POST, MESSAGE, COMMENT
     }
 
     private String message;
@@ -13,6 +13,9 @@ public class Notification {
     private Type type;
     private String senderId;
 
+    public Notification() {
+    }
+    
     public Notification(String message, Type type, String senderId) {
         this.message = message;
         this.timestamp = LocalDateTime.now();
