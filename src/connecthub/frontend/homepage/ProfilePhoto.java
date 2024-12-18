@@ -28,21 +28,28 @@ public class ProfilePhoto extends javax.swing.JPanel {
             g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
             g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
-            // Draw the circular clip
-            Ellipse2D.Double clip = new Ellipse2D.Double(1, 1, size - 2, size - 2);
-            g2d.setClip(clip);
+            // Define the circular clip
+            Ellipse2D.Double clip = new Ellipse2D.Double(strokeLength / 2.0, strokeLength / 2.0, size - strokeLength, size - strokeLength);
+
+            // Save the current clip and set the new clip for the image rendering
+            Shape originalClip = g2d.getClip();
+            g2d.clip(clip);
 
             // Scale the image to fit the circular area
             g2d.drawImage(image, 0, 0, size, size, this);
 
-            // Reset the clip and draw the border
-            g2d.setClip(null);
+            // Reset the clip after drawing the image
+            g2d.setClip(originalClip);
+
+            // Draw the border within the visible bounds
             g2d.setColor(Color.BLACK);
             g2d.setStroke(new BasicStroke(strokeLength));
             g2d.draw(clip);
+
             g2d.dispose();
         }
     }
+
 
 
     /**

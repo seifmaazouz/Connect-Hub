@@ -82,7 +82,7 @@
                           <EmptySpace max="32767" attributes="0"/>
                           <Component id="btnViewStories" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="144" max="-2" attributes="0"/>
-                          <Component id="profilePhotoLabel" min="-2" pref="100" max="-2" attributes="0"/>
+                          <Component id="profilePhotoLabel" min="-2" pref="102" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -103,7 +103,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="btnNotifications" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Component id="profilePhotoLabel" min="-2" pref="100" max="-2" attributes="0"/>
+                      <Component id="profilePhotoLabel" min="-2" pref="102" max="-2" attributes="0"/>
                       <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                           <Component id="btnCreateContent" alignment="3" min="-2" pref="49" max="-2" attributes="0"/>
                           <Component id="btnViewStories" alignment="3" min="-2" pref="49" max="-2" attributes="0"/>

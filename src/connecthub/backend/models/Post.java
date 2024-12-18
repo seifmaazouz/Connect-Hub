@@ -1,32 +1,33 @@
 package connecthub.backend.models;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Set;
 
+
 public class Post extends Content implements Interactable {
-    private HashMap<String, String> comments;
-    private Set<String> likedBy;
+    private final List<Comment> comments;
+    private final Set<String> likedBy;
 
     // Default constructor (required for Jackson deserialization)
     public Post() {
-        comments = new LinkedHashMap<>();
+        comments = new ArrayList<>();
         likedBy = new HashSet<>();
     }
 
     public Post(String contentId, String authorId, ContentData contentData) {
         super(contentId, authorId, contentData);
-        comments = new LinkedHashMap<>();
+        comments = new ArrayList<>();
         likedBy = new HashSet<>();
     }
 
     @Override
-    public void comment(String userId, String comment) {
-        comments.put(userId, comment);
+    public void comment(String username, String comment) {
+
+        comments.add(new Comment(username, comment));
     }
 
     @Override
@@ -38,7 +39,7 @@ public class Post extends Content implements Interactable {
         }
     }
 
-    public HashMap<String, String> getComments() {
+    public List<Comment> getComments() {
         return comments;
     }
 

@@ -82,6 +82,7 @@ public class NewsFeedPanel extends javax.swing.JPanel {
 
         jDisplayPosts.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jDisplayPosts.setMaximumSize(new java.awt.Dimension(500, 32767));
+        jDisplayPosts.setMinimumSize(new java.awt.Dimension(500, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);

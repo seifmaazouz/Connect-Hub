@@ -44,7 +44,7 @@ public abstract class ContentDatabase<T extends Content> {
 
     // uses a separate class to manage loading content from json file to satisfy Single Responsibility Principle
     public void loadAllContents() {
-        // contents.clear
+         contents.clear(); // clear existing contents
         for(T content : contentLoader.loadContentsFromFile()) {
             contents.put(content.getContentId(), content);
         }

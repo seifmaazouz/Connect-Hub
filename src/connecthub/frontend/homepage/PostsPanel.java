@@ -101,8 +101,7 @@ public class PostsPanel extends javax.swing.JPanel {
                 if (imagePath != null) {
                     Image image = new ImageIcon(imagePath).getImage();
                     image = ImageManager.getScaledImage(image, 400, 400);
-                    ImageIcon icon = new ImageIcon(image);
-                    JLabel postImageLabel = new JLabel(icon);
+                    JLabel postImageLabel = ImageManager.getImageLabel(image);
                     postImageLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
                     postPanel.add(postImageLabel);
                 }
@@ -117,8 +116,7 @@ public class PostsPanel extends javax.swing.JPanel {
                 JButton showCommentsButton = new JButton("Show Comments");
                 showCommentsButton.addActionListener(e -> {
                     // Logic to show comments
-                    JOptionPane.showMessageDialog(this, "Comments: " + post.getComments().toString());
-                    postService.addContent(post); // update json file
+                    new ViewPostComments(null, true, post.getComments()).setVisible(true);
                 });
                 postPanel.add(showCommentsButton);
 
@@ -147,9 +145,8 @@ public class PostsPanel extends javax.swing.JPanel {
                 addCommentButton.addActionListener(e -> {
                     String comment = JOptionPane.showInputDialog(this, "Enter your comment:");
                     if (comment != null && !comment.trim().isEmpty()) {
-                        post.comment(viewingUserId, comment);
+                        post.comment(userService.getUserById(viewingUserId).getUsername(), comment);
                         postService.addContent(post); // update json file
-                        // refresh the panel to show the new comment
                     }
                 });
 
