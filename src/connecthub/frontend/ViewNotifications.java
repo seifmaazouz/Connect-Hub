@@ -2,9 +2,6 @@ package connecthub.frontend;
 
 import connecthub.backend.models.Friendship;
 import connecthub.backend.models.Notification;
-import static connecthub.backend.models.Notification.Type.FRIEND_REQUEST;
-import static connecthub.backend.models.Notification.Type.GROUP_ACTIVITY;
-import static connecthub.backend.models.Notification.Type.NEW_POST;
 import connecthub.backend.models.User;
 import connecthub.backend.services.FriendshipService;
 import connecthub.backend.services.UserService;
@@ -63,6 +60,11 @@ public class ViewNotifications extends javax.swing.JDialog {
                 break;
             case COMMENT:
                 notificationLabel.setText("Comment");
+                yes.setText("View");
+                no.setText("Ignore");
+                break;
+            case LIKE:
+                notificationLabel.setText("Like");
                 yes.setText("View");
                 no.setText("Ignore");
                 break;
@@ -246,6 +248,7 @@ public class ViewNotifications extends javax.swing.JDialog {
                     //view chat
                     break;
                 case COMMENT:
+                case LIKE:
                     //view my post
                     break;
             }

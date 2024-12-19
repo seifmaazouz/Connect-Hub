@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public class Notification {
 
     public enum Type {
-        FRIEND_REQUEST, GROUP_ACTIVITY, NEW_POST, MESSAGE, COMMENT
+        FRIEND_REQUEST, GROUP_ACTIVITY, NEW_POST, MESSAGE, COMMENT, LIKE
     }
 
     private String message;

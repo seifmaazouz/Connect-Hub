@@ -36,6 +36,9 @@ public class NotificationService {
                 case COMMENT:
                     message = senderUser.getUsername() + " commented on your post.";
                     break;
+                case LIKE:
+                    message = senderUser.getUsername() + " liked your post.";
+                    break;
             }
             Notification notification = new Notification(message, type, senderUser.getUserId());
             if (receiverId == null) {
