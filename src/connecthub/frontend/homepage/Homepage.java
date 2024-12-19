@@ -46,7 +46,7 @@ public class Homepage extends javax.swing.JFrame {
     private  NewsFeedPanel newsFeedPanel;
     private  GroupsPanel groupsPanel;
     private  ProfilePostsPanel profilePostsPanel;
-    private final User user;
+    private User user;
     private final UserService userService;
     private final PostService postService;
     private final StoryService storyService;
@@ -191,6 +191,7 @@ public class Homepage extends javax.swing.JFrame {
     private void refresh() {
         postService.refreshContents();
         userService.refreshContents();
+        user = userService.getUserById(user.getUserId());
         storyService.refreshContents();
         storyService.deleteExpiredStories();
         profilePostsPanel.refresh();
@@ -501,7 +502,7 @@ public class Homepage extends javax.swing.JFrame {
     private void btnNotificationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNotificationsActionPerformed
 //        Notification notification = new Notification("Asser sent you a friend request.", Notification.Type.FRIEND_REQUEST,"1023");
 //        user.sendNotification(notification);
-        userService.updateUser(user.getUserId(), user);
+//        userService.updateUser(user.getUserId(), user);
         List<Notification> notifications = user.getNotifications();
         if (notifications.isEmpty())
             System.out.println("No notifications");

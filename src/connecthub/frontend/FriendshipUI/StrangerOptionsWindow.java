@@ -5,6 +5,7 @@ import connecthub.backend.models.Notification;
 import connecthub.backend.models.User;
 import connecthub.backend.services.FriendshipService;
 import connecthub.backend.services.NotificationService;
+import connecthub.backend.services.NotificationServiceOld;
 import connecthub.backend.services.UserService;
 import connecthub.frontend.FriendProfile;
 import connecthub.frontend.homepage.ProfilePhoto;
@@ -52,17 +53,22 @@ public class StrangerOptionsWindow extends JDialog{
 
         sendRequestButton.addActionListener(e -> {
             friendship.sendRequest(activeUserId, stranger.getUserId());
-            NotificationService notificationService = new NotificationService();
-            notificationService.addNotification(
-                    stranger.getUserId(),
-                    UserService.getInstance().getUserById(activeUserId).getUsername() + " has sent you a friend request.",
-                    Notification.Type.FRIEND_REQUEST,
-                    activeUserId);
-            try {
-                notificationService.saveNotifications();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
+//            NotificationServiceOld notificationService = new NotificationServiceOld();
+//            notificationService.addNotification(
+//                    stranger.getUserId(),
+//                    UserService.getInstance().getUserById(activeUserId).getUsername() + " has sent you a friend request.",
+//                    Notification.Type.FRIEND_REQUEST,
+//                    activeUserId);
+            NotificationService notificationService1 = new NotificationService(stranger);
+            notificationService1.sendNotificationToFriends(Notification.Type.FRIEND_REQUEST, activeUserId);
+//            try {
+//                notificationService.saveNotifications();
+//            } catch (IOException ex) {
+//                throw new RuntimeException(ex);
+//            }
+            UserService userService = UserService.getInstance();
+            userService.updateUser(stranger.getUserId(), stranger);
+            userService.updateUser(activeUserId, userService.getUserById(activeUserId));
             FriendshipService friendshipService = new FriendshipService();
             friendshipService.saveFriendship(friendship);
             dispose();

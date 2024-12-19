@@ -7,12 +7,14 @@ import static connecthub.backend.models.Notification.Type.GROUP_ACTIVITY;
 import static connecthub.backend.models.Notification.Type.NEW_POST;
 import connecthub.backend.models.User;
 import connecthub.backend.services.FriendshipService;
+import connecthub.backend.services.UserService;
 import java.io.IOException;
 import java.util.List;
 
 public class ViewNotifications extends javax.swing.JDialog {
 
     private User user;
+    private UserService userService;
     private List<Notification> notifications;
     private static int notificationIndex;
     private int size;
@@ -21,6 +23,7 @@ public class ViewNotifications extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.user = user;
+        this.userService = UserService.getInstance();
         this.notifications = this.user.getNotifications();
         size = notifications.size();
         notificationIndex = 1;
@@ -257,6 +260,7 @@ public class ViewNotifications extends javax.swing.JDialog {
                 break;
         }
         user.deleteNotification(notification);
+        userService.updateUser(user.getUserId(), user);
         this.dispose();
     }//GEN-LAST:event_yesActionPerformed
 
@@ -275,11 +279,13 @@ public class ViewNotifications extends javax.swing.JDialog {
                 break;
         }
         user.deleteNotification(notification);
+        userService.updateUser(user.getUserId(), user);
         this.dispose();
     }//GEN-LAST:event_noActionPerformed
 
     private void clearNotificationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearNotificationsActionPerformed
         user.clearNotifications();
+        userService.updateUser(user.getUserId(), user);
         this.dispose();
     }//GEN-LAST:event_clearNotificationsActionPerformed
 

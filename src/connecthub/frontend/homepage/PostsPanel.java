@@ -1,8 +1,10 @@
 package connecthub.frontend.homepage;
 
 import connecthub.backend.models.ContentData;
+import connecthub.backend.models.Notification;
 import connecthub.backend.models.Post;
 import connecthub.backend.models.User;
+import connecthub.backend.services.NotificationService;
 import connecthub.backend.services.PostService;
 import connecthub.backend.services.UserService;
 import connecthub.backend.utils.factories.ServiceFactory;
@@ -143,10 +145,12 @@ public class PostsPanel extends javax.swing.JPanel {
                 // Add comment button
                 JButton addCommentButton = new JButton("Add Comment");
                 addCommentButton.addActionListener(e -> {
-                    String comment = JOptionPane.showInputDialog(this, "Enter your comment:");
+                    String comment = JOptionPane.showInputDialog(null, "Enter your comment:");
                     if (comment != null && !comment.trim().isEmpty()) {
                         post.comment(userService.getUserById(viewingUserId).getUsername(), comment);
                         postService.addContent(post); // update json file
+                        NotificationService notificationService = new NotificationService(userService.getUserById(viewingUserId));
+                        notificationService.sendNotificationToFriends(Notification.Type.COMMENT, author.getUserId());
                     }
                 });
 

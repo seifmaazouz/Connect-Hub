@@ -1,63 +1,58 @@
-// src/connecthub/backend/services/NotificationService.java
 package connecthub.backend.services;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import connecthub.backend.database.JSONParser;
+import connecthub.backend.models.Friendship;
 import connecthub.backend.models.Notification;
-
+import connecthub.backend.models.User;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import static connecthub.backend.constants.FilePath.NOTIFICATIONS_FILE_PATH;
-
 public class NotificationService {
-    private HashMap<String, ArrayList<Notification>> notifications;
 
-    public NotificationService() {
-        notifications = new HashMap<>();
+    private User senderUser;
+
+    public NotificationService(User user) {
+        this.senderUser = user;
     }
 
-    public void addNotification(String receiverId, String message, Notification.Type type, String senderId) {
-        if (!notifications.containsKey(receiverId)) {
-            notifications.put(receiverId, new ArrayList<>());
-        }
-        notifications.get(receiverId).add(new Notification(message, type, senderId));
-    }
-    
-    public void removeNotification(Notification notification) {
-        notifications.remove(notification);
-    }
-    
-    public HashMap<String, ArrayList<Notification>> getNotifications() throws IOException {
-        HashMap<String, ArrayList<Notification>> notificationMap = new JSONParser().readJSON(NOTIFICATIONS_FILE_PATH,
-                new TypeReference <HashMap<String, ArrayList<Notification>>> () {});
-
-        for (String receiverId : notificationMap.keySet()) {
-            notifications.put(receiverId, notificationMap.get(receiverId));
-        }
-        return notifications;
-    }
-
-    public void saveNotifications() throws IOException {
-        HashMap<String, ArrayList<Notification>> notificationMap = new HashMap<>();
-        for (String receiverId : notifications.keySet()) {
-            notificationMap.put(receiverId, notifications.get(receiverId));
-        }
-        new JSONParser().writeJSON(NOTIFICATIONS_FILE_PATH, notificationMap);
-    }
-
-    public void clearNotifications(String receiverId) {
-        notifications.get(receiverId).clear();
-    }
-
-    public Notification getNotification(String receiverId, String senderId, Notification.Type type) {
-        for (Notification notification : notifications.get(receiverId)) {
-            if (notification.getSenderId().equals(senderId) && notification.getType().equals(type)) {
-                return notification;
+    public void sendNotificationToFriends(Notification.Type type, String receiverId) {
+        try {
+            Friendship friendship = new FriendshipService().loadFriendship();
+            List<String> friendsId = friendship.getUserFriends(senderUser.getUserId());
+            UserService userService = UserService.getInstance();
+            String message = null;
+            switch (type) {
+                case FRIEND_REQUEST:
+                    message = senderUser.getUsername() + " sent you a friend request.";
+                    break;
+                case GROUP_ACTIVITY:
+                    message = "";
+                    break;
+                case NEW_POST:
+                    message = senderUser.getUsername() + " published a new post.";
+                    break;
+                case MESSAGE:
+                    message = senderUser.getUsername() + " sent you a message.";
+                    break;
+                case COMMENT:
+                    message = senderUser.getUsername() + " commented on your post.";
+                    break;
             }
+            Notification notification = new Notification(message, type, senderUser.getUserId());
+            if (receiverId == null) {
+                for (String friendId : friendsId) {
+                    User friend = userService.getUserById(friendId);
+                    friend.sendNotification(notification);
+                    userService.updateUser(friendId, friend);
+                    userService.updateUser(senderUser.getUserId(), senderUser);
+                }
+            } else {
+                User receiver = userService.getUserById(receiverId);
+                receiver.sendNotification(notification);
+                userService.updateUser(receiverId, receiver);
+                userService.updateUser(senderUser.getUserId(), senderUser);
+            }
+        } catch (IOException e) {
+            System.out.println("No Friends.");
         }
-        return null;
     }
 }
