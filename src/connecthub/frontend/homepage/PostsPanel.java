@@ -20,6 +20,7 @@ public class PostsPanel extends javax.swing.JPanel {
     private final UserService userService;
     private final PostService postService;
     private final String viewingUserId;
+    private final NotificationService notificationService;
 
     public PostsPanel(List<Post> posts, String viewingUserId) {
         initComponents();
@@ -27,6 +28,7 @@ public class PostsPanel extends javax.swing.JPanel {
         this.userService = UserService.getInstance();
         this.postService = ServiceFactory.createPostService();
         this.viewingUserId = viewingUserId;
+        this.notificationService = new NotificationService(userService.getUserById(viewingUserId));
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding around the panel
         this.setOpaque(false);
@@ -139,6 +141,7 @@ public class PostsPanel extends javax.swing.JPanel {
                         likeButton.setForeground(null);
                     }
                     postService.addContent(post); // update json file
+                    notificationService.sendNotificationToFriends(Notification.Type.LIKE, author.getUserId());
                 });
                 postPanel.add(likeButton);
 
@@ -149,7 +152,6 @@ public class PostsPanel extends javax.swing.JPanel {
                     if (comment != null && !comment.trim().isEmpty()) {
                         post.comment(userService.getUserById(viewingUserId).getUsername(), comment);
                         postService.addContent(post); // update json file
-                        NotificationService notificationService = new NotificationService(userService.getUserById(viewingUserId));
                         notificationService.sendNotificationToFriends(Notification.Type.COMMENT, author.getUserId());
                     }
                 });
