@@ -1,5 +1,6 @@
 package connecthub.frontend.homepage;
 
+import connecthub.backend.background.NotificationFetcher;
 import connecthub.backend.models.Friendship;
 import connecthub.backend.models.Notification;
 import connecthub.backend.models.Post;
@@ -55,11 +56,16 @@ public class Homepage extends javax.swing.JFrame {
     private List<String> friends;
     private boolean profileMode = false, exitMode = true;
     private final GroupService groupService;
+    private static Homepage instance;
 
 
-    public Homepage(User user) throws IOException {
+    private Homepage(User user) {
         initComponents();
         this.user = user;
+
+        // create thread for notification fetcher
+        NotificationFetcher notificationFetcher = new NotificationFetcher(user, this);
+        Thread notificationThread = new Thread(notificationFetcher);
 
         // create all services
         friendshipService = new FriendshipService();
@@ -111,8 +117,18 @@ public class Homepage extends javax.swing.JFrame {
         sideBarHolder.addTab("Search Users", searchUsersPanel);
         searchUsersPanel.revalidate();
         searchUsersPanel.repaint();
-        
-        if (!user.getNotifications().isEmpty()) {
+    }
+
+    public static Homepage getInstance(User user) {
+        if (instance == null)
+            return new Homepage(user);
+        else
+            instance.user = user;
+            return instance;
+    }
+
+    public void updateNotifications(List<Notification> notifications) {
+        if (!notifications.isEmpty()) {
             notifcationCount.setText("" + user.getNotifications().size());
         }
         else {
@@ -217,7 +233,7 @@ public class Homepage extends javax.swing.JFrame {
             throw new RuntimeException(e);
         }
         
-        // refresh side bar
+        // refresh sidebar
         sideBarHolder.removeAll();
         sideBarHolder.addTab("Friends", new FriendListPanel(friendship, user.getUserId()));
         sideBarHolder.revalidate();
@@ -233,6 +249,7 @@ public class Homepage extends javax.swing.JFrame {
         sideBarHolder.repaint();
         revalidate();
         repaint();
+
         if (!user.getNotifications().isEmpty()) {
             notifcationCount.setText("" + user.getNotifications().size());
         }
@@ -546,8 +563,6 @@ public class Homepage extends javax.swing.JFrame {
                     Logger.getLogger(Homepage.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (NoSuchAlgorithmException ex) {
                     Logger.getLogger(Homepage.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
                 }
             }
         });
