@@ -10,6 +10,8 @@ import connecthub.backend.services.FriendshipService;
 import connecthub.backend.services.UserService;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ViewNotifications extends javax.swing.JDialog {
 
@@ -86,11 +88,6 @@ public class ViewNotifications extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Notifiactions");
         setResizable(false);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosed(java.awt.event.WindowEvent evt) {
-                formWindowClosed(evt);
-            }
-        });
 
         notificationLabel.setText("Notification Label");
         notificationLabel.setToolTipText("");
@@ -120,28 +117,20 @@ public class ViewNotifications extends javax.swing.JDialog {
         yes.setText("Yes");
         yes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                try {
-                    yesActionPerformed(evt);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+                yesActionPerformed(evt);
             }
         });
 
         no.setText("No");
         no.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                try {
-                    noActionPerformed(evt);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+                noActionPerformed(evt);
             }
         });
 
         notificationTime.setText("Notification Time");
 
-        clearNotifications.setText("Clear");
+        clearNotifications.setText("Clear All");
         clearNotifications.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 clearNotificationsActionPerformed(evt);
@@ -232,55 +221,63 @@ public class ViewNotifications extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_nextNotificationActionPerformed
 
-    private void yesActionPerformed(java.awt.event.ActionEvent evt) throws IOException {//GEN-FIRST:event_yesActionPerformed
-        // TODO add your handling code here:
-        Notification notification = notifications.get(size - notificationIndex);
-        Notification.Type type = notification.getType();
-        switch (type) {
-            case FRIEND_REQUEST:
-                FriendshipService friendshipService = new FriendshipService();
-                Friendship friendship = friendshipService.loadFriendship();
-                friendship.acceptRequest(this.user.getUserId(), notification.getSenderId());
-                friendshipService.saveFriendship(friendship);
-                System.out.println("Friend request accepted");
-                break;
-            case GROUP_ACTIVITY:
-                //view group
-                //wait for nader
-                break;
-            case NEW_POST:
-                //view post
-                //new homepage
-                break;
-            case MESSAGE:
-                //view chat
-                break;
-            case COMMENT:
-                //view my post
-                break;
+    private void yesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_yesActionPerformed
+        try {
+            // TODO add your handling code here:
+            Notification notification = notifications.get(size - notificationIndex);
+            Notification.Type type = notification.getType();
+            switch (type) {
+                case FRIEND_REQUEST:
+                    FriendshipService friendshipService = new FriendshipService();
+                    Friendship friendship = friendshipService.loadFriendship();
+                    friendship.acceptRequest(this.user.getUserId(), notification.getSenderId());
+                    friendshipService.saveFriendship(friendship);
+                    System.out.println("Friend request accepted");
+                    break;
+                case GROUP_ACTIVITY:
+                    //view group
+                    //wait for nader
+                    break;
+                case NEW_POST:
+                    //view post
+                    //new homepage
+                    break;
+                case MESSAGE:
+                    //view chat
+                    break;
+                case COMMENT:
+                    //view my post
+                    break;
+            }
+            user.deleteNotification(notification);
+            userService.updateUser(user.getUserId(), user);
+            this.dispose();
+        } catch (IOException ex) {
+            Logger.getLogger(ViewNotifications.class.getName()).log(Level.SEVERE, null, ex);
         }
-        user.deleteNotification(notification);
-        userService.updateUser(user.getUserId(), user);
-        this.dispose();
     }//GEN-LAST:event_yesActionPerformed
 
-    private void noActionPerformed(java.awt.event.ActionEvent evt) throws IOException {//GEN-FIRST:event_noActionPerformed
-        Notification notification = notifications.get(size - notificationIndex);
-        Notification.Type type = notification.getType();
-        switch (type) {
-            case FRIEND_REQUEST:
-                FriendshipService friendshipService = new FriendshipService();
-                Friendship friendship = friendshipService.loadFriendship();
-                friendship.cancelRequest(user.getUserId(), notification.getSenderId());
-                friendshipService.saveFriendship(friendship);
-                System.out.println("Friend request declined");
-                break;
-            default:
-                break;
+    private void noActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noActionPerformed
+        try {
+            Notification notification = notifications.get(size - notificationIndex);
+            Notification.Type type = notification.getType();
+            switch (type) {
+                case FRIEND_REQUEST:
+                    FriendshipService friendshipService = new FriendshipService();
+                    Friendship friendship = friendshipService.loadFriendship();
+                    friendship.cancelRequest(user.getUserId(), notification.getSenderId());
+                    friendshipService.saveFriendship(friendship);
+                    System.out.println("Friend request declined");
+                    break;
+                default:
+                    break;
+            }
+            user.deleteNotification(notification);
+            userService.updateUser(user.getUserId(), user);
+            this.dispose();
+        } catch (IOException ex) {
+            Logger.getLogger(ViewNotifications.class.getName()).log(Level.SEVERE, null, ex);
         }
-        user.deleteNotification(notification);
-        userService.updateUser(user.getUserId(), user);
-        this.dispose();
     }//GEN-LAST:event_noActionPerformed
 
     private void clearNotificationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearNotificationsActionPerformed
@@ -288,14 +285,6 @@ public class ViewNotifications extends javax.swing.JDialog {
         userService.updateUser(user.getUserId(), user);
         this.dispose();
     }//GEN-LAST:event_clearNotificationsActionPerformed
-
-    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-//        try {
-//            new Homepage(user).setVisible(true);
-//        } catch (IOException ex) {
-//            Logger.getLogger(ViewNotifications.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-    }//GEN-LAST:event_formWindowClosed
 
 //    public static void main(String args[]) {
 //        java.awt.EventQueue.invokeLater(new Runnable() {
