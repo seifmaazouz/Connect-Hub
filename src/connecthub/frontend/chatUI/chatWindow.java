@@ -67,9 +67,10 @@ public class chatWindow extends JFrame {
             chatPanel.add(entry, BorderLayout.WEST);
         }
 
+        // Scroll to the bottom of the chat
         SwingUtilities.invokeLater(() -> {
-            chatBody.getVerticalScrollBar().setUnitIncrement(8);
-            chatBody.getVerticalScrollBar().setValue(chatBody.getVerticalScrollBar().getMaximum());
+            JScrollBar bar = chatBody.getVerticalScrollBar();
+            bar.setValue(bar.getMaximum());
         });
 
         // Ensure the panel updates
@@ -109,7 +110,11 @@ public class chatWindow extends JFrame {
         chatPanel.add(entry);
         chatPanel.revalidate();
         chatPanel.repaint();
-        chatBody.getVerticalScrollBar().setValue(chatBody.getVerticalScrollBar().getMaximum());
+
+        SwingUtilities.invokeLater(() -> {
+            chatBody.getVerticalScrollBar().setUnitIncrement(8);
+            chatBody.getVerticalScrollBar().setValue(chatBody.getVerticalScrollBar().getMaximum());
+        });
 
         // Save the chat history
         try {
@@ -132,11 +137,14 @@ public class chatWindow extends JFrame {
             Color color = message.getSenderId().equals(activeUser.getUserId()) ? Color.decode("#20A520") : Color.BLUE;
             ChatMessageEntry entry = new ChatMessageEntry(UserService.getInstance().getUserById(message.getSenderId()), message.getMessageContent(), color);
             chatPanel.add(entry, BorderLayout.WEST);
+            SwingUtilities.invokeLater(() -> {
+                chatBody.getVerticalScrollBar().setUnitIncrement(8);
+                chatBody.getVerticalScrollBar().setValue(chatBody.getVerticalScrollBar().getMaximum());
+            });
         }
         chat = updatedChat;
         chatPanel.revalidate();
         chatPanel.repaint();
-        chatBody.getVerticalScrollBar().setValue(chatBody.getVerticalScrollBar().getMaximum());
     }
 
     public static void main(String[] args) {
