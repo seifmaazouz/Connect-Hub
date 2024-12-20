@@ -5,6 +5,7 @@ import connecthub.backend.models.User;
 import connecthub.backend.services.strategies.NotificationStrategy;
 import connecthub.backend.services.strategies.NotifyAllFriendsStrategy;
 import connecthub.backend.services.strategies.NotifySpecificUserStrategy;
+import connecthub.backend.utils.builders.NotificationBuilder;
 
 public class NotificationService {
 
@@ -28,27 +29,31 @@ public class NotificationService {
     }
 
     private Notification createNotification(Notification.Type type, String contentId) {
-        String message = null;
+        NotificationBuilder builder = new NotificationBuilder()
+                .setType(type)
+                .setSenderUserId(senderUser.getUserId())
+                .setContentId(contentId);
+
         switch (type) {
             case FRIEND_REQUEST:
-                message = senderUser.getUsername() + " sent you a friend request.";
+                builder.setMessage(senderUser.getUsername() + " sent you a friend request.");
                 break;
             case GROUP_ACTIVITY:
-                message = "";
+                builder.setMessage("");
                 break;
             case NEW_POST:
-                message = senderUser.getUsername() + " published a new post.";
+                builder.setMessage(senderUser.getUsername() + " published a new post.");
                 break;
             case MESSAGE:
-                message = senderUser.getUsername() + " sent you a message.";
+                builder.setMessage(senderUser.getUsername() + " sent you a message.");
                 break;
             case COMMENT:
-                message = senderUser.getUsername() + " commented on your post.";
+                builder.setMessage(senderUser.getUsername() + " commented on your post.");
                 break;
             case LIKE:
-                message = senderUser.getUsername() + " liked your post.";
+                builder.setMessage(senderUser.getUsername() + " liked your post.");
                 break;
         }
-        return new Notification(message, type, senderUser.getUserId(), contentId);
+        return builder.build();
     }
 }
