@@ -1,5 +1,6 @@
 package connecthub.frontend.chatUI;
 
+import connecthub.backend.background.ChatFetcher;
 import connecthub.backend.models.Chat;
 import connecthub.backend.models.ChatMessage;
 import connecthub.backend.models.User;
@@ -15,6 +16,7 @@ public class chatWindow extends JFrame {
     private User friend;
     private Chat chat;
     private ChatService cs;
+    private ChatFetcher chatFetcher;
 
     private JPanel chatPanel; // Holds chat message entries
 
@@ -75,8 +77,21 @@ public class chatWindow extends JFrame {
         sendButton.addActionListener(e -> messageSent());
         textField1.addActionListener(e -> messageSent());
 
+        // create chatFetcher thread
+        this.chatFetcher = new ChatFetcher(this);
+
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                chatFetcher.stop();
+                dispose();
+            }
+        });
+
         setVisible(true);
     }
+
+
 
     private void messageSent() {
         String message = textField1.getText();
