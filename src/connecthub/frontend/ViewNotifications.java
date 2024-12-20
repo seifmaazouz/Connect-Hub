@@ -237,9 +237,16 @@ public class ViewNotifications extends javax.swing.JDialog {
             Notification.Type type = notification.getType();
             PostService postService = ServiceFactory.createPostService();
             postService.refreshContents();
-            Post post = postService.getContentFromId(notification.getContentId());
-            List<Post> posts;
-            User author;
+            String postId = notification.getContentId();
+            List<Post> posts = null;
+            User author = null;
+            Post post = null;
+            if(postId != null) {
+                post = postService.getContentFromId(postId);
+                posts = new ArrayList<>();
+                posts.add(post);
+                author = userService.getUserById(post.getAuthorId());
+            }
             switch (type) {
                 case FRIEND_REQUEST:
                     FriendshipService friendshipService = new FriendshipService();
@@ -254,22 +261,18 @@ public class ViewNotifications extends javax.swing.JDialog {
                     break;
                 case NEW_POST:
                     //view post
-                    posts = new ArrayList<>();
-                    posts.add(post);
-                    author = userService.getUserById(post.getAuthorId());
                     new ViewPosts(null, true, posts, author.getUsername()).setVisible(true);
                     break;
                 case MESSAGE:
                     //view chat
                     break;
                 case COMMENT:
+                    //view comments
+                    new ViewPosts(null, true, posts, author.getUsername()).setVisible(true);
                     new ViewPostComments(null, true, post.getComments()).setVisible(true);
                     break;
                 case LIKE:
                     //view my post
-                    posts = new ArrayList<>();
-                    posts.add(post);
-                    author = userService.getUserById(post.getAuthorId());
                     new ViewPosts(null, true, posts, author.getUsername()).setVisible(true);
                     JOptionPane.showMessageDialog(null, post.getLikes(), "Number of Likes", JOptionPane.PLAIN_MESSAGE);
                     break;
