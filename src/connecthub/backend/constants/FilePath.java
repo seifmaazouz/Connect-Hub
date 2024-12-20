@@ -15,4 +15,6 @@ public interface FilePath {
     String DEFAULT_PROFILE_PHOTO = IMAGE_SAVE_DIRECTORY + File.separator + "defaultProfilePhoto.jpg";
     String DEFAULT_COVER_PHOTO = IMAGE_SAVE_DIRECTORY + File.separator + "defaultCoverPhoto.jpg";
     String NOTIFICATIONS_FILE_PATH = "src/connecthub/backend/database/files/notifications.json";
+    String CHATS_FILE_PATH = "src/connecthub/backend/database/files/chats";
+    String CHATIDS_FILE_PATH = "src/connecthub/backend/database/files/chats/chatIds.json";
 }

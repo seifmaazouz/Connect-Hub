@@ -1,18 +1,15 @@
 package connecthub.frontend.FriendshipUI;
 
-import connecthub.backend.loaders.UserLoader;
 import connecthub.backend.models.Friendship;
 import connecthub.backend.models.User;
 import connecthub.backend.services.FriendshipService;
 import connecthub.backend.services.UserService;
 import connecthub.frontend.FriendProfile;
-import connecthub.frontend.Profile;
+import connecthub.frontend.chatUI.chatWindow;
 import connecthub.frontend.homepage.ProfilePhoto;
-import connecthub.frontend.utils.ImageManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
 
 public class FriendOptionsWindow extends JDialog{
@@ -22,6 +19,7 @@ public class FriendOptionsWindow extends JDialog{
     private JButton unfriendButton;
     private JButton cancelButton;
     private JLabel bigProfilePhotoLabel;
+    private JButton messageButton;
 
     public FriendOptionsWindow(Friendship friendship, String activeUserId, User friend) throws IOException {
         setContentPane(panel1);
@@ -43,6 +41,15 @@ public class FriendOptionsWindow extends JDialog{
         viewProfileButton.addActionListener(e -> {
             System.out.println("View Profile Button Clicked");
             new FriendProfile(friend).setVisible(true);
+        });
+
+        messageButton.addActionListener(e -> {
+            System.out.println("Message Button Clicked");
+            try {
+                new chatWindow(UserService.getInstance().getUserById(activeUserId), friend).setVisible(true);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         });
 
         blockButton.addActionListener(e -> {
