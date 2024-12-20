@@ -8,6 +8,7 @@ import connecthub.backend.services.FriendshipService;
 import connecthub.backend.services.PostService;
 import connecthub.backend.services.UserService;
 import connecthub.backend.utils.factories.ServiceFactory;
+import connecthub.frontend.chatUI.chatWindow;
 import connecthub.frontend.homepage.ViewPostComments;
 
 import javax.swing.*;
@@ -264,7 +265,8 @@ public class ViewNotifications extends javax.swing.JDialog {
                     new ViewPosts(null, true, posts, author.getUsername()).setVisible(true);
                     break;
                 case MESSAGE:
-                    //view chat
+                    User friend = userService.getUserById(notification.getSenderId());
+                    new chatWindow(user, friend).setVisible(true);
                     break;
                 case COMMENT:
                     //view comments

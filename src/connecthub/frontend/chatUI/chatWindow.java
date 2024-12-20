@@ -3,8 +3,10 @@ package connecthub.frontend.chatUI;
 import connecthub.backend.background.ChatFetcher;
 import connecthub.backend.models.Chat;
 import connecthub.backend.models.ChatMessage;
+import connecthub.backend.models.Notification;
 import connecthub.backend.models.User;
 import connecthub.backend.services.ChatService;
+import connecthub.backend.services.NotificationService;
 import connecthub.backend.services.UserService;
 
 import javax.swing.*;
@@ -100,7 +102,9 @@ public class chatWindow extends JFrame {
         }
         System.out.println("Message: " + message);
         chat.sendMessage(activeUser.getUserId(), message);
-
+        NotificationService notificationService = new NotificationService(activeUser);
+        notificationService.sendNotification(Notification.Type.MESSAGE, friend.getUserId(), null);
+        
         // Add the new message to the chat panel
         ChatMessageEntry entry = new ChatMessageEntry(activeUser, message, Color.decode("#20A520"));
         chatPanel.add(entry);
