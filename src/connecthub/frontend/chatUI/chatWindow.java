@@ -62,6 +62,11 @@ public class chatWindow extends JFrame {
             chatPanel.add(entry, BorderLayout.WEST);
         }
 
+        SwingUtilities.invokeLater(() -> {
+            chatBody.getVerticalScrollBar().setUnitIncrement(8);
+            chatBody.getVerticalScrollBar().setValue(chatBody.getVerticalScrollBar().getMaximum());
+        });
+
         // Ensure the panel updates
         chatPanel.revalidate();
         chatPanel.repaint();
@@ -86,6 +91,7 @@ public class chatWindow extends JFrame {
         chatPanel.add(entry);
         chatPanel.revalidate();
         chatPanel.repaint();
+        chatBody.getVerticalScrollBar().setValue(chatBody.getVerticalScrollBar().getMaximum());
 
         // Save the chat history
         try {
@@ -96,6 +102,19 @@ public class chatWindow extends JFrame {
 
         // Clear the input field
         textField1.setText("");
+    }
+
+    public void refreshChat() throws IOException {
+        chat = cs.loadHistory(activeUser.getUserId(), friend.getUserId());
+        chatPanel.removeAll();
+        for (ChatMessage message : chat.getMessages()) {
+            Color color = message.getSenderId().equals(activeUser.getUserId()) ? Color.decode("#20A520") : Color.BLUE;
+            ChatMessageEntry entry = new ChatMessageEntry(UserService.getInstance().getUserById(message.getSenderId()), message.getMessageContent(), color);
+            chatPanel.add(entry, BorderLayout.WEST);
+        }
+        chatPanel.revalidate();
+        chatPanel.repaint();
+        chatBody.getVerticalScrollBar().setValue(chatBody.getVerticalScrollBar().getMaximum());
     }
 
     public static void main(String[] args) {
