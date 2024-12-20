@@ -23,25 +23,25 @@ public class UserDatabase {
         return instance;
     }
 
-    public void saveUser(User user) {
+    public synchronized void saveUser(User user) {
         users.put(user.getUserId(), user);
         saveChangesToFile();
     }
 
-    public void deleteUser(String userId) {
+    public synchronized void deleteUser(String userId) {
         users.remove(userId);
         saveChangesToFile();
     }
 
-    public HashMap<String, User> getUsers() {
+    public synchronized HashMap<String, User> getUsers() {
         return users;
     }
 
-    protected void saveChangesToFile() {
+    protected synchronized void saveChangesToFile() {
         userLoader.saveUsers(getUsers());
     }
 
-    public void loadAllContents() {
+    public synchronized void loadAllContents() {
         for (User user: userLoader.loadUsers().values()) {
             users.put(user.getUserId(), user);
         }

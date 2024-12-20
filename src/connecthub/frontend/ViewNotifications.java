@@ -2,10 +2,17 @@ package connecthub.frontend;
 
 import connecthub.backend.models.Friendship;
 import connecthub.backend.models.Notification;
+import connecthub.backend.models.Post;
 import connecthub.backend.models.User;
 import connecthub.backend.services.FriendshipService;
+import connecthub.backend.services.PostService;
 import connecthub.backend.services.UserService;
+import connecthub.backend.utils.factories.ServiceFactory;
+import connecthub.frontend.homepage.ViewPostComments;
+
+import javax.swing.*;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -228,6 +235,11 @@ public class ViewNotifications extends javax.swing.JDialog {
             // TODO add your handling code here:
             Notification notification = notifications.get(size - notificationIndex);
             Notification.Type type = notification.getType();
+            PostService postService = ServiceFactory.createPostService();
+            postService.refreshContents();
+            Post post = postService.getContentFromId(notification.getContentId());
+            List<Post> posts;
+            User author;
             switch (type) {
                 case FRIEND_REQUEST:
                     FriendshipService friendshipService = new FriendshipService();
@@ -242,14 +254,24 @@ public class ViewNotifications extends javax.swing.JDialog {
                     break;
                 case NEW_POST:
                     //view post
-                    //new homepage
+                    posts = new ArrayList<>();
+                    posts.add(post);
+                    author = userService.getUserById(post.getAuthorId());
+                    new ViewPosts(null, true, posts, author.getUsername()).setVisible(true);
                     break;
                 case MESSAGE:
                     //view chat
                     break;
                 case COMMENT:
+                    new ViewPostComments(null, true, post.getComments()).setVisible(true);
+                    break;
                 case LIKE:
                     //view my post
+                    posts = new ArrayList<>();
+                    posts.add(post);
+                    author = userService.getUserById(post.getAuthorId());
+                    new ViewPosts(null, true, posts, author.getUsername()).setVisible(true);
+                    JOptionPane.showMessageDialog(null, post.getLikes(), "Number of Likes", JOptionPane.PLAIN_MESSAGE);
                     break;
             }
             user.deleteNotification(notification);

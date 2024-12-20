@@ -119,7 +119,6 @@ public class PostsPanel extends javax.swing.JPanel {
                 // Show comments button
                 JButton showCommentsButton = new JButton("Show Comments");
                 showCommentsButton.addActionListener(e -> {
-                    // Logic to show comments
                     new ViewPostComments(null, true, post.getComments()).setVisible(true);
                 });
                 postPanel.add(showCommentsButton);
@@ -136,12 +135,12 @@ public class PostsPanel extends javax.swing.JPanel {
                     if (post.getLikedBy().contains(viewingUserId)) {
                         likeButton.setBackground(Color.decode("#003297"));
                         likeButton.setForeground(Color.WHITE);
+                        notificationService.sendNotificationToFriends(Notification.Type.LIKE, author.getUserId(), post.getContentId());
                     } else {
                         likeButton.setBackground(null);
                         likeButton.setForeground(null);
                     }
                     postService.addContent(post); // update json file
-                    notificationService.sendNotificationToFriends(Notification.Type.LIKE, author.getUserId());
                 });
                 postPanel.add(likeButton);
 
@@ -152,7 +151,7 @@ public class PostsPanel extends javax.swing.JPanel {
                     if (comment != null && !comment.trim().isEmpty()) {
                         post.comment(userService.getUserById(viewingUserId).getUsername(), comment);
                         postService.addContent(post); // update json file
-                        notificationService.sendNotificationToFriends(Notification.Type.COMMENT, author.getUserId());
+                        notificationService.sendNotificationToFriends(Notification.Type.COMMENT, author.getUserId(), post.getContentId());
                     }
                 });
 

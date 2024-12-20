@@ -23,7 +23,7 @@ public class NotificationServiceOld {
         if (!notifications.containsKey(receiverId)) {
             notifications.put(receiverId, new ArrayList<>());
         }
-        notifications.get(receiverId).add(new Notification(message, type, senderId));
+        notifications.get(receiverId).add(new Notification(message, type, senderId, null));
     }
     
     public void removeNotification(Notification notification) {

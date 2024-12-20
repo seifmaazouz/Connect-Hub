@@ -68,7 +68,7 @@ public class Homepage extends javax.swing.JFrame {
         if (!notifications.isEmpty()) {
             notifcationCount.setText(String.valueOf(notifications.size()));
         } else {
-            notifcationCount.setText("  ");
+            notifcationCount.setText("   ");
         }
 
         // create thread for notification fetcher
@@ -134,7 +134,7 @@ public class Homepage extends javax.swing.JFrame {
         if (!notifications.isEmpty()) {
             notifcationCount.setText(String.valueOf(notifications.size()));
         } else {
-            notifcationCount.setText("  ");
+            notifcationCount.setText("   ");
         }
     }
 
@@ -362,7 +362,7 @@ public class Homepage extends javax.swing.JFrame {
         });
 
         notifcationCount.setForeground(new java.awt.Color(255, 0, 0));
-        notifcationCount.setText(" ");
+        notifcationCount.setText("   ");
 
         javax.swing.GroupLayout backgroundLayout = new javax.swing.GroupLayout(background);
         background.setLayout(backgroundLayout);
@@ -414,7 +414,7 @@ public class Homepage extends javax.swing.JFrame {
                         .addGroup(backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnNotifications)
                             .addComponent(notifcationCount)))
-                    .addComponent(profilePhotoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(profilePhotoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnCreateContent, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnViewStories, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -514,8 +514,9 @@ public class Homepage extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCreateGroupActionPerformed
 
     private void btnNotificationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNotificationsActionPerformed
-        if (notifications != null && !notifications.isEmpty())
+        if (!notifications.isEmpty()) {
             new ViewNotifications(this, true, user).setVisible(true);
+        }
         else
             System.out.println("No notifications");
 

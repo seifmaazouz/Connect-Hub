@@ -14,7 +14,7 @@ public class NotificationService {
         this.senderUser = user;
     }
 
-    public void sendNotificationToFriends(Notification.Type type, String receiverId) {
+    public void sendNotificationToFriends(Notification.Type type, String receiverId, String contentId) {
         try {
             Friendship friendship = new FriendshipService().loadFriendship();
             List<String> friendsId = friendship.getUserFriends(senderUser.getUserId());
@@ -40,7 +40,7 @@ public class NotificationService {
                     message = senderUser.getUsername() + " liked your post.";
                     break;
             }
-            Notification notification = new Notification(message, type, senderUser.getUserId());
+            Notification notification = new Notification(message, type, senderUser.getUserId(), contentId);
             if (receiverId == null) {
                 for (String friendId : friendsId) {
                     User friend = userService.getUserById(friendId);

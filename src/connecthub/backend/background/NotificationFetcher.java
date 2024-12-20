@@ -29,7 +29,6 @@ public class NotificationFetcher implements Runnable {
     }
 
     private void fetchNotifications() {
-        System.out.println("thread running");
         // Fetch notifications for the user
         userService.refreshContents();
         user = userService.getUserById(user.getUserId());

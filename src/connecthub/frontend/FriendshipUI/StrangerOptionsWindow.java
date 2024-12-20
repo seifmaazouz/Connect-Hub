@@ -60,7 +60,7 @@ public class StrangerOptionsWindow extends JDialog{
 //                    Notification.Type.FRIEND_REQUEST,
 //                    activeUserId);
             NotificationService notificationService1 = new NotificationService(stranger);
-            notificationService1.sendNotificationToFriends(Notification.Type.FRIEND_REQUEST, activeUserId);
+            notificationService1.sendNotificationToFriends(Notification.Type.FRIEND_REQUEST, activeUserId, null);
 //            try {
 //                notificationService.saveNotifications();
 //            } catch (IOException ex) {
