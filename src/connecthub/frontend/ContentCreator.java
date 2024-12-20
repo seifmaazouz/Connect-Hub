@@ -1,8 +1,10 @@
 package connecthub.frontend;
 
+import connecthub.backend.models.Notification;
 import connecthub.backend.models.Post;
 import connecthub.backend.models.Story;
 import connecthub.backend.models.User;
+import connecthub.backend.services.NotificationService;
 import connecthub.backend.services.PostService;
 import connecthub.backend.services.StoryService;
 import connecthub.backend.utils.factories.ContentFactory;
@@ -18,26 +20,27 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 
 public class ContentCreator extends javax.swing.JDialog {
+
     private User user;
-    private  File imageFile;
+    private File imageFile;
     private StoryService storyService;
     private PostService postService;
 
-    
     public ContentCreator(java.awt.Frame parent, boolean modal, User user) {
         super(parent, modal);
         initComponents();
         this.user = user;
         imageFile = null;
     }
-    
+
     // validate input text is not empty
     private String ValidateInputText(JTextArea textArea) throws IOException {
         String text = textArea.getText().strip();
-        if(text.isEmpty())
+        if (text.isEmpty()) {
             throw new IIOException("Text field cannot be left empty!");
-        else
-             return text;
+        } else {
+            return text;
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -329,7 +332,7 @@ public class ContentCreator extends javax.swing.JDialog {
         // Set global selected imageFile to this imageFile;
         imageFile = selectedFile;
         // Set label status to selected file and preview image
-        if(imageFile != null) {
+        if (imageFile != null) {
             lblImageStatusPost.setText("Selected File: " + selectedFile.getName());
             try {
                 Image image = ImageManager.getImageFromFile(imageFile, 200, 200);
@@ -356,9 +359,11 @@ public class ContentCreator extends javax.swing.JDialog {
             // add post
             postService.addContent(newPost);
             imageFile = null;
+            NotificationService notificationService = new NotificationService(user);
+            notificationService.sendNotification(Notification.Type.NEW_POST, null, newPost.getContentId());
             this.dispose();
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "Cannot Publish Post: " +ex.getMessage(), "Publish Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Cannot Publish Post: " + ex.getMessage(), "Publish Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnPublishPostActionPerformed
 
@@ -367,7 +372,7 @@ public class ContentCreator extends javax.swing.JDialog {
         // Set global selected imageFile to this imageFile;
         imageFile = selectedFile;
         // Set label status to selected file and preview image
-        if(imageFile != null) {
+        if (imageFile != null) {
             lblImageStatusStory.setText("Selected File: " + selectedFile.getName());
             try {
                 Image image = ImageManager.getImageFromFile(imageFile, 200, 200);
@@ -397,7 +402,7 @@ public class ContentCreator extends javax.swing.JDialog {
             this.dispose();
             System.out.println("Here");
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "Cannot Publish Story: " +ex.getMessage(), "Publish Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Cannot Publish Story: " + ex.getMessage(), "Publish Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnPublishStoryActionPerformed
 

@@ -1,5 +1,6 @@
 package connecthub.frontend.homepage;
 
+import connecthub.backend.background.NotificationFetcher;
 import connecthub.backend.models.Friendship;
 import connecthub.backend.models.Notification;
 import connecthub.backend.models.Post;
@@ -46,7 +47,7 @@ public class Homepage extends javax.swing.JFrame {
     private  NewsFeedPanel newsFeedPanel;
     private  GroupsPanel groupsPanel;
     private  ProfilePostsPanel profilePostsPanel;
-    private final User user;
+    private User user;
     private final UserService userService;
     private final PostService postService;
     private final StoryService storyService;
@@ -55,11 +56,25 @@ public class Homepage extends javax.swing.JFrame {
     private List<String> friends;
     private boolean profileMode = false, exitMode = true;
     private final GroupService groupService;
+    private final NotificationFetcher notificationFetcher;
+    private List<Notification> notifications;
 
-
-    public Homepage(User user) throws IOException {
+    public Homepage(User user) {
         initComponents();
         this.user = user;
+        notifications = user.getNotifications();
+
+        // initialize notification count
+        if (!notifications.isEmpty()) {
+            notifcationCount.setText(String.valueOf(notifications.size()));
+        } else {
+            notifcationCount.setText("  ");
+        }
+
+        // create thread for notification fetcher
+        notificationFetcher = new NotificationFetcher(user, this);
+        Thread notificationThread = new Thread(notificationFetcher);
+        notificationThread.start();
 
         // create all services
         friendshipService = new FriendshipService();
@@ -111,12 +126,15 @@ public class Homepage extends javax.swing.JFrame {
         sideBarHolder.addTab("Search Users", searchUsersPanel);
         searchUsersPanel.revalidate();
         searchUsersPanel.repaint();
-        
-        if (!user.getNotifications().isEmpty()) {
-            notifcationCount.setText("" + user.getNotifications().size());
-        }
-        else {
-            notifcationCount.setText(" ");
+    }
+
+    public void updateNotifications(User user) {
+        this.user = user;
+        notifications = user.getNotifications();
+        if (!notifications.isEmpty()) {
+            notifcationCount.setText(String.valueOf(notifications.size()));
+        } else {
+            notifcationCount.setText("  ");
         }
     }
 
@@ -191,6 +209,8 @@ public class Homepage extends javax.swing.JFrame {
     private void refresh() {
         postService.refreshContents();
         userService.refreshContents();
+        userService.updateUser(user.getUserId(), user);
+        user = userService.getUserById(user.getUserId());
         storyService.refreshContents();
         storyService.deleteExpiredStories();
         profilePostsPanel.refresh();
@@ -216,7 +236,7 @@ public class Homepage extends javax.swing.JFrame {
             throw new RuntimeException(e);
         }
         
-        // refresh side bar
+        // refresh sidebar
         sideBarHolder.removeAll();
         sideBarHolder.addTab("Friends", new FriendListPanel(friendship, user.getUserId()));
         sideBarHolder.revalidate();
@@ -232,12 +252,6 @@ public class Homepage extends javax.swing.JFrame {
         sideBarHolder.repaint();
         revalidate();
         repaint();
-        if (!user.getNotifications().isEmpty()) {
-            notifcationCount.setText("" + user.getNotifications().size());
-        }
-        else {
-            notifcationCount.setText(" ");
-        }
     }
 
     @SuppressWarnings("unchecked")
@@ -348,7 +362,7 @@ public class Homepage extends javax.swing.JFrame {
         });
 
         notifcationCount.setForeground(new java.awt.Color(255, 0, 0));
-        notifcationCount.setText(" ");
+        notifcationCount.setText("  ");
 
         javax.swing.GroupLayout backgroundLayout = new javax.swing.GroupLayout(background);
         background.setLayout(backgroundLayout);
@@ -400,7 +414,7 @@ public class Homepage extends javax.swing.JFrame {
                         .addGroup(backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnNotifications)
                             .addComponent(notifcationCount)))
-                    .addComponent(profilePhotoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(profilePhotoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnCreateContent, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnViewStories, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -441,6 +455,7 @@ public class Homepage extends javax.swing.JFrame {
             if(exitMode)
                 System.exit(0);
         }
+        notificationFetcher.stop();
     }//GEN-LAST:event_formWindowClosed
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
@@ -470,7 +485,7 @@ public class Homepage extends javax.swing.JFrame {
             viewStories.setVisible(true);
         }
         else
-        JOptionPane.showMessageDialog(null, "There are currently no active friend stories!", "Stories Expired", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "There are currently no active friend stories!", "Stories Expired", JOptionPane.ERROR_MESSAGE);
     }//GEN-LAST:event_btnViewStoriesActionPerformed
 
     private void profilePhotoLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profilePhotoLabelMouseClicked
@@ -499,15 +514,12 @@ public class Homepage extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCreateGroupActionPerformed
 
     private void btnNotificationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNotificationsActionPerformed
-//        Notification notification = new Notification("Asser sent you a friend request.", Notification.Type.FRIEND_REQUEST,"1023");
-//        user.sendNotification(notification);
-        userService.updateUser(user.getUserId(), user);
-        List<Notification> notifications = user.getNotifications();
-        if (notifications.isEmpty())
-            System.out.println("No notifications");
-        else {
+        if (!notifications.isEmpty()) {
             new ViewNotifications(this, true, user).setVisible(true);
         }
+        else
+            System.out.println("No notifications");
+
     }//GEN-LAST:event_btnNotificationsActionPerformed
 
     
@@ -538,15 +550,14 @@ public class Homepage extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                UserService u = UserService.getInstance();
+                UserService userService = UserService.getInstance();
                 try {
-                    new Homepage(u.getUser("seif@gmail.com", "seif123")).setVisible(true);
+                    User user = userService.login("seif@gmail.com", "seif123");
+                    new Homepage(user).setVisible(true);
                 } catch (InvalidKeySpecException ex) {
                     Logger.getLogger(Homepage.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (NoSuchAlgorithmException ex) {
                     Logger.getLogger(Homepage.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
                 }
             }
         });

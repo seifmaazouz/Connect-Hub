@@ -1,63 +1,59 @@
-// src/connecthub/backend/services/NotificationService.java
 package connecthub.backend.services;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import connecthub.backend.database.JSONParser;
 import connecthub.backend.models.Notification;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import static connecthub.backend.constants.FilePath.NOTIFICATIONS_FILE_PATH;
+import connecthub.backend.models.User;
+import connecthub.backend.services.strategies.NotificationStrategy;
+import connecthub.backend.services.strategies.NotifyAllFriendsStrategy;
+import connecthub.backend.services.strategies.NotifySpecificUserStrategy;
+import connecthub.backend.utils.builders.NotificationBuilder;
 
 public class NotificationService {
-    private HashMap<String, ArrayList<Notification>> notifications;
 
-    public NotificationService() {
-        notifications = new HashMap<>();
+    private final User senderUser;
+
+    public NotificationService(User user) {
+        this.senderUser = user;
     }
 
-    public void addNotification(String receiverId, String message, Notification.Type type, String senderId) {
-        if (!notifications.containsKey(receiverId)) {
-            notifications.put(receiverId, new ArrayList<>());
+    public void sendNotification(Notification.Type type, String receiverId, String contentId) {
+        Notification notification = createNotification(type, contentId);
+        NotificationStrategy strategy;
+
+        if (receiverId == null) {
+            strategy = new NotifyAllFriendsStrategy(senderUser);
+        } else {
+            strategy = new NotifySpecificUserStrategy();
         }
-        notifications.get(receiverId).add(new Notification(message, type, senderId));
-    }
-    
-    public void removeNotification(Notification notification) {
-        notifications.remove(notification);
-    }
-    
-    public HashMap<String, ArrayList<Notification>> getNotifications() throws IOException {
-        HashMap<String, ArrayList<Notification>> notificationMap = new JSONParser().readJSON(NOTIFICATIONS_FILE_PATH,
-                new TypeReference <HashMap<String, ArrayList<Notification>>> () {});
 
-        for (String receiverId : notificationMap.keySet()) {
-            notifications.put(receiverId, notificationMap.get(receiverId));
+        strategy.sendNotification(notification, receiverId);
+    }
+
+    private Notification createNotification(Notification.Type type, String contentId) {
+        NotificationBuilder builder = new NotificationBuilder()
+                .setType(type)
+                .setSenderUserId(senderUser.getUserId())
+                .setContentId(contentId);
+
+        switch (type) {
+            case FRIEND_REQUEST:
+                builder.setMessage(senderUser.getUsername() + " sent you a friend request.");
+                break;
+            case GROUP_ACTIVITY:
+                builder.setMessage("");
+                break;
+            case NEW_POST:
+                builder.setMessage(senderUser.getUsername() + " published a new post.");
+                break;
+            case MESSAGE:
+                builder.setMessage(senderUser.getUsername() + " sent you a message.");
+                break;
+            case COMMENT:
+                builder.setMessage(senderUser.getUsername() + " commented on your post.");
+                break;
+            case LIKE:
+                builder.setMessage(senderUser.getUsername() + " liked your post.");
+                break;
         }
-        return notifications;
-    }
-
-    public void saveNotifications() throws IOException {
-        HashMap<String, ArrayList<Notification>> notificationMap = new HashMap<>();
-        for (String receiverId : notifications.keySet()) {
-            notificationMap.put(receiverId, notifications.get(receiverId));
-        }
-        new JSONParser().writeJSON(NOTIFICATIONS_FILE_PATH, notificationMap);
-    }
-
-    public void clearNotifications(String receiverId) {
-        notifications.get(receiverId).clear();
-    }
-
-    public Notification getNotification(String receiverId, String senderId, Notification.Type type) {
-        for (Notification notification : notifications.get(receiverId)) {
-            if (notification.getSenderId().equals(senderId) && notification.getType().equals(type)) {
-                return notification;
-            }
-        }
-        return null;
+        return builder.build();
     }
 }

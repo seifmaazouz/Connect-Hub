@@ -1,8 +1,10 @@
 package connecthub.frontend.homepage;
 
 import connecthub.backend.models.ContentData;
+import connecthub.backend.models.Notification;
 import connecthub.backend.models.Post;
 import connecthub.backend.models.User;
+import connecthub.backend.services.NotificationService;
 import connecthub.backend.services.PostService;
 import connecthub.backend.services.UserService;
 import connecthub.backend.utils.factories.ServiceFactory;
@@ -18,6 +20,7 @@ public class PostsPanel extends javax.swing.JPanel {
     private final UserService userService;
     private final PostService postService;
     private final String viewingUserId;
+    private final NotificationService notificationService;
 
     public PostsPanel(List<Post> posts, String viewingUserId) {
         initComponents();
@@ -25,6 +28,7 @@ public class PostsPanel extends javax.swing.JPanel {
         this.userService = UserService.getInstance();
         this.postService = ServiceFactory.createPostService();
         this.viewingUserId = viewingUserId;
+        this.notificationService = new NotificationService(userService.getUserById(viewingUserId));
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding around the panel
         this.setOpaque(false);
@@ -115,7 +119,6 @@ public class PostsPanel extends javax.swing.JPanel {
                 // Show comments button
                 JButton showCommentsButton = new JButton("Show Comments");
                 showCommentsButton.addActionListener(e -> {
-                    // Logic to show comments
                     new ViewPostComments(null, true, post.getComments()).setVisible(true);
                 });
                 postPanel.add(showCommentsButton);
@@ -132,6 +135,8 @@ public class PostsPanel extends javax.swing.JPanel {
                     if (post.getLikedBy().contains(viewingUserId)) {
                         likeButton.setBackground(Color.decode("#003297"));
                         likeButton.setForeground(Color.WHITE);
+                        if(!post.getAuthorId().equals(viewingUserId))
+                            notificationService.sendNotification(Notification.Type.LIKE, author.getUserId(), post.getContentId());
                     } else {
                         likeButton.setBackground(null);
                         likeButton.setForeground(null);
@@ -143,10 +148,12 @@ public class PostsPanel extends javax.swing.JPanel {
                 // Add comment button
                 JButton addCommentButton = new JButton("Add Comment");
                 addCommentButton.addActionListener(e -> {
-                    String comment = JOptionPane.showInputDialog(this, "Enter your comment:");
+                    String comment = JOptionPane.showInputDialog(null, "Enter your comment:");
                     if (comment != null && !comment.trim().isEmpty()) {
                         post.comment(userService.getUserById(viewingUserId).getUsername(), comment);
                         postService.addContent(post); // update json file
+                        if(!post.getAuthorId().equals(viewingUserId))
+                            notificationService.sendNotification(Notification.Type.COMMENT, author.getUserId(), post.getContentId());
                     }
                 });
 
