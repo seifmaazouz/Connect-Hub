@@ -5,7 +5,6 @@ import connecthub.backend.models.Notification;
 import connecthub.backend.models.User;
 import connecthub.backend.services.FriendshipService;
 import connecthub.backend.services.NotificationService;
-import connecthub.backend.services.NotificationServiceOld;
 import connecthub.backend.services.UserService;
 import connecthub.frontend.FriendProfile;
 import connecthub.frontend.homepage.ProfilePhoto;
