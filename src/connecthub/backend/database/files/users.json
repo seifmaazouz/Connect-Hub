@@ -69,7 +69,7 @@
     "email" : "asser@yahoo.com",
     "username" : "Asser Hanafy",
     "dateOfBirth" : 1108159200000,
-    "status" : "offline",
+    "status" : "online",
     "hashedPassword" : "WnVEdrivD0phRerVGmsdz8IVRssdgPXelxC/mkaXiSQ=",
     "salt" : "E0d3ZiqVXwICvN+c2jnZ5Q==",
     "profilePhoto" : "src\\connecthub\\backend\\database\\images\\1023_2024-12-12_15-30-13.jpg",
