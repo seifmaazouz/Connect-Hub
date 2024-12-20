@@ -39,6 +39,7 @@ public class Post extends Content implements Interactable {
         }
     }
 
+    @Override
     public List<Comment> getComments() {
         return comments;
     }
@@ -48,6 +49,7 @@ public class Post extends Content implements Interactable {
     }
 
     @JsonIgnore
+    @Override
     public int getLikes() {
         return likedBy.size();
     }
