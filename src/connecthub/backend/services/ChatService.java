@@ -5,6 +5,7 @@ import connecthub.backend.database.JSONParser;
 import connecthub.backend.models.Chat;
 import connecthub.backend.models.ChatMessage;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,16 +19,23 @@ public class ChatService {
 
     public Chat loadHistory(String user1, String user2) throws IOException {
         String chatId = getChatId(user1, user2);
-        System.out.println(checkHistoryExists(user1, user2));
-        HashMap<String, ArrayList<String>> chatData = new JSONParser()
-                .readJSON(CHATS_FILE_PATH + "/" + chatId + ".json", new TypeReference<HashMap<String, ArrayList<String>>>() {});
-        Chat chat = new Chat(chatId);
-        int length = chatData.size();
-        for (int i = 0; i < length; i++) {
-            ArrayList<String> entry = chatData.get("" + i);
-            chat.addToMessages(new ChatMessage(entry));
-        }
+        if (checkHistoryExists(user1, user2)) {
+
+            HashMap<String, ArrayList<String>> chatData = new JSONParser()
+                    .readJSON(CHATS_FILE_PATH + "/" + chatId + ".json", new TypeReference<HashMap<String, ArrayList<String>>>() {});
+            Chat chat = new Chat(chatId);
+            int length = chatData.size();
+            for (int i = 0; i < length; i++) {
+                ArrayList<String> entry = chatData.get("" + i);
+                chat.addToMessages(new ChatMessage(entry));
+            }
         return chat;
+        } else {
+            Chat c = new Chat(chatId);
+            new File(CHATS_FILE_PATH + "/" + chatId + ".json").createNewFile();
+            saveHistory(c);
+            return c;
+        }
     }
 
     public String getChatId(String user1, String user2) throws IOException {
@@ -49,9 +57,8 @@ public class ChatService {
 
     public boolean checkHistoryExists(String user1, String user2) throws IOException {
         String chatId = getChatId(user1, user2);
-        HashMap<String, ArrayList<String>> chatData = new JSONParser()
-                .readJSON(CHATS_FILE_PATH + "/" + chatId + ".json", new TypeReference<HashMap<String, ArrayList<String>>>() {});
-        return !chatData.isEmpty();
+        File file = new File(CHATS_FILE_PATH + "/" + chatId + ".json");
+        return file.exists() && file.length() > 0;
     }
 
     public void saveHistory(Chat chat) throws IOException {

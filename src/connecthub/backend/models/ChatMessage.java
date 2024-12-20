@@ -32,4 +32,12 @@ public class ChatMessage {
         entry.add(messageContent);
         return entry;
     }
+
+    public String getSenderId() {
+        return senderId;
+    }
+
+    public String getMessageContent() {
+        return messageContent;
+    }
 }
