@@ -10,6 +10,7 @@ import connecthub.backend.services.UserService;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.util.List;
 
 public class chatWindow extends JFrame {
     private User activeUser;
@@ -17,6 +18,7 @@ public class chatWindow extends JFrame {
     private Chat chat;
     private ChatService cs;
     private ChatFetcher chatFetcher;
+    private List<ChatMessage> currMessages;
 
     private JPanel chatPanel; // Holds chat message entries
 
@@ -25,6 +27,7 @@ public class chatWindow extends JFrame {
         this.activeUser = me;
         this.friend = he;
         this.chat = cs.loadHistory(activeUser.getUserId(), friend.getUserId());
+        this.currMessages = chat.getMessages();
 
         // Initialize JFrame properties
         setTitle("Chat with " + friend.getUsername());
@@ -58,7 +61,7 @@ public class chatWindow extends JFrame {
         setContentPane(panel1);
 
         // Add chat messages from history
-        for (ChatMessage message : chat.getMessages()) {
+        for (ChatMessage message : currMessages) {
             Color color = message.getSenderId().equals(activeUser.getUserId()) ? Color.decode("#20A520") : Color.BLUE;
             ChatMessageEntry entry = new ChatMessageEntry(UserService.getInstance().getUserById(message.getSenderId()), message.getMessageContent(), color);
             chatPanel.add(entry, BorderLayout.WEST);
@@ -120,13 +123,17 @@ public class chatWindow extends JFrame {
     }
 
     public void refreshChat() throws IOException {
-        chat = cs.loadHistory(activeUser.getUserId(), friend.getUserId());
-        chatPanel.removeAll();
-        for (ChatMessage message : chat.getMessages()) {
+        Chat updatedChat = cs.loadHistory(activeUser.getUserId(), friend.getUserId());
+        List<ChatMessage> newMessages = updatedChat.getMessages().subList(chat.getMessages().size(), updatedChat.getMessages().size());
+        for (ChatMessage message : newMessages) {
+            if(currMessages.contains(message)) {
+                continue;
+            }
             Color color = message.getSenderId().equals(activeUser.getUserId()) ? Color.decode("#20A520") : Color.BLUE;
             ChatMessageEntry entry = new ChatMessageEntry(UserService.getInstance().getUserById(message.getSenderId()), message.getMessageContent(), color);
             chatPanel.add(entry, BorderLayout.WEST);
         }
+        chat = updatedChat;
         chatPanel.revalidate();
         chatPanel.repaint();
         chatBody.getVerticalScrollBar().setValue(chatBody.getVerticalScrollBar().getMaximum());
