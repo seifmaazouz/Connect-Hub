@@ -102,8 +102,11 @@ public class UserService {
         User user = getUser(email, password);
 
         if (user != null) {
-            user.setStatus("online");
-            databaseManager.saveUser(user);
+            UserService userService = UserService.getInstance();
+            userService.refreshContents();
+            User updateUser = userService.getUserById(user.getUserId());
+            updateUser.setStatus("online");
+            databaseManager.saveUser(updateUser);
         }
 
         return user; // Return the authenticated user, or null if login failed

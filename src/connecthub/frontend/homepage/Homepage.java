@@ -68,7 +68,7 @@ public class Homepage extends javax.swing.JFrame {
         if (!notifications.isEmpty()) {
             notifcationCount.setText(String.valueOf(notifications.size()));
         } else {
-            notifcationCount.setText("   ");
+            notifcationCount.setText("  ");
         }
 
         // create thread for notification fetcher
@@ -134,7 +134,7 @@ public class Homepage extends javax.swing.JFrame {
         if (!notifications.isEmpty()) {
             notifcationCount.setText(String.valueOf(notifications.size()));
         } else {
-            notifcationCount.setText("   ");
+            notifcationCount.setText("  ");
         }
     }
 
@@ -362,7 +362,7 @@ public class Homepage extends javax.swing.JFrame {
         });
 
         notifcationCount.setForeground(new java.awt.Color(255, 0, 0));
-        notifcationCount.setText("   ");
+        notifcationCount.setText("  ");
 
         javax.swing.GroupLayout backgroundLayout = new javax.swing.GroupLayout(background);
         background.setLayout(backgroundLayout);
@@ -550,9 +550,10 @@ public class Homepage extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                UserService u = UserService.getInstance();
+                UserService userService = UserService.getInstance();
                 try {
-                    new Homepage(u.getUser("seif@gmail.com", "seif123")).setVisible(true);
+                    User user = userService.login("seif@gmail.com", "seif123");
+                    new Homepage(user).setVisible(true);
                 } catch (InvalidKeySpecException ex) {
                     Logger.getLogger(Homepage.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (NoSuchAlgorithmException ex) {
