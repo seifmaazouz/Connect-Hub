@@ -8,6 +8,16 @@
     <properties/>
     <border type="none"/>
     <children>
+      <component id="a846f" class="javax.swing.JLabel" binding="contentLabel">
+        <constraints>
+          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="9" fill="0" indent="1" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <alignmentY value="0.5"/>
+          <text value="Label"/>
+          <verticalAlignment value="0"/>
+        </properties>
+      </component>
       <component id="6a0ce" class="javax.swing.JLabel" binding="bigProfilePhotoLabel">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="9" fill="0" indent="0" use-parent-layout="false">
@@ -17,15 +27,7 @@
           </grid>
         </constraints>
         <properties>
-          <text value="Label"/>
-        </properties>
-      </component>
-      <component id="a846f" class="javax.swing.JLabel" binding="contentLabel">
-        <constraints>
-          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Label"/>
+          <text value=""/>
         </properties>
       </component>
     </children>
