@@ -56,16 +56,25 @@ public class Homepage extends javax.swing.JFrame {
     private List<String> friends;
     private boolean profileMode = false, exitMode = true;
     private final GroupService groupService;
-    private static Homepage instance;
+    private final NotificationFetcher notificationFetcher;
+    private List<Notification> notifications;
 
-
-    private Homepage(User user) {
+    public Homepage(User user) {
         initComponents();
         this.user = user;
+        notifications = user.getNotifications();
+
+        // initialize notification count
+        if (!notifications.isEmpty()) {
+            notifcationCount.setText(String.valueOf(notifications.size()));
+        } else {
+            notifcationCount.setText("  ");
+        }
 
         // create thread for notification fetcher
-        NotificationFetcher notificationFetcher = new NotificationFetcher(user, this);
+        notificationFetcher = new NotificationFetcher(user, this);
         Thread notificationThread = new Thread(notificationFetcher);
+        notificationThread.start();
 
         // create all services
         friendshipService = new FriendshipService();
@@ -119,20 +128,13 @@ public class Homepage extends javax.swing.JFrame {
         searchUsersPanel.repaint();
     }
 
-    public static Homepage getInstance(User user) {
-        if (instance == null)
-            return new Homepage(user);
-        else
-            instance.user = user;
-            return instance;
-    }
-
-    public void updateNotifications(List<Notification> notifications) {
+    public void updateNotifications(User user) {
+        this.user = user;
+        notifications = user.getNotifications();
         if (!notifications.isEmpty()) {
-            notifcationCount.setText("" + user.getNotifications().size());
-        }
-        else {
-            notifcationCount.setText(" ");
+            notifcationCount.setText(String.valueOf(notifications.size()));
+        } else {
+            notifcationCount.setText("  ");
         }
     }
 
@@ -207,6 +209,7 @@ public class Homepage extends javax.swing.JFrame {
     private void refresh() {
         postService.refreshContents();
         userService.refreshContents();
+        userService.updateUser(user.getUserId(), user);
         user = userService.getUserById(user.getUserId());
         storyService.refreshContents();
         storyService.deleteExpiredStories();
@@ -249,13 +252,6 @@ public class Homepage extends javax.swing.JFrame {
         sideBarHolder.repaint();
         revalidate();
         repaint();
-
-        if (!user.getNotifications().isEmpty()) {
-            notifcationCount.setText("" + user.getNotifications().size());
-        }
-        else {
-            notifcationCount.setText(" ");
-        }
     }
 
     @SuppressWarnings("unchecked")
@@ -459,6 +455,7 @@ public class Homepage extends javax.swing.JFrame {
             if(exitMode)
                 System.exit(0);
         }
+        notificationFetcher.stop();
     }//GEN-LAST:event_formWindowClosed
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
@@ -488,7 +485,7 @@ public class Homepage extends javax.swing.JFrame {
             viewStories.setVisible(true);
         }
         else
-        JOptionPane.showMessageDialog(null, "There are currently no active friend stories!", "Stories Expired", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "There are currently no active friend stories!", "Stories Expired", JOptionPane.ERROR_MESSAGE);
     }//GEN-LAST:event_btnViewStoriesActionPerformed
 
     private void profilePhotoLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profilePhotoLabelMouseClicked
@@ -517,15 +514,11 @@ public class Homepage extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCreateGroupActionPerformed
 
     private void btnNotificationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNotificationsActionPerformed
-//        Notification notification = new Notification("Asser sent you a friend request.", Notification.Type.FRIEND_REQUEST,"1023");
-//        user.sendNotification(notification);
-//        userService.updateUser(user.getUserId(), user);
-        List<Notification> notifications = user.getNotifications();
-        if (notifications.isEmpty())
-            System.out.println("No notifications");
-        else {
+        if (notifications != null && !notifications.isEmpty())
             new ViewNotifications(this, true, user).setVisible(true);
-        }
+        else
+            System.out.println("No notifications");
+
     }//GEN-LAST:event_btnNotificationsActionPerformed
 
     

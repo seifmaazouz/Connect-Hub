@@ -265,7 +265,7 @@ public class Profile extends javax.swing.JFrame {
     }//GEN-LAST:event_viewFriendsActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-            Homepage.getInstance(user).setVisible(true);
+            new Homepage(user).setVisible(true);
     }//GEN-LAST:event_formWindowClosed
 
     private void removeCoverPhotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeCoverPhotoActionPerformed

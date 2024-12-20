@@ -76,7 +76,7 @@ public class Login {
                             "Success",
                             JOptionPane.INFORMATION_MESSAGE);
                     frame.dispose();
-                    Homepage.getInstance(user).setVisible(true);
+                    new Homepage(user).setVisible(true);
                 } else {
                     JOptionPane.showMessageDialog(frame,
                             "Login failed: Invalid email or password.",
