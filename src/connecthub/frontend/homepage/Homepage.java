@@ -554,6 +554,8 @@ public class Homepage extends javax.swing.JFrame {
                 try {
                     User user = userService.login("seif@gmail.com", "seif123");
                     new Homepage(user).setVisible(true);
+                    User user2 = userService.login("asser@yahoo.com", "asser123");
+                    new Homepage(user2).setVisible(true);
                 } catch (InvalidKeySpecException ex) {
                     Logger.getLogger(Homepage.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (NoSuchAlgorithmException ex) {
