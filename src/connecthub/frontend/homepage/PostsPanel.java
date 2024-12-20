@@ -135,7 +135,7 @@ public class PostsPanel extends javax.swing.JPanel {
                     if (post.getLikedBy().contains(viewingUserId)) {
                         likeButton.setBackground(Color.decode("#003297"));
                         likeButton.setForeground(Color.WHITE);
-                        notificationService.sendNotificationToFriends(Notification.Type.LIKE, author.getUserId(), post.getContentId());
+                        notificationService.sendNotification(Notification.Type.LIKE, author.getUserId(), post.getContentId());
                     } else {
                         likeButton.setBackground(null);
                         likeButton.setForeground(null);
@@ -151,7 +151,7 @@ public class PostsPanel extends javax.swing.JPanel {
                     if (comment != null && !comment.trim().isEmpty()) {
                         post.comment(userService.getUserById(viewingUserId).getUsername(), comment);
                         postService.addContent(post); // update json file
-                        notificationService.sendNotificationToFriends(Notification.Type.COMMENT, author.getUserId(), post.getContentId());
+                        notificationService.sendNotification(Notification.Type.COMMENT, author.getUserId(), post.getContentId());
                     }
                 });
 

@@ -360,7 +360,7 @@ public class ContentCreator extends javax.swing.JDialog {
             postService.addContent(newPost);
             imageFile = null;
             NotificationService notificationService = new NotificationService(user);
-            notificationService.sendNotificationToFriends(Notification.Type.NEW_POST, null, newPost.getContentId());
+            notificationService.sendNotification(Notification.Type.NEW_POST, null, newPost.getContentId());
             this.dispose();
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "Cannot Publish Post: " + ex.getMessage(), "Publish Error", JOptionPane.ERROR_MESSAGE);
