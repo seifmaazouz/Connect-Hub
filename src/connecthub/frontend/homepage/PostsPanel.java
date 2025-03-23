@@ -24,7 +24,7 @@ public class PostsPanel extends javax.swing.JPanel {
 
     public PostsPanel(List<Post> posts, String viewingUserId) {
         initComponents();
-        this.posts = posts;
+        this.posts = SortPosts(posts);
         this.userService = UserService.getInstance();
         this.postService = ServiceFactory.createPostService();
         this.viewingUserId = viewingUserId;
@@ -33,6 +33,11 @@ public class PostsPanel extends javax.swing.JPanel {
         this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding around the panel
         this.setOpaque(false);
         initializePosts(posts);
+    }
+
+    private List<Post> SortPosts(List<Post> posts) {
+        posts.sort((p1, p2) -> p1.getTimestamp().compareTo(p2.getTimestamp()));
+        return posts;
     }
 
     private void initializePosts(List<Post> posts) {

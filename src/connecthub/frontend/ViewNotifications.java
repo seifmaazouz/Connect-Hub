@@ -295,7 +295,7 @@ public class ViewNotifications extends javax.swing.JDialog {
                 case FRIEND_REQUEST:
                     FriendshipService friendshipService = new FriendshipService();
                     Friendship friendship = friendshipService.loadFriendship();
-                    friendship.cancelRequest(user.getUserId(), notification.getSenderId());
+                    friendship.cancelRequest(notification.getSenderId(), user.getUserId());
                     friendshipService.saveFriendship(friendship);
                     System.out.println("Friend request declined");
                     break;

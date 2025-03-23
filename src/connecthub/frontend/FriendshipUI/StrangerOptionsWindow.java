@@ -58,16 +58,16 @@ public class StrangerOptionsWindow extends JDialog{
 //                    UserService.getInstance().getUserById(activeUserId).getUsername() + " has sent you a friend request.",
 //                    Notification.Type.FRIEND_REQUEST,
 //                    activeUserId);
-            NotificationService notificationService1 = new NotificationService(stranger);
-            notificationService1.sendNotification(Notification.Type.FRIEND_REQUEST, activeUserId, null);
+            NotificationService notificationService1 = new NotificationService(UserService.getInstance().getUserById(activeUserId));
+            notificationService1.sendNotification(Notification.Type.FRIEND_REQUEST, stranger.getUserId(), null);
 //            try {
 //                notificationService.saveNotifications();
 //            } catch (IOException ex) {
 //                throw new RuntimeException(ex);
 //            }
-            UserService userService = UserService.getInstance();
-            userService.updateUser(stranger.getUserId(), stranger);
-            userService.updateUser(activeUserId, userService.getUserById(activeUserId));
+//            UserService userService = UserService.getInstance();
+//            userService.updateUser(stranger.getUserId(), stranger);
+//            userService.updateUser(activeUserId, userService.getUserById(activeUserId));
             FriendshipService friendshipService = new FriendshipService();
             friendshipService.saveFriendship(friendship);
             dispose();

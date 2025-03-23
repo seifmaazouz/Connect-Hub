@@ -120,4 +120,14 @@
   "timestamp" : [ 2024, 12, 20, 17, 7, 20, 890826400 ],
   "comments" : [ ],
   "likedBy" : [ ]
+}, {
+  "contentId" : "10",
+  "authorId" : "64f15ca2-bc0e-4b25-9b25-064d9a4e93fb",
+  "contentData" : {
+    "text" : "Monkey",
+    "imagePath" : "src\\connecthub\\backend\\database\\images\\64f15ca2-bc0e-4b25-9b25-064d9a4e93fb_2024-12-21_00-58-59.jpg"
+  },
+  "timestamp" : [ 2024, 12, 21, 0, 58, 59, 614770700 ],
+  "comments" : [ ],
+  "likedBy" : [ ]
 } ]

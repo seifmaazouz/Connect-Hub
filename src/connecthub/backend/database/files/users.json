@@ -38,6 +38,19 @@
     "bio" : null,
     "notifications" : [ ]
   },
+  "64f15ca2-bc0e-4b25-9b25-064d9a4e93fb" : {
+    "userId" : "64f15ca2-bc0e-4b25-9b25-064d9a4e93fb",
+    "email" : "moatassem@hotmail.com",
+    "username" : "Sumo",
+    "dateOfBirth" : 1073858400000,
+    "status" : "online",
+    "hashedPassword" : "M99OqEKNn9EH52WT5d1Yvfr15HVXl+JCrkew65dUrpo=",
+    "salt" : "vW5i2wTfhGEn19ZgsUBHbA==",
+    "profilePhoto" : "src\\connecthub\\backend\\database\\images\\64f15ca2-bc0e-4b25-9b25-064d9a4e93fb_2024-12-21_00-51-35.jpg",
+    "coverPhoto" : "src/connecthub/backend/database/images\\defaultCoverPhoto.jpg",
+    "bio" : null,
+    "notifications" : [ ]
+  },
   "9090" : {
     "userId" : "9090",
     "email" : "ahmednader@gmail.com",
@@ -82,7 +95,7 @@
     "email" : "seif@gmail.com",
     "username" : "Jeff21erson",
     "dateOfBirth" : 1117832400000,
-    "status" : "offline",
+    "status" : "online",
     "hashedPassword" : "Nb6x0yXmUwKkkVTec1MIM5lYAWVUVNnhOPHOg0bYOIo=",
     "salt" : "V1y+7aH1p3EbtNZHyTliYA==",
     "profilePhoto" : "src\\connecthub\\backend\\database\\images\\1022_2024-12-12_21-32-23.jpg",
